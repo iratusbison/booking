@@ -1,0 +1,221 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load define_action %}
+
+{% block title %}
+{{ "Dashboard" }}
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/materialize.css' %}">
+<link rel="stylesheet" href="{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
+<link rel="stylesheet" href="{% static 'dropify/css/dropify.min.css' %}">
+<style>
+.nav-active {
+  border-right: solid .3rem #263238;
+}
+.search-wrapper {
+  position: relative;
+}
+.search-wrapper .label-icon {
+  position: absolute;
+  bottom: 30%;
+}
+.search-wrapper input[type="search"] {
+  padding-left: 2.5rem;
+  width: calc(100% - 2.5rem);
+}
+table.clean tr {
+  border: none;
+}
+.input-field input[type=text]:focus + label {
+  color: #ff6f00 ;
+}
+.input-field input[type=text]:focus {
+  border-bottom: 1px solid #ff6f00;
+  box-shadow: 0 1px 0 0 #ff6f00;
+}
+</style>
+
+{% block dashboard_styles %}{% endblock dashboard_styles %}
+{% endblock styles %}
+
+{% block content %}
+<header id="header" class="page-topbar">
+  <!-- start header nav-->
+  <div class="navbar-fixed">
+    <nav class="navbar-color grey darken-4">
+      <div class="nav-wrapper">
+        <ul class="left">
+          <li>
+            <h1 class="logo-wrapper">
+              <a href="{% url 'dashboard' %}" class="brand-logo darken-1">
+                <img src="{% static 'images/logo.png' %}" alt="technostall-logo">
+                <span class="logo-text hide-on-med-and-down heading">BISON</span>
+              </a>
+            </h1>
+          </li>
+        </ul>
+        <ul class="right hide-on-med-and-down">
+          <li>
+            <a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown">
+              <i class="material-icons">notifications_none
+                {% comment %} <small class="notification-badge amber darken-4">5</small> {% endcomment %}
+              </i>
+            </a>
+            <ul id="notifications-dropdown" class="dropdown-content">
+              <li>
+                <h6>NOTIFICATIONS
+                  {% comment %} <span class="new badge">5</span> {% endcomment %}
+                </h6>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="#!" class="grey-text text-darken-2">No new notifications :D</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button" data-activates="profile-dropdown" title="Profile">
+              <span class="avatar-status avatar-online">
+                <img src="{% static 'images/no-user.png' %}" alt="avatar">
+                <i></i>
+              </span>
+            </a>
+          </li>
+          <li>
+            Welcome, {{ request.user.get_full_name }}
+          </li>
+          <li>
+            <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
+              <span class="">
+                <i class="material-icons">exit_to_app</i>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <!-- end header nav-->
+</header>
+<div id="main">
+  <!-- START WRAPPER -->
+  <div class="wrapper">
+    <!-- START LEFT SIDEBAR NAV-->
+    <aside id="left-sidebar-nav">
+      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y" style="transform: translateX(0%);">
+        <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+                <a href="{% url 'sale_new' %}" class="waves-effect amber darken-4 white-text">
+                    <i class="fa fa-plus white-text" style="font-size: 1rem;"></i>
+                    <span class="nav-text">ADD SALE</span>
+                </a>
+            </li>
+            <li class="bold">
+              <a href="{% url 'pricelist' %}" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
+                  <i class="fa fa-clipboard-list" style="font-size: 1rem;"></i>
+                  <span class="nav-text">Pricelist</span>
+                </a>
+            </li>
+            <li class="bold">
+              <a href="{% url 'sale_list' %}" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
+                  <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
+                  <span class="nav-text">Sales</span>
+                </a>
+            </li>
+            {% if request.session.ts_user.is_admin %}
+            <li class="bold">
+                <a href="{% url 'restock_list' %}" class="waves-effect {% if active_tab == 'restock' %}nav-active{% endif %}">
+                    <i class="fa fa-redo" style="font-size: 1rem;"></i>
+                    <span class="nav-text">Restock</span>
+        
+                  </a>
+            </li>
+            {% endif %}
+            {% if request.session.ts_user.is_admin %}
+            <li class="bold">
+              <a href="{% url 'sale_list_with_total' %}" class="waves-effect ">
+                    <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
+                    <span class="nav-text">total revenue</span>
+                  </a>
+            </li>
+            {% endif %}
+            <li class="bold">
+              <a href="{% url 'print' %}" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
+                  <i class="fa fa-print" style="font-size: 1rem;"></i>
+                  <span class="nav-text">Printing</span>
+                </a>
+            </li>
+            {% if request.session.ts_user.is_admin %}
+            <li class="bold">
+              <a href="{% url 'user_list' %}" class="waves-effect {% if active_tab == 'staff' %}nav-active{% endif %}">
+                  <i class="fas fa-users" style="font-size: 1rem;"></i>
+                  <span class="nav-text">Staff manager</span>
+                </a>
+            </li>
+            {% endif %}
+          </ul>
+        </li>
+        <!-- <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
+          <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps-scrollbar-y-rail" style="top: 0px; height: 529.333px; right: 3px;">
+          <div class="ps-scrollbar-y" style="top: 0px; height: 446px;"></div>
+        </div> -->
+      </ul>
+      <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only amber darken-4">
+        <i class="material-icons">menu</i>
+      </a>
+    </aside>
+    <!-- END LEFT SIDEBAR NAV-->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+    <!-- START CONTENT -->
+    {% block dashboard_content %}
+    
+
+    
+    <section id="content">
+      <!--start container-->
+      <div class="container">
+      </div>
+      <!--end container-->
+    </section>
+    {% endblock dashboard_content %}        
+    <!-- END CONTENT -->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+  </div>
+  <!-- END WRAPPER -->
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/materialize.min.js' %}"></script>
+<script src="{% static 'perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'dropify/js/dropify.min.js' %}"></script>
+<script type="text/javascript">
+  $(window).ready(() => {
+    $('.dropify').dropify();
+  });
+</script>
+{% if messages %}
+<script>
+  $(document).ready(() => {
+    {% for message in messages %}
+      M.toast({
+        html: `{{ message|escape }}`, 
+        classes: `{{ message.tags }}`,
+        displayLength: 1500
+      })
+    {% endfor %}
+  })
+</script>
+{% endif %}
+{% block dashboard_scripts %}
+{% endblock dashboard_scripts %}
+{% endblock scripts %}
+

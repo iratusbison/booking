@@ -1,0 +1,71 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+{% block dashboard_styles %}
+<style>
+    .sale-row {
+        margin: 1rem 0;
+        padding: 1rem 0;
+        transition: background-color .1s ease-in-out;
+    }
+    .sale-row h5{
+        margin: 0;
+        margin-bottom: .25rem;
+    }
+    .sale-row:hover {
+        background: #eee;
+    }
+</style>
+{% endblock dashboard_styles %}
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <nav class="clean">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
+                    <a href="{% url 'sale_list' %}" class="breadcrumb" style="font-size:1rem">Sales</a>
+                    
+                </div>
+            </div>
+        </nav>
+                            
+        <div class="card z-depth-0">
+            <div class="card-content">
+                <div class="card-title row" style="margin-bottom: 1rem">
+                    <h4 class="col s8 l11" style="margin: 0">
+                        Sales
+                    </h4>
+                    <a href="{% url 'sale_new' %}" class="col s4 l1 btn-small amber darken-4">
+                        <i class="fa fa-plus"></i>
+                        <span>Add</span>
+                    </a>
+                </div>
+                {% for sale in sales %}
+                    <div class="row sale-row valign-wrapper z-depth-1" onclick="location.href=`{% url 'sale_detail' pk=sale.pk %}`" style="cursor: pointer">
+                        <div class="col s7 m9">
+                            <h5>
+                                Sale #{{ sale.pk }}
+                            </h5>
+                            <p>{{ sale.date_created }}</p>
+                        </div>
+
+                    </div>
+                    {% empty %}
+                    <p>There are no sales available</p>
+                {% endfor %}
+                {% if paginations|length > 1 %}
+                <ul class="pagination">
+                    {% for page in paginations %}
+                        {% if page == pagination %}
+                        <li class="active"><a href="{% url 'sale_list' %}?p={{ page }}">{{ page }}</a></li>
+                        {% else %}
+                        <li class="waves-effect"><a href="{% url 'sale_list' %}?p={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock dashboard_content %}

@@ -1,0 +1,142 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m6">
+        <h5>Total Revenue for All Sales:</h5>
+        <table class="clean">
+            <tr>
+                <td>Total:</td>
+                <td style="text-align: left">Rp {{ total_revenue|floatformat:0|intcomma }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m6">
+        <h5>Total Revenue by Month:</h5>
+        <table class="clean">
+            <tr>
+                <th> Month (in Number) </th>
+                <th>Total Revenue</th>
+            </tr>
+
+            {% for month, revenue in revenue_by_month.items %}
+            <tr>
+                <td>{{ month }}</td>
+                <td style="text-align: left">Rp {{ revenue|floatformat:0|intcomma }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m6">
+        <h5>Total Revenue by Day:</h5>
+        <table class="clean">
+            <tr>
+                <th> Day </th>
+                <th>Total Revenue</th>
+            </tr>
+
+            {% for day, revenue in revenue_by_day.items %}
+            <tr>
+                <td>{{ day }}</td>
+                <td style="text-align: left">Rp {{ revenue|floatformat:0|intcomma }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m6">
+        <h5>Revenue Chart by Day:</h5>
+        <canvas id="dayRevenueChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m6">
+        <h5>Revenue Chart by Month:</h5>
+        <canvas id="monthRevenueChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    var dayChartData = {
+        labels: [{% for day, revenue in revenue_by_day.items %}"{{ day }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [
+            {
+                label: 'Total Revenue by Day',
+                data: [{% for day, revenue in revenue_by_day.items %}{{ revenue }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }
+        ]
+    };
+
+    var monthChartData = {
+        labels: [{% for month, revenue in revenue_by_month.items %}"{{ month }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [
+            {
+                label: 'Total Revenue by Month',
+                data: [{% for month, revenue in revenue_by_month.items %}{{ revenue }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }
+        ]
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var dayCtx = document.getElementById('dayRevenueChart').getContext('2d');
+        var dayChart = new Chart(dayCtx, {
+            type: 'bar',
+            data: dayChartData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        callback: function (value, index, values) {
+                            return 'Rp ' + value.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+
+        var monthCtx = document.getElementById('monthRevenueChart').getContext('2d');
+        var monthChart = new Chart(monthCtx, {
+            type: 'bar',
+            data: monthChartData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        callback: function (value, index, values) {
+                            return 'Rp ' + value.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock dashboard_content %}

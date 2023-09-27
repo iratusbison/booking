@@ -1,0 +1,14 @@
+# Ignore environment files
+.env
+
+# Ignore media files
+media/**/*
+
+# Ignore venv
+django-venv/
+
+# Ignore .vscode settings
+.vscode/
+
+# Ignore node_modules
+node_modules/
