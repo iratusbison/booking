@@ -131,7 +131,7 @@ table.clean tr {
                 <a href="{% url 'restock_list' %}" class="waves-effect {% if active_tab == 'restock' %}nav-active{% endif %}">
                     <i class="fa fa-redo" style="font-size: 1rem;"></i>
                     <span class="nav-text">Restock</span>
-        
+
                   </a>
             </li>
             {% endif %}
@@ -143,12 +143,7 @@ table.clean tr {
                   </a>
             </li>
             {% endif %}
-            <li class="bold">
-              <a href="{% url 'print' %}" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
-                  <i class="fa fa-print" style="font-size: 1rem;"></i>
-                  <span class="nav-text">Printing</span>
-                </a>
-            </li>
+
             {% if request.session.ts_user.is_admin %}
             <li class="bold">
               <a href="{% url 'user_list' %}" class="waves-effect {% if active_tab == 'staff' %}nav-active{% endif %}">
@@ -159,6 +154,13 @@ table.clean tr {
             {% endif %}
           </ul>
         </li>
+        <li>
+           <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
+             <span class="nav-text"> exit
+               <i class="material-icons">exit_to_app </i>
+             </span>
+           </a>
+         </li>
         <!-- <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
           <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
         </div>
@@ -174,16 +176,16 @@ table.clean tr {
     <!-- //////////////////////////////////////////////////////////////////////////// -->
     <!-- START CONTENT -->
     {% block dashboard_content %}
-    
 
-    
+
+
     <section id="content">
       <!--start container-->
       <div class="container">
       </div>
       <!--end container-->
     </section>
-    {% endblock dashboard_content %}        
+    {% endblock dashboard_content %}
     <!-- END CONTENT -->
     <!-- //////////////////////////////////////////////////////////////////////////// -->
   </div>
@@ -207,7 +209,7 @@ table.clean tr {
   $(document).ready(() => {
     {% for message in messages %}
       M.toast({
-        html: `{{ message|escape }}`, 
+        html: `{{ message|escape }}`,
         classes: `{{ message.tags }}`,
         displayLength: 1500
       })
