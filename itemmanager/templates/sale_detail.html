@@ -20,19 +20,6 @@
             $("#change-amount").text(changeAmount.toFixed(2));
         }
 
-        // Listen for changes in payment method
-        $("#payment-method").on("change", function () {
-            const selectedPaymentMethod = $(this).val();
-
-            if (selectedPaymentMethod === "cash") {
-                // Display the change calculation fields
-                $("#change-result").show();
-            } else {
-                // Hide the change calculation fields for non-cash payments
-                $("#change-result").hide();
-            }
-        });
-
         // Listen for changes in total price or amount received
         $("#total-price, #amount-received").on("input", calculateChange);
 
@@ -112,9 +99,10 @@
     </div>
 </div>
 
+<!-- Modified input field with total revenue value -->
 <div class="row">
     <div class="input-field col s12">
-        <input id="total-price" type="number" name="total_price" step="0.01">
+        <input id="total-price" type="number" name="total_price" step="0.01" value="{{ saleitems|total_revenue|floatformat:2 }}">
         <label for="total-price">Total Price</label>
     </div>
 </div>
