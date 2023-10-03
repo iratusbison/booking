@@ -39,17 +39,17 @@
 <div class="row">
     <div class="col s12 m6">
         <h5>Total Revenue by Month:</h5>
-        <table class="clean">
+        <div class="calendar">
             <tr>
                 <th> Month (in Number) </th>
-                <th>Total Revenue</th>
+                
             </tr>
 
             {% for month, revenue in revenue_by_month.items %}
-            <tr>
-                <td>{{ month }}</td>
-                <td style="text-align: left">₹ {{ revenue|floatformat:0|intcomma }}</td>
-            </tr>
+           <div class="calendar-cell">
+                <div class="calendar-month">{{ month }}</div>
+                <div class="revenue-amount">₹ {{ revenue|floatformat:0|intcomma }}</div>
+            </div>
             {% endfor %}
         </table>
     </div>
@@ -60,10 +60,13 @@
         <h5>Total Revenue by Day:</h5>
         <div class="calendar">
             {% for day, revenue in revenue_by_day.items %}
+            {% for month, revenue in revenue_by_month.items %}
             <div class="calendar-cell">
-                <div class="calendar-day">{{ day }}</div>
+                
+                <div class="calendar-day">{{ day }} / {{ month }}</div>
                 <div class="revenue-amount">₹ {{ revenue|floatformat:0|intcomma }}</div>
             </div>
+            {% endfor %}
             {% endfor %}
         </div>
     </div>
