@@ -5,7 +5,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView
-from django.views.generic.detail import DetailView 
+from django.views.generic.detail import DetailView
 
 from baseapp.decorators import admin_required
 from itemmanager.models.sale import *
@@ -29,19 +29,14 @@ class SaleListView(TemplateView):
             pagination = 0
         pagination = pagination if pagination > 0 else 0
         sales_per_page = 10
-        ts_user_data = request.session.get('ts_user', {})
-        admin = ts_user_data.get('is_admin', False)
 
-        #admin = request.session['ts_user']['is_admin']
-        
         sales = Sale.objects.order_by('-date_created')
-        if not admin:
-            sales = sales.filter(user_on_duty=request.user)
         max_pagination = math.ceil(sales.count() / sales_per_page)
-        min_sale_index = pagination*sales_per_page
+        min_sale_index = pagination * sales_per_page
+
         context = {
             'sales': sales[min_sale_index:min_sale_index+sales_per_page],
-            'paginations': range(1, max_pagination+1),
+            'paginations': range(1, max_pagination + 1),
             'pagination': pagination + 1,
             'min_sale_index': min_sale_index,
             'active_tab': 'sale'
@@ -96,7 +91,7 @@ class SaleNewView(TemplateView):
                 price = item.item_price*quantity
                 sale_item = SaleItem(sale=sale, item=item, sale_amount=quantity, sale_price=price)
                 sale_item.save()
-            
+
             return redirect('sale_detail', pk=sale.pk)
         else:
             context = self.get_context_data(formset=saleitem_formset)
@@ -110,23 +105,21 @@ class SaleDetailView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         sale = kwargs.get('sale')
         saleitems = SaleItem.objects.filter(sale=sale).order_by('item__item_name')
-       
+
         context = {
             'sale': sale,
             'saleitems': saleitems,
             'active_tab': 'sale',
-            
         }
         return context
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         sale = get_object_or_404(Sale, pk=self.kwargs.get('pk'))
-        if sale.user_on_duty != request.user:
-            raise Http404
         context = self.get_context_data(sale=sale)
         return render(request, self.template_name, context)
-    
+
+
     from itemmanager.models.saleitem import SaleItem
 
 def calculate_total_revenue(sales):
@@ -166,7 +159,7 @@ class SaleListViewWithTotal(ListView):
 
         context['revenue_by_month'] = revenue_by_month
 
-    
+
          # Calculate revenue by day
         revenue_by_day = {}
         for sale in sales:
