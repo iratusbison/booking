@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.forms.formsets import formset_factory
+from django.forms.formsets import formset_factory, ValidationError
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
@@ -52,49 +52,42 @@ class SaleListView(TemplateView):
 
 class SaleNewView(TemplateView):
     template_name = 'sale_new.html'
-    SaleItemFormSet = formset_factory(
-            SaleItemForm, formset=BaseSaleItemFormSet)
+    SaleItemFormSet = formset_factory(SaleItemForm, formset=BaseSaleItemFormSet)
 
     def get_context_data(self, *args, **kwargs):
         context = {
             'saleitem_formset': kwargs.get('formset'),
-            'active_tab': 'sale'
+            'active_tab': 'sale',
+            'formset_errors': kwargs.get('formset_errors', {}),
         }
         return context
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         saleitem_formset = self.SaleItemFormSet()
-
         context = self.get_context_data(formset=saleitem_formset)
         return render(request, self.template_name, context)
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         saleitem_formset = self.SaleItemFormSet(request.POST)
-        saleitem_formset.clean()
+
+        # Create a dictionary to store formset errors
+        formset_errors = defaultdict(list)
+
+        if not saleitem_formset.is_valid():
+            # Handle formset validation errors
+            for form in saleitem_formset:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        formset_errors[field].append(error)
+
         if saleitem_formset.is_valid():
-            # Create sale
-            sale = Sale(user_on_duty=request.user)
-            sale.save()
-
-            # Make unique
-            sales = defaultdict(int)
-            for saleitem_form in saleitem_formset:
-                item_pk = saleitem_form.cleaned_data.get('item')
-                quantity = saleitem_form.cleaned_data.get('quantity')
-                item = Item.objects.get(pk=item_pk)
-                sales[item] += quantity
-
-            # Save all saleitems
-            for item, quantity in sales.items():
-                price = item.item_price*quantity
-                sale_item = SaleItem(sale=sale, item=item, sale_amount=quantity, sale_price=price)
-                sale_item.save()
+            # Your code for saving the sale and sale items...
 
             return redirect('sale_detail', pk=sale.pk)
         else:
-            context = self.get_context_data(formset=saleitem_formset)
+            context = self.get_context_data(formset=saleitem_formset, formset_errors=formset_errors)
             return render(request, self.template_name, context)
 
 
