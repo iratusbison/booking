@@ -58,7 +58,6 @@ class SaleNewView(TemplateView):
         context = {
             'saleitem_formset': kwargs.get('formset'),
             'active_tab': 'sale',
-            'formset_errors': kwargs.get('formset_errors', {}),
         }
         return context
 
@@ -83,12 +82,29 @@ class SaleNewView(TemplateView):
                         formset_errors[field].append(error)
 
         if saleitem_formset.is_valid():
-            # Your code for saving the sale and sale items...
+            # Create sale
+            sale = Sale(user_on_duty=request.user)
+            sale.save()
+
+            # Make unique
+            sales = defaultdict(int)
+            for saleitem_form in saleitem_formset:
+                item_pk = saleitem_form.cleaned_data.get('item')
+                quantity = saleitem_form.cleaned_data.get('quantity')
+                item = Item.objects.get(pk=item_pk)
+                sales[item] += quantity
+
+            # Save all saleitems
+            for item, quantity in sales.items():
+                price = item.item_price * quantity
+                sale_item = SaleItem(sale=sale, item=item, sale_amount=quantity, sale_price=price)
+                sale_item.save()
 
             return redirect('sale_detail', pk=sale.pk)
         else:
             context = self.get_context_data(formset=saleitem_formset, formset_errors=formset_errors)
             return render(request, self.template_name, context)
+
 
 
 class SaleDetailView(TemplateView):
