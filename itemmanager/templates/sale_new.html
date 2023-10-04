@@ -13,6 +13,8 @@
 {% endblock dashboard_styles %}
 
 {% block dashboard_content %}
+
+
 <div class="row">
     <div class="row col s12">
         <nav class="clean">
@@ -31,6 +33,23 @@
                     {{ error|escape }}<br>
                 {% endfor %}
             </div>
+{% if formset_errors %}
+<div class="alert alert-danger">
+    <strong>Error:</strong> There are issues with your submission. Please correct the following:
+    <ul>
+        {% for field, errors in formset_errors.items %}
+            <li>{{ field }}:
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
         </div>
         {% endif %}
         <h4 style="padding: 0 0.75rem">
@@ -39,13 +58,14 @@
         <form action="{% url 'pricelist' %}?" method="GET">
         <input id="search" type="search" name="f" value="{{ filter_pattern }}" placeholder="Search items">
         </form>
+
         <form id="sale-form" class="col s12" method="POST" onsubmit="return confirm('Are you sure?')">
             <div class="row">
                 <div class="col s7 m9">
                     <h6><b>Item</b></h6>
                 </div>
                 <div class="col s3 m2">
-                    <h6><b>Quantity</b></h6> 
+                    <h6><b>Quantity</b></h6>
                 </div>
                 <div class="col s2 m1">
                 </div>
