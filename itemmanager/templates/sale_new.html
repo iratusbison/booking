@@ -36,6 +36,9 @@
         <h4 style="padding: 0 0.75rem">
             New sale
         </h4>
+        <form action="{% url 'pricelist' %}?" method="GET">
+        <input id="search" type="search" name="f" value="{{ filter_pattern }}" placeholder="Search items">
+        </form>
         <form id="sale-form" class="col s12" method="POST" onsubmit="return confirm('Are you sure?')">
             <div class="row">
                 <div class="col s7 m9">
