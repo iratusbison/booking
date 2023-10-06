@@ -2,6 +2,14 @@
 {% load humanize %}
 {% block dashboard_content %}
 <style>
+ .orange-button {
+   background-color: #ff6f00;
+   color: #fff;
+
+   border: none;
+
+   cursor: pointer;
+}
   .toggle-button.active {
     background-color: #007bff;
     color: #fff; /* Text color for active state */
@@ -42,7 +50,7 @@
 
 <div class="row">
     <div class="col s12 m6">
-        <button id="toggleMonth">click here to view Total Revenue by Month</button>
+        <button id="toggleMonth" class="orange-button">click here to view Total Revenue by Month</button>
 
         <div class="calendar" id="revenueByMonth" style="display: none;">
             <table>
@@ -65,7 +73,7 @@
 
 <div class="row">
     <div class="col s12 m6">
-        <button id="toggleDay">click here to view Total Revenue by Day</button>
+        <button id="toggleDay" class="orange-button">click here to view Total Revenue by Day</button>
 
         <div class="calendar" id="revenueByDay" style="display: none;">
             <table>
@@ -110,7 +118,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
  <div class="row" >
         <div class="col s12 m6">
-            <button id="toggleDayChart">click here to view Revenue Chart by Day</button>
+            <button id="toggleDayChart" class="orange-button">click here to view Revenue Chart by Day</button>
 
             <canvas id="dayRevenueChart" width="400" height="200" style="display: none;"></canvas>
         </div>
@@ -118,7 +126,7 @@
 
     <div class="row" >
         <div class="col s12 m6">
-            <button id="toggleMonthChart">click here to view Revenue Chart by Month</button>
+            <button id="toggleMonthChart" class="orange-button">click here to view Revenue Chart by Month</button>
 
             <canvas id="monthRevenueChart" width="400" height="200" style="display: none;"></canvas>
         </div>
