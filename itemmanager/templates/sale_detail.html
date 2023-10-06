@@ -93,7 +93,20 @@
                         </table>
                     </div>
                 </div>
-                <button id="print-button" class="btn orange">Print Receipt</button>
+ <style>
+                   .orange-button {
+                   background-color: #ff6f00;
+                   color: #fff;
+
+                  border: none;
+
+                  cursor: pointer;
+                               }
+</style>
+                <a href="{% url 'sale_new' %}" >
+
+                    <button class = "orange-button">Add another Sale</button>
+                </a>
             </div>
         </div>
     </div>
