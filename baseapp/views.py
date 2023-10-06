@@ -26,12 +26,12 @@ def login(request):
             request.session['ts_user']['is_admin'] = tsuser.is_admin()
             
             auth_login(request, user)
-            return redirect('/dashboard/')
+            return redirect('/dashboard/pricelist/')
         else:
             return render(request, 'core/login.html', {'error': True})
     else:
         if request.user.is_authenticated:
-            return redirect('/dashboard/')
+            return redirect('/dashboard/pricelist/')
         return render(request, 'core/login.html')
 
 def logout(request):
