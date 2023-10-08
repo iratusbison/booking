@@ -42,13 +42,12 @@ class RestockListView(TemplateView):
     @method_decorator(admin_required)
     def get(self, request, *args, **kwargs):
         pagination = request.GET.get('p', '') or 1
-        context = self.get_context_data(page=pagination)        
+        context = self.get_context_data(page=pagination)
         return render(request, self.template_name, context)
 
 class RestockNewView(TemplateView):
     template_name = 'restock_new.html'
-    RestockItemFormSet = formset_factory(
-            RestockItemForm, formset=BaseRestockItemFormSet)
+    RestockItemFormSet = formset_factory(RestockItemForm, formset=BaseRestockItemFormSet)
 
     def get_context_data(self, *args, **kwargs):
         context = {
@@ -70,43 +69,59 @@ class RestockNewView(TemplateView):
     def post(self, request, *args, **kwargs):
         restock_form = RestockForm(request.POST, request.FILES)
         restockitem_formset = self.RestockItemFormSet(request.POST)
-        print(request.POST)
-        print(request.FILES)
-        print(restockitem_formset.is_valid())
         if restock_form.is_valid() and restockitem_formset.is_valid():
             # Create restock
             proof = request.FILES.get('restock_proof_of_payment', None)
-
             restock = Restock(restock_PIC=request.user, restock_proof_of_payment=proof)
             restock.save()
 
             # Make unique
-            restock_items = []
-            restock_quantities = defaultdict(int)
-            restock_costs = defaultdict(float)
+            restock_items = {}
+
             for restockitem_form in restockitem_formset:
                 item_pk = restockitem_form.cleaned_data.get('item')
                 quantity = restockitem_form.cleaned_data.get('quantity')
                 cost = restockitem_form.cleaned_data.get('cost')
                 item = Item.objects.get(pk=item_pk)
                 print(item, quantity, cost)
-                restock_items.append(item)
-                restock_quantities[item] += quantity
-                restock_costs[item] += cost
 
-            # Save all restockitems
-            for item in restock_items:
-                quantity = restock_quantities[item]
-                cost = restock_costs[item]
-                restock_item = RestockItem(restock=restock, item=item, restock_item_amount=quantity, restock_item_total_cost=cost)
-                restock_item.save()
-            
+                if item.pk in restock_items:
+                    # If item already exists in restock_items, update the quantity and cost
+                    restock_items[item.pk]['quantity'] += quantity
+                    restock_items[item.pk]['cost'] += cost
+                else:
+                    # If item doesn't exist, add it to restock_items
+                    restock_items[item.pk] = {
+                        'item': item,
+                        'quantity': quantity,
+                        'cost': cost
+                    }
+
+            # Save or update restockitems
+            for item_pk, item_data in restock_items.items():
+                item = item_data['item']
+                quantity = item_data['quantity']
+                cost = item_data['cost']
+                # Check if a RestockItem with the same restock and item exists
+                existing_restock_item = RestockItem.objects.filter(restock=restock, item=item).first()
+                if existing_restock_item:
+                    # If it exists, update the quantity and cost
+                    existing_restock_item.restock_item_amount += quantity
+                    existing_restock_item.restock_item_total_cost += cost
+                    existing_restock_item.save()
+                else:
+                    # If it doesn't exist, create a new RestockItem
+                    restock_item = RestockItem(restock=restock, item=item, restock_item_amount=quantity, restock_item_total_cost=cost)
+                    restock_item.save()
+
             notice = "Restock was successfully created"
             messages.success(request, notice, extra_tags='green rounded')
             return redirect('restock_detail', pk=restock.pk)
         else:
             context = self.get_context_data(formset=restockitem_formset, form=restock_form)
             return render(request, self.template_name, context)
+
+
 
 class RestockDetailView(TemplateView):
     model = Restock
