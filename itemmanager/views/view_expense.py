@@ -8,7 +8,7 @@ def expense_list(request):
     expenses = Expense.objects.all()
 
     total_expenses = expenses.aggregate(total=Sum('amount'))['total']
-    return render(request, 'expenses/expense_list.html', {'expenses': expenses, 'total_expenses': total_expenses})
+    return render(request, 'expense_list.html', {'expenses': expenses, 'total_expenses': total_expenses})
 
 def add_expense(request):
     if request.method == 'POST':
@@ -18,11 +18,11 @@ def add_expense(request):
             return redirect('expense_list')
     else:
         form = ExpenseForm()
-    return render(request, 'expenses/add_expense.html', {'form': form})
+    return render(request, 'add_expense.html', {'form': form})
 
 def delete_expense(request, expense_id):
     expense = get_object_or_404(Expense, pk=expense_id)
     if request.method == 'POST':
         expense.delete()
         return redirect('expense_list')
-    return render(request, 'expenses/delete_expense.html', {'expense': expense})
+    return render(request, 'delete_expense.html', {'expense': expense})
