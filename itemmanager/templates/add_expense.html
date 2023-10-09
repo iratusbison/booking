@@ -1,0 +1,14 @@
+{% extends "core/dashboard.html" %}
+
+
+{% block dashboard_content %}
+<h5>Add Expense</h5>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Expense</button>
+</form>
+
+<a href="{% url 'expense_list' %}">Back to Expense List</a>
+{% endblock dashboard_content %}
