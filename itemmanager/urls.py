@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 from itemmanager.views.view_item import PricelistView , Item, ItemDeleteView, ItemDetailView, ItemEditView , ItemForm, ItemNewView, RestockItem
 from itemmanager.views.view_restock import RestockListView, RestockDeleteView,RestockDetailView,RestockNewView
 from itemmanager.views.view_sale import SaleListView, SaleNewView, SaleDetailView, SaleDeleteView ,SaleListViewWithTotal
+from itemmanager.views.view_expense import expense_list, add_expense, delete_expense
 
 
 urlpatterns = [
@@ -19,6 +20,10 @@ urlpatterns = [
     path('restocks/new/', RestockNewView.as_view(), name='restock_new'),
     path('restocks/<int:pk>/', RestockDetailView.as_view(), name='restock_detail'),
     path('restocks/<int:pk>/delete', RestockDeleteView.as_view(), name='restock_delete'),
-     path('new_item/', ItemNewView.as_view(), name='new_item'),
+    path('new_item/', ItemNewView.as_view(), name='new_item'),
     path('to', SaleListViewWithTotal.as_view(), name='sale_list_with_total'),
+    path('expense', expense_list, name='expense_list'),
+    path('add_expense/', add_expense, name='add_expense'),
+    path('delete_expense/<int:expense_id>/', delete_expense, name='delete_expense'),
+
 ]
