@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
 <link rel="stylesheet" href="{% static 'dropify/css/dropify.min.css' %}">
 <style>
+
 .nav-active {
   border-right: solid .3rem #263238;
 }
@@ -154,6 +155,14 @@ table.clean tr {
             {% endif %}
           </ul>
         </li>
+         {% if request.session.ts_user.is_admin %}
+            <li class="bold">
+              <a href="{% url 'expense_list' %}" class="waves-effect ">
+                    <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
+                    <span class="nav-text">Expense notes</span>
+                  </a>
+            </li>
+            {% endif %}
         <li>
            <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
              <span class="nav-text"> exit
@@ -176,6 +185,58 @@ table.clean tr {
     <!-- //////////////////////////////////////////////////////////////////////////// -->
     <!-- START CONTENT -->
     {% block dashboard_content %}
+
+<style>
+/* Your existing styles... */
+
+/* Add this CSS class for the orange button */
+.orange-button {
+  background-color: #ff6f00;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.vendor-name {
+  font-family: 'YourDesiredFont', sans-serif; /* Replace 'YourDesiredFont' with the actual font name */
+  font-size: 18px; /* Adjust the font size as needed */
+  font-weight: bold; /* Adjust the font weight as needed */
+  color: black; /* Adjust the text color as needed */
+}
+</style>
+<section id="content">
+  <div class="container">
+    <form method="post" action="">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="orange-button">Add Vendor</button>
+    </form>
+    <table>
+      {% for vendor in vendors %}
+      <tr>
+        <td class="vendor-cell">
+          <h4 class="vendor-name">{{ vendor.name }}</h4>
+        </td>
+        <td class="vendor-cell">
+          <div class="vendor-notes-box">
+            <h4 class="vendor-name">{{ vendor.notes }}</h4>
+          </div>
+        </td>
+        <td>
+          <form method="post" action="{% url 'delete_vendor' vendor.id %}">
+            {% csrf_token %}
+            <button type="submit" class="orange-button">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</section>
+
+
+
 
 
 
