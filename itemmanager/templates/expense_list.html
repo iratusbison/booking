@@ -1,0 +1,32 @@
+{% extends "core/dashboard.html" %}
+{% block dashboard_content %}
+<h4>Expense List</h4>
+<h5><p>Total Expenses: ₹ {{ total_expenses|default:"0.00" }}</p></h5>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.description }}</td>
+            <td>₹ {{ expense.amount }}</td>
+            <td>{{ expense.date }}</td>
+            <td><a href="{% url 'delete_expense' expense.id %}">Delete</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No expenses yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'add_expense' %}" class="btn btn-primary">Add Expense</a>
+{% endblock dashboard_content %}
