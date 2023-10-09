@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from itemmanager.models.item import Item
 from itemmanager.models.restock import *
 from collections import defaultdict
+from itemmanager.models.expense import Expense
 
 
 class ItemForm(forms.ModelForm):
@@ -68,7 +69,7 @@ class RestockForm(forms.ModelForm):
 class RestockItemForm(forms.Form):
     quantity = forms.IntegerField(widget=forms.TextInput(
         attrs={'style': 'margin-bottom: 0', 'type': 'number'}))
-    
+
     cost = forms.FloatField(widget=forms.TextInput(
         attrs={'style': 'margin-bottom: 0', 'type': 'number', 'step': '0.01'}))
 
@@ -83,3 +84,28 @@ class RestockItemForm(forms.Form):
 
 class BaseRestockItemFormSet(BaseFormSet):
     pass
+
+
+
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        fields = ['description', 'amount', 'date']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
