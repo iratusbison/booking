@@ -1,0 +1,60 @@
+{% extends "core/dashboard.html" %}
+{% block dashboard_content %}
+{% load custom_filter %}
+
+
+
+
+<table class="loan-details">
+  <tr>
+    <th>Loan Details</th>
+    <th>Values</th>
+  </tr>
+  <tr>
+    <td>Amount</td>
+    <td>₹ {{ loan.amount }}</td>
+  </tr>
+  <tr>
+    <td>Interest Rate</td>
+    <td>{{ loan.interest_rate }}%</td>
+  </tr>
+  <tr>
+    <td>Start Date</td>
+    <td>{{ loan.start_date }}</td>
+  </tr>
+  <tr>
+    <td>End Date</td>
+    <td>{{ loan.end_date }}</td>
+  </tr>
+  <tr>
+    <td>Interest</td>
+    <td>₹ {{ loan.calculate_interest|floatformat:2 }}</td>
+  </tr>
+  <tr>
+    <td>Interest added with loan amount</td>
+    <td>₹ {{ total_amount|floatformat:2 }}</td>
+  </tr>
+</table>
+<table>
+<h4>Payments</h4>
+<ul>
+     {% for payment in payments %}
+    <li>
+        Payment Amount: ₹ {{ payment.amount }} - Date: {{ payment.payment_date }}
+        <form method="post" action="{% url 'delete_payment' section.id loan.id %}" onsubmit="return confirm('Are you sure you want to delete this payment?')">
+
+            {% csrf_token %}
+            <input type="hidden" name="payment_id" value="{{ payment.id }}">
+            <input type="submit" value="Delete">
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+</table>
+
+<a href="{% url 'make_payment' section.id loan.id %}" class="">Make Payment</a>
+
+
+
+
+{% endblock dashboard_content %}

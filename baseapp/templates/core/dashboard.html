@@ -31,11 +31,11 @@ table.clean tr {
   border: none;
 }
 .input-field input[type=text]:focus + label {
-  color: #ff6f00 ;
+  color: #001eff ;
 }
 .input-field input[type=text]:focus {
-  border-bottom: 1px solid #ff6f00;
-  box-shadow: 0 1px 0 0 #ff6f00;
+  border-bottom: 1px solid #001eff;
+  box-shadow: 0 1px 0 0 #001eff;
 }
 </style>
 
@@ -52,31 +52,14 @@ table.clean tr {
           <li>
             <h1 class="logo-wrapper">
               <a href="{% url 'dashboard' %}" class="brand-logo darken-1">
-                <img src="{% static 'images/logo.png' %}" alt="technostall-logo">
-                <span class="logo-text hide-on-med-and-down heading">KASH</span>
+
+                <span class="logo-text hide-on-med-and-down heading">K</span>
               </a>
             </h1>
           </li>
         </ul>
         <ul class="right hide-on-med-and-down">
-          <li>
-            <a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown">
-              <i class="material-icons">notifications_none
-                {% comment %} <small class="notification-badge amber darken-4">5</small> {% endcomment %}
-              </i>
-            </a>
-            <ul id="notifications-dropdown" class="dropdown-content">
-              <li>
-                <h6>NOTIFICATIONS
-                  {% comment %} <span class="new badge">5</span> {% endcomment %}
-                </h6>
-              </li>
-              <li class="divider"></li>
-              <li>
-                <a href="#!" class="grey-text text-darken-2">No new notifications :D</a>
-              </li>
-            </ul>
-          </li>
+
           <li>
             <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button" data-activates="profile-dropdown" title="Profile">
               <span class="avatar-status avatar-online">
@@ -110,59 +93,19 @@ table.clean tr {
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
-                <a href="{% url 'sale_new' %}" class="waves-effect amber darken-4 white-text">
-                    <i class="fa fa-plus white-text" style="font-size: 1rem;"></i>
-                    <span class="nav-text">ADD SALE</span>
+                <a href="{% url 'expense_list' %}" class="">
+                    <span class="nav-text">Expense notes</span>
                 </a>
             </li>
-            <li class="bold">
-              <a href="{% url 'pricelist' %}" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
-                  <i class="fa fa-clipboard-list" style="font-size: 1rem;"></i>
-                  <span class="nav-text">Pricelist</span>
-                </a>
-            </li>
-            <li class="bold">
-              <a href="{% url 'sale_list' %}" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
-                  <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
-                  <span class="nav-text">Sales</span>
-                </a>
-            </li>
-            {% if request.session.ts_user.is_admin %}
-            <li class="bold">
-                <a href="{% url 'restock_list' %}" class="waves-effect {% if active_tab == 'restock' %}nav-active{% endif %}">
-                    <i class="fa fa-redo" style="font-size: 1rem;"></i>
-                    <span class="nav-text">Restock</span>
-
-                  </a>
-            </li>
-            {% endif %}
-            {% if request.session.ts_user.is_admin %}
-            <li class="bold">
-              <a href="{% url 'sale_list_with_total' %}" class="waves-effect ">
-                    <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
-                    <span class="nav-text">total revenue</span>
-                  </a>
-            </li>
-            {% endif %}
-
-            {% if request.session.ts_user.is_admin %}
-            <li class="bold">
-              <a href="{% url 'user_list' %}" class="waves-effect {% if active_tab == 'staff' %}nav-active{% endif %}">
-                  <i class="fas fa-users" style="font-size: 1rem;"></i>
-                  <span class="nav-text">Staff manager</span>
-                </a>
-            </li>
-            {% endif %}
           </ul>
         </li>
-         {% if request.session.ts_user.is_admin %}
-            <li class="bold">
-              <a href="{% url 'expense_list' %}" class="waves-effect ">
-                    <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
-                    <span class="nav-text">Expense notes</span>
-                  </a>
-            </li>
-            {% endif %}
+
+
+
+  <a href="{% url 'section_list' %}" class="">
+    Loan Sections
+  </a>
+
         <li>
            <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
              <span class="nav-text"> exit
@@ -170,12 +113,7 @@ table.clean tr {
              </span>
            </a>
          </li>
-        <!-- <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
-          <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
-        </div>
-        <div class="ps-scrollbar-y-rail" style="top: 0px; height: 529.333px; right: 3px;">
-          <div class="ps-scrollbar-y" style="top: 0px; height: 446px;"></div>
-        </div> -->
+
       </ul>
       <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only amber darken-4">
         <i class="material-icons">menu</i>
@@ -230,4 +168,3 @@ table.clean tr {
 {% block dashboard_scripts %}
 {% endblock dashboard_scripts %}
 {% endblock scripts %}
-

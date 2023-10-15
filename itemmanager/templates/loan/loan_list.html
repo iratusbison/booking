@@ -1,0 +1,47 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<!-- Add this section tag at the beginning of the content -->
+<section id="loan-list">
+<h4>{{ section.name }}</h4>
+<ul>
+  {% for loan in loans %}
+    <li>
+      <a href="{% url 'loan_detail' section.id loan.id %}"></a>
+    </li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'section_list' %}">Back to Sections</a>
+</section>
+
+<h4>Loan List</h2>
+<h5><p>Total Loan Amount: ₹{{ total_loan_amount }} </p></h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Loan ID</th>
+            <th>Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for loan in loans %}
+            <tr>
+                <td><a href="{% url 'loan_detail' section.id loan.id  %}">{{ loan.id }}</a></td>
+                <td>₹{{ loan.amount }}</td>
+                <td>
+                    <a href="{% url 'loan_detail' section.id loan.id %}" class="">Details</a>
+                    <form method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="loan_id" value="{{ loan.id }}">
+                        <button type="submit" class="">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'add_loan' section.id %}" class="">Add Loan</a>
+{% endblock dashboard_content %}

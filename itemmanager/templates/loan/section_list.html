@@ -1,0 +1,19 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+ <!-- Add this code to your HTML template where you want to display the total loan amount of all sections -->
+₹{{ total_loan_amount_of_all_sections }} 
+
+  <ul>
+    {% for section in sections %}
+      <li>
+        <a href="{% url 'loan_list' section.id %}">{{ section.name }}</a>
+        <form method="post" action="{% url 'delete_section' section.id %}" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="">Delete</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'add_section' %}" class="btn btn-primary">Add Section</a>
+{% endblock %}

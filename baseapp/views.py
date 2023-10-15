@@ -24,14 +24,14 @@ def login(request):
             request.session['ts_user']['major_short'] = tsuser.major
             request.session['ts_user']['role_short'] = tsuser.role
             request.session['ts_user']['is_admin'] = tsuser.is_admin()
-            
+
             auth_login(request, user)
-            return redirect('/dashboard/pricelist/')
+            return redirect('/dashboard/')
         else:
             return render(request, 'core/login.html', {'error': True})
     else:
         if request.user.is_authenticated:
-            return redirect('/dashboard/pricelist/')
+            return redirect('/dashboard/')
         return render(request, 'core/login.html')
 
 def logout(request):
@@ -68,13 +68,13 @@ def subscribe(request):
             return redirect('home')
     except Subscription.DoesNotExist:
         pass
-    
+
     # Handle the subscription payment here (e.g., integrate with a payment gateway)
     # After successful payment, set the subscription dates
     subscription_start_date = date.today()
     subscription_end_date = subscription_start_date + timedelta(days=365)  # 1 year subscription
     Subscription.objects.create(user=user, subscription_start_date=subscription_start_date, subscription_end_date=subscription_end_date)
-    
+
     return redirect('home')
 
 @method_decorator(login_required, name='dispatch')
@@ -84,11 +84,11 @@ class HomeView(View):
         try:
             subscription = Subscription.objects.get(user=user)
             # Check if the subscription is active
-            
+
             if subscription.subscription_end_date >= date.today():
                 return render(request, 'core/home.html', {'subscription': subscription})
         except Subscription.DoesNotExist:
             pass
-        
+
         # If no active subscription, display a message
         return render(request, 'core/home.html', {'message': 'Your subscription has expired. Please renew it.'})

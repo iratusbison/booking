@@ -1,0 +1,12 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+
+  <form method="post" action="{% url 'add_section' %}">
+    {% csrf_token %}
+    <label for="section_name">Section Name:</label>
+    <input type="text" name="name" id="section_name">
+    <button type="submit">Add Section</button>
+  </form>
+</div>
+{% endblock %}
