@@ -101,10 +101,25 @@ table.clean tr {
         </li>
 
 
+        <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+                <a href="{% url 'isection_list' %}" class="">
+                    <span class="nav-text">investment section</span>
+                </a>
+            </li>
+          </ul>
+        </li>
 
-  <a href="{% url 'section_list' %}" class="">
-    Loan Sections
-  </a>
+       <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+                <a href="{% url 'section_list' %}" class="">
+                    <span class="nav-text">loan section</span>
+                </a>
+            </li>
+          </ul>
+        </li>
 
         <li>
            <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">

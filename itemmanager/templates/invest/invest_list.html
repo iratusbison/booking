@@ -1,0 +1,47 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<!-- Add this section tag at the beginning of the content -->
+<section id="investment-list">
+<h4>{{ isection.name }}</h4>
+<ul>
+  {% for investment in investments %}
+    <li>
+      <a href="{% url 'investment_detail' isection.id investment.id %}"></a>
+    </li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'isection_list' %}">Back to Sections</a>
+</section>
+
+<h4>investment List</h2>
+<h5><p>Total investment Amount: ₹{{ total_invest_amount }} </p></h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>investment ID</th>
+            <th>Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for investment in investments %}
+            <tr>
+                <td><a href="{% url 'investment_detail' isection.id investment.id  %}">{{ investment.id }}</a></td>
+                <td>₹{{ investment.amount }}</td>
+                <td>
+                    <a href="{% url 'investment_detail' isection.id investment.id %}" class="">Details</a>
+                    <form method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="invest_id" value="{{ investment.id }}">
+                        <button type="submit" class="">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'add_investment' isection.id %}" class="">Add investment</a>
+{% endblock dashboard_content %}

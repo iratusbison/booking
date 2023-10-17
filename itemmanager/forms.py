@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from collections import defaultdict
 from itemmanager.models.expense import Expense
 from itemmanager.models.loan import Loan, Payment, Section
+from itemmanager.models.invest import InPayment, Investment, InSection
 
 
 class ExpenseForm(forms.ModelForm):
@@ -43,11 +44,29 @@ class PaymentForm(forms.ModelForm):
             'payment_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
+class InSectionForm(forms.ModelForm):
+    class Meta:
+        model = InSection
+        fields = ['name']
 
 
 
+class InvestmentForm(forms.ModelForm):
+    class Meta:
+        model = Investment
+        fields = '__all__'
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
-
+class InPaymentForm(forms.ModelForm):
+    class Meta:
+        model = InPayment
+        fields = ['amount', 'payment_date', 'payment_type']
+        widgets = {
+            'payment_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 
 
