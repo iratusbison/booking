@@ -1,0 +1,18 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+    <h5>Sections - Total Expenses: ₹ {{ total_expenses }}</h5>
+    <ul>
+        {% for esection in esections %}
+            <li>
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <a href="{% url 'expense_list' esection.id %}">{{ esection.name }}</a>
+                    <input type="hidden" name="delete_esection" value="{{ esection.id }}">
+                    <button type="submit" class="">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_esection' %}">Add ESection</a>
+{% endblock %}

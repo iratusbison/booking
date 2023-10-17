@@ -1,13 +1,13 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from itemmanager.views.view_invest import  invest_list, investment_detail, add_investment, make_payment, delete_payment, isection_list, iadd_section
-from itemmanager.views.view_expense import expense_list, add_expense, delete_expense
+from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection
 from itemmanager.views.view_loan import  loan_list, loan_detail, add_loan, make_payment, delete_payment, section_list, add_section, delete_section
 
 urlpatterns = [
-    path('expense', expense_list, name='expense_list'),
-    path('add_expense/', add_expense, name='add_expense'),
-    path('delete_expense/<int:expense_id>/', delete_expense, name='delete_expense'),
+    #path('expense', expense_list, name='expense_list'),
+    #path('add_expense/', add_expense, name='add_expense'),
+    #path('delete_expense/<int:expense_id>/', delete_expense, name='delete_expense'),
     path('section/delete/<int:section_id>/', delete_section, name='delete_section'),
     path('section/list/', section_list, name='section_list'),
     path('section/add/', add_section, name='add_section'),
@@ -24,4 +24,10 @@ urlpatterns = [
     path('isection/<int:isection_id>/invest/<int:investment_id>/delete_payment/', delete_payment, name='delete_payment'),
     path('isection/list/', isection_list, name='isection_list'),
     path('isection/add/', iadd_section, name='iadd_section'),
+    path('esection/', esection_list, name='esection_list'),
+    path('esection/add/', add_esection, name='add_esection'),
+    path('esection/<int:esection_id>/expenses/', expense_list, name='expense_list'),
+    path('esection/<int:esection_id>/add_expense/', add_expense, name='add_expense'),
+    path('esection/expense/<int:expense_id>/delete/', delete_expense, name='delete_expense'),
+
 ]
