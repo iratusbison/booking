@@ -1,0 +1,14 @@
+{% extends "core/dashboard.html" %}
+
+
+{% block dashboard_content %}
+<h5>Add Income</h5>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save income</button>
+</form>
+
+<a href="{% url 'income_list' incsection.id %}">Back to Income List</a>
+{% endblock dashboard_content %}

@@ -1,0 +1,13 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+
+    <h5>Add Section</h5>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Section</button>
+    </form>
+    <a href="{% url 'incsection_list' %}">Back to incSection List</a>
+
+{% endblock %}

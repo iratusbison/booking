@@ -7,6 +7,20 @@ from collections import defaultdict
 from itemmanager.models.expense import Expense, ESection
 from itemmanager.models.loan import Loan, Payment, Section
 from itemmanager.models.invest import InPayment, Investment, InSection
+from itemmanager.models.income import Income,IncSection
+
+class IncomeForm(forms.ModelForm):
+    class Meta:
+        model = Income
+        fields = ['description', 'amount', 'date']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class IncSectionForm(forms.ModelForm):
+    class Meta:
+        model = IncSection
+        fields = ['name']
 
 
 class ExpenseForm(forms.ModelForm):

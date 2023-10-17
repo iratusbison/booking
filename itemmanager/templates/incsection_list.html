@@ -1,0 +1,18 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+    <h5>Sections - Total Incomes: ₹ {{ total_income }}</h5>
+    <ul>
+        {% for incsection in incsections %}
+            <li>
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <a href="{% url 'income_list' incsection.id %}">{{ incsection.name }}</a>
+                    <input type="hidden" name="delete_incsection" value="{{ incsection.id }}">
+                    <button type="submit" class="">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_incsection' %}">Add Section</a>
+{% endblock %}
