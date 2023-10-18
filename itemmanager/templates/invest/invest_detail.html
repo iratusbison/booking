@@ -35,24 +35,6 @@
     <td>₹ {{ total_amount|floatformat:2 }}</td>
   </tr>
 </table>
-<table>
-<h4>Payments</h4>
-<ul>
-     {% for payment in payments %}
-    <li>
-        Payment Amount: ₹ {{ payment.amount }} - Date: {{ payment.payment_date }}
-        <form method="post" action="{% url 'delete_payment' isection.id investment.id %}" onsubmit="return confirm('Are you sure you want to delete this payment?')">
-
-            {% csrf_token %}
-            <input type="hidden" name="payment_id" value="{{ payment.id }}">
-            <input type="submit" value="Delete">
-        </form>
-    </li>
-    {% endfor %}
-</ul>
-</table>
-
-<a href="{% url 'make_payment' isection.id investment.id %}" class="">Make Payment</a>
 
 
 

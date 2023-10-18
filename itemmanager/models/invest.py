@@ -25,18 +25,4 @@ class Investment(models.Model):
 
         return interest
 
-class InPayment(models.Model):
-    investment = models.ForeignKey(Investment, on_delete=models.CASCADE, null=True)
-    INSTALLMENT = 'Installment'
-    WHOLE_AMOUNT = 'Whole Amount'
-    PAYMENT_CHOICES = [
-        (INSTALLMENT, 'Installment'),
-        (WHOLE_AMOUNT, 'Whole Amount'),
-    ]
-    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    payment_date = models.DateField()
-    payment_type = models.CharField(
-        max_length=20,
-        choices=PAYMENT_CHOICES,
-        default=INSTALLMENT,
-    )
+

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from itemmanager.models.invest import Investment, InPayment, InSection
-from itemmanager.forms import InPaymentForm, InSectionForm, InvestmentForm
+from itemmanager.models.invest import Investment,  InSection
+from itemmanager.forms import  InSectionForm, InvestmentForm
 from django.db.models import Sum
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -23,14 +23,14 @@ def isection_list(request):
 
     isections = InSection.objects.all()
     total_invest_amount_of_all_isections = Investment.objects.aggregate(total=Sum('amount'))['total'] or 0
-    
+
     return render(request, 'invest/isection_list.html', {'isections': isections, 'total_invest_amount_of_all_isections': total_invest_amount_of_all_isections})
 
 @login_required
 def invest_list(request, isection_id):
     isection = get_object_or_404(InSection, id=isection_id)
     investments = Investment.objects.filter(section=isection)
-    
+
     total_invest_amount = investments.aggregate(total=Sum('amount'))['total'] or 0
     total_invest_amount_of_all_isections = Investment.objects.aggregate(total=Sum('amount'))['total'] or 0
 
@@ -91,8 +91,8 @@ def iadd_section(request):
         form = InSectionForm()
 
     return render(request, 'invest/iadd_section.html', {'form': form})
-    
- 
+
+
 
 
 @login_required
@@ -110,35 +110,3 @@ def add_investment(request, isection_id):
         form = InvestmentForm()
     return render(request, 'invest/add_invest.html', {'isection': isection, 'form': form})
 
-@login_required
-def make_payment(request, isection_id, investment_id):
-    isection = get_object_or_404(InSection, id=isection_id)
-    investment = get_object_or_404(Investment, id=investment_id)
-
-    if request.method == 'POST':
-        form = InPaymentForm(request.POST)
-        if form.is_valid():
-            payment = form.save(commit=False)
-            payment.investment = investment
-            payment.save()
-
-            # Update the invest balance and interest as needed
-
-            return redirect('investment_detail', insection_id=isection_id, investment_id=investment_id)
-
-
-    form = InPaymentForm()
-    return render(request, 'invest/payment_form.html', {'isection': isection, 'investment': investment, 'form': form})
-
-@login_required
-def delete_payment(request, isection_id, investment_id):
-    if request.method == 'POST':
-        payment_id = request.POST.get('payment_id')
-        try:
-            payment = InPayment.objects.get(id=payment_id)
-            payment.delete()
-        except InPayment.DoesNotExist:
-            # Handle the case where the payment does not exist
-            pass
-
-    return redirect('investment_detail', insection_id=isection_id, investment_id=investment_id)

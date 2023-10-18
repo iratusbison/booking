@@ -1,20 +1,33 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
- <!-- Add this code to your HTML template where you want to display the total investment amount of all sections -->
-₹{{ total_invest_amount_of_all_isections }} 
+<div style="text-align: center;">
 
-  <ul>
-    {% for isection in isections %}
-      <li>
-        <a href="{% url 'invest_list' isection.id %}">{{ isection.name }}</a>
-        <form method="post" action="{% url 'delete_section' isection.id %}" style="display: inline;">
-          {% csrf_token %}
-          <button class="delete-section-btn" data-isection-id="{{ isection.id }}">Delete Section</button>
+  <!-- Display the total investment amount of all sections -->
+  <p>Total Investment Amount: ₹{{ total_invest_amount_of_all_isections }}</p>
 
-        </form>
-      </li>
-    {% endfor %}
-  </ul>
+  <table style="margin: 0 auto;">
+    <thead>
+      <tr>
+       <th>Section Name</th> 
+        <th>Actions</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for isection in isections %}
+        <tr>
+          <td style="text-align: center;"><a href="{% url 'invest_list' isection.id %}" style="color: #333;">{{ isection.name }}</a></td>
+          <td>
+            <form method="post" action="{% url 'delete_section' isection.id %}" style="display: inline;">
+              {% csrf_token %}
+              <button class="delete-section-btn" data-isection-id="{{ isection.id }}">Delete Section</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
   <a href="{% url 'iadd_section' %}" class="btn btn-primary">Add Section</a>
+</div>
 {% endblock %}
