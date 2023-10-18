@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from itemmanager.views.view_invest import  invest_list, investment_detail, add_investment,  isection_list, iadd_section
-from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection
+from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection, generate_pdf
 from itemmanager.views.view_loan import  loan_list, loan_detail, add_loan, make_payment, delete_payment, section_list, add_section, delete_section
 from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection
 from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
@@ -33,6 +33,7 @@ urlpatterns = [
     path('esection/<int:esection_id>/expenses/', expense_list, name='expense_list'),
     path('esection/<int:esection_id>/add_expense/', add_expense, name='add_expense'),
     path('esection/expense/<int:expense_id>/delete/', delete_expense, name='delete_expense'),
+    path('generate-pdf/<int:esection_id>/', generate_pdf, name='generate_pdf'),
 
     path('incsection/', incsection_list, name='incsection_list'),
     path('incsection/add/', add_incsection, name='add_incsection'),

@@ -35,7 +35,8 @@
     <a href="{% url 'add_expense' esection.id %}" style="color: #333; margin-top: 20px;">Add Expense</a>
 
     <!-- Add a "Save as PDF" button with an ID for JavaScript -->
-    <button id="saveAsPdf" style="color: #fff; background-color: #333; border: none; padding: 10px 20px; margin-top: 20px;">Save as PDF</button>
+    <a href="{% url 'generate_pdf' esection.id %}" class="btn btn-primary">Generate PDF</a>
+
 </div>
 
 <style>
@@ -45,18 +46,5 @@
     }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<script>
-    // Add JavaScript code to handle the "Save as PDF" button click
-    document.getElementById('saveAsPdf').addEventListener('click', function() {
-        const pdf = new jsPDF();
-        
-        // Add content to the PDF
-        pdf.text('Expense List', 10, 10);
-        pdf.autoTable({ html: 'table' });
-        
-        // Save the PDF as a file
-        pdf.save('expense_list.pdf');
-    });
-</script>
+
 {% endblock %}
