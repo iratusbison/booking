@@ -4,6 +4,7 @@ from itemmanager.views.view_invest import  invest_list, investment_detail, add_i
 from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection
 from itemmanager.views.view_loan import  loan_list, loan_detail, add_loan, make_payment, delete_payment, section_list, add_section, delete_section
 from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection
+from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
 
 
 urlpatterns = [
@@ -39,5 +40,10 @@ urlpatterns = [
     path('incsection/<int:incsection_id>/incomes/', income_list, name='income_list'),
     path('incsection/<int:incsection_id>/add_income/', add_income, name='add_income'),
     path('incsection/income/<int:income_id>/delete/', delete_income, name='delete_income'),
+
+    path('task_list', task_list, name='task_list'),
+    path('task/create/', create_task, name='create_task'),
+    path('task/<int:pk>/edit/', edit_task, name='edit_task'),
+    path('task/<int:pk>/delete/', delete_task, name='delete_task'),
 
 ]

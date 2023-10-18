@@ -8,6 +8,7 @@ from itemmanager.models.expense import Expense, ESection
 from itemmanager.models.loan import Loan, Payment, Section
 from itemmanager.models.invest import InPayment, Investment, InSection
 from itemmanager.models.income import Income,IncSection
+from itemmanager.models.todolist import Task
 
 class IncomeForm(forms.ModelForm):
     class Meta:
@@ -86,14 +87,13 @@ class InPaymentForm(forms.ModelForm):
         }
 
 
-
-
-
-
-
-
-
-
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['title', 'due_date']
+        widgets = {
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 
 
