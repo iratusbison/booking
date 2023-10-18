@@ -27,6 +27,7 @@ urlpatterns = [
     path('isection/list/', isection_list, name='isection_list'),
     path('isection/add/', iadd_section, name='iadd_section'),
 
+
     path('esection/', esection_list, name='esection_list'),
     path('esection/add/', add_esection, name='add_esection'),
     path('esection/<int:esection_id>/expenses/', expense_list, name='expense_list'),

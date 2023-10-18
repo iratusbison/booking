@@ -1,15 +1,63 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<h1>Task List</h1>
-<ul>
-    {% for task in tasks %}
-        <li>
-            {{ task.title }} - Due Date: {{ task.due_date }}
-            <a href="{% url 'edit_task' task.pk %}">Edit</a>
-            <a href="{% url 'delete_task' task.pk %}">Delete</a>
-        </li>
-    {% endfor %}
-</ul>
-<a href="{% url 'create_task' %}">Create New Task</a>
+<div style="text-align: center;">
+    <h5>Task List</h5>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.due_date }}</td>
+                    <td>
+                        <a href="{% url 'edit_task' task.pk %}" style="color: #333;">Edit</a>
+                        <!-- Add a new table cell for the Delete link -->
+                        <td>
+                            <a href="{% url 'delete_task' task.pk %}" style="color: #333;">Delete</a>
+                        </td>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'create_task' %}" style="color: #333;" class="btn btn-primary">Create New Task</a>
+</div>
+
+<style>
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+    }
+
+    /* Style the table */
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+    }
+
+    /* Style the "Create New Task" button */
+    .btn.btn-primary {
+        color: #333;
+    }
+</style>
 {% endblock %}

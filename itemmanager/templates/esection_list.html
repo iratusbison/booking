@@ -1,18 +1,63 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
+<div style="text-align: center;">
     <h5>Sections - Total Expenses: ₹ {{ total_expenses }}</h5>
-    <ul>
-        {% for esection in esections %}
-            <li>
-                <form method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <a href="{% url 'expense_list' esection.id %}">{{ esection.name }}</a>
-                    <input type="hidden" name="delete_esection" value="{{ esection.id }}">
-                    <button type="submit" class="">Delete</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'add_esection' %}">Add ESection</a>
+
+    <table class="section-table">
+        <thead>
+            <tr>
+                <th>Section Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for esection in esections %}
+                <tr>
+                    <td><a href="{% url 'expense_list' esection.id %}" style="color: #333;">{{ esection.name }}</a></td>
+                    <td>
+                        <form method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="delete_esection" value="{{ esection.id }}">
+                            <button type="submit" style="color: #333;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'add_esection' %}" style="color: #333;">Add ESection</a>
+</div>
+
+<style>
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+    }
+
+    /* Style the section table */
+    .section-table {
+        width: 80%;
+        border-collapse: collapse;
+        margin: 20px auto;
+    }
+
+    .section-table th, .section-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .section-table th {
+        background-color: #f2f2f2;
+    }
+
+    /* Style the "Delete" buttons */
+    button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+</style>
 {% endblock %}

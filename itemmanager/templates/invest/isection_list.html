@@ -9,8 +9,8 @@
   <table style="margin: 0 auto;">
     <thead>
       <tr>
-       <th>Section Name</th> 
-        <th>Actions</th> 
+       <th>Section Name</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -18,10 +18,11 @@
         <tr>
           <td style="text-align: center;"><a href="{% url 'invest_list' isection.id %}" style="color: #333;">{{ isection.name }}</a></td>
           <td>
-            <form method="post" action="{% url 'delete_section' isection.id %}" style="display: inline;">
-              {% csrf_token %}
-              <button class="delete-section-btn" data-isection-id="{{ isection.id }}">Delete Section</button>
-            </form>
+             <form method="post" action="{% url 'isection_list' %}">
+               {% csrf_token %}
+               <input type="hidden" name="isection_id" value="{{ isection.id }}">
+               <button type="submit">Delete</button>
+             </form>
           </td>
         </tr>
       {% endfor %}

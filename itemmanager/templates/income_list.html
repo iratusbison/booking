@@ -1,33 +1,63 @@
 {% extends "core/dashboard.html" %}
 {% block dashboard_content %}
-<h4>Income List</h4>
-<h5><p>Total Income: ₹ {{ total_income|default:"0.00" }}</p></h5>
+<div style="text-align: center;">
+    <h4>Income List</h4>
+    <h5><p>Total Income: ₹ {{ total_income|default:"0.00" }}</p></h5>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for income in incomes %}
-        <tr>
-            <td>{{ income.description }}</td>
-            <td>₹ {{ income.amount }}</td>
-            <td>{{ income.date }}</td>
-            <td><a href="{% url 'delete_income' income.id %}">Delete</a></td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No income yet.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for income in incomes %}
+            <tr>
+                <td>{{ income.description }}</td>
+                <td>₹ {{ income.amount }}</td>
+                <td>{{ income.date }}</td>
+                <td><a href="{% url 'delete_income' income.id %}" style="color: #333;">Delete</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No income yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<a href="{% url 'add_income' incsection.id %}" class="">Add Income</a>
+    <a href="{% url 'add_income' incsection.id %}" style="color: #333;">Add Income</a>
+</div>
 
-{% endblock dashboard_content %}
+<style>
+    .table {
+        margin: 0 auto;
+        width: 80%;
+    }
+
+    /* Style hyperlinks */
+    a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    /* Style table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+{% endblock %}

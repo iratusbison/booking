@@ -1,47 +1,77 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<!-- Add this section tag at the beginning of the content -->
 <section id="investment-list">
-<h4>{{ isection.name }}</h4>
-<ul>
-  {% for investment in investments %}
-    <li>
-      <a href="{% url 'investment_detail' isection.id investment.id %}"></a>
-    </li>
-  {% endfor %}
-</ul>
-
-<a href="{% url 'isection_list' %}">Back to Sections</a>
+    <h4>{{ isection.name }}</h4>
+    <ul>
+        {% for investment in investments %}
+            <li>
+                <a href="{% url 'investment_detail' isection.id investment.id %}">{{ investment.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'isection_list' %}">Back to Sections</a>
 </section>
 
-<h4>investment List</h2>
-<h5><p>Total investment Amount: ₹{{ total_invest_amount }} </p></h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>investment ID</th>
-            <th>Amount</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for investment in investments %}
-            <tr>
-                <td><a href="{% url 'investment_detail' isection.id investment.id  %}">{{ investment.id }}</a></td>
-                <td>₹{{ investment.amount }}</td>
-                <td>
-                    <a href="{% url 'investment_detail' isection.id investment.id %}" class="">Details</a>
-                    <form method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="invest_id" value="{{ investment.id }}">
-                        <button type="submit" class="">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div style="text-align: center;">
+    <h4>Investment List</h4>
+    <h5>Total Investment Amount: ₹{{ total_invest_amount }}</h5>
 
-<a href="{% url 'add_investment' isection.id %}" class="">Add investment</a>
-{% endblock dashboard_content %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Investment ID</th>
+                <th>Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for investment in investments %}
+                <tr>
+                    <td><a href="{% url 'investment_detail' isection.id investment.id %}">{{ investment.id }}</a></td>
+                    <td>₹{{ investment.amount }}</td>
+                    <td>
+                        <a href="{% url 'investment_detail' isection.id investment.id %}" style="color: #333;">Details</a>
+                        <form method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="invest_id" value="{{ investment.id }}">
+                            <button type="submit" style="color: #333;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'add_investment' isection.id %}" style="color: #333;" class="btn btn-primary">Add Investment</a>
+</div>
+
+<style>
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+    }
+
+    /* Style the table */
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin: 20px auto;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+    }
+
+    /* Style the "Add Investment" button */
+    .btn.btn-primary {
+        color: #333;
+    }
+</style>
+{% endblock %}

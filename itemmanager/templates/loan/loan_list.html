@@ -1,47 +1,77 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<!-- Add this section tag at the beginning of the content -->
 <section id="loan-list">
-<h4>{{ section.name }}</h4>
-<ul>
-  {% for loan in loans %}
-    <li>
-      <a href="{% url 'loan_detail' section.id loan.id %}"></a>
-    </li>
-  {% endfor %}
-</ul>
-
-<a href="{% url 'section_list' %}">Back to Sections</a>
+    <h4>{{ section.name }}</h4>
+    <ul>
+        {% for loan in loans %}
+            <li>
+                <a href="{% url 'loan_detail' section.id loan.id %}">{{ loan.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'section_list' %}">Back to Sections</a>
 </section>
 
-<h4>Loan List</h2>
-<h5><p>Total Loan Amount: ₹{{ total_loan_amount }} </p></h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Loan ID</th>
-            <th>Amount</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for loan in loans %}
-            <tr>
-                <td><a href="{% url 'loan_detail' section.id loan.id  %}">{{ loan.id }}</a></td>
-                <td>₹{{ loan.amount }}</td>
-                <td>
-                    <a href="{% url 'loan_detail' section.id loan.id %}" class="">Details</a>
-                    <form method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="loan_id" value="{{ loan.id }}">
-                        <button type="submit" class="">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div style="text-align: center;">
+    <h4>Loan List</h4>
+    <h5>Total Loan Amount: ₹{{ total_loan_amount }}</h5>
 
-<a href="{% url 'add_loan' section.id %}" class="">Add Loan</a>
-{% endblock dashboard_content %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in loans %}
+                <tr>
+                    <td><a href="{% url 'loan_detail' section.id loan.id %}">{{ loan.id }}</a></td>
+                    <td>₹{{ loan.amount }}</td>
+                    <td>
+                        <a href="{% url 'loan_detail' section.id loan.id %}" style="color: #333;">Details</a>
+                        <form method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="loan_id" value="{{ loan.id }}">
+                            <button type="submit" style="color: #333;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'add_loan' section.id %}" style="color: #333;" class="btn btn-primary">Add Loan</a>
+</div>
+
+<style>
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+    }
+
+    /* Style the table */
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+    }
+
+    /* Style the "Add Loan" button */
+    .btn.btn-primary {
+        color: #333;
+    }
+</style>
+{% endblock %}

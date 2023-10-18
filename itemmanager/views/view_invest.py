@@ -53,16 +53,9 @@ def investment_detail(request, insection_id, investment_id):
     isection = get_object_or_404(InSection, id=insection_id)
 
     if request.method == 'POST':
-        form = InPaymentForm(request.POST)
-        if form.is_valid():
-            payment = form.save(commit=False)
-            payment.investment = investment
-            payment.save()
 
-            # Update the invest balance and interest based on the payment type
-            if payment.payment_type == 'Installment':
-                # Subtract the payment amount from the invest balance
-                investment.amount -= payment.amount
+        if form.is_valid():
+
 
                 # Update the interest using the calculate_interest method
                 investment.interest_rate = investment.calculate_interest()
@@ -73,12 +66,8 @@ def investment_detail(request, insection_id, investment_id):
     # Recalculate the total amount after the payment is made
     total_amount = investment.amount + investment.calculate_interest()
 
-    payments = InPayment.objects.filter(investment=investment)
 
-    # Calculate the reduced total amount
-    reduced_total_amount = total_amount - sum(payment.amount for payment in payments if payment.payment_type == 'Installment')
-
-    return render(request, 'invest/invest_detail.html', {'isection': isection, 'investment': investment, 'payments': payments, 'total_amount': total_amount, 'reduced_total_amount': reduced_total_amount})
+    return render(request, 'invest/invest_detail.html', {'isection': isection, 'investment': investment,  'total_amount': total_amount})
 
 @login_required
 def iadd_section(request):

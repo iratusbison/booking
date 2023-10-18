@@ -1,13 +1,42 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<h1>{{ form.instance.pk|default:"Create New Task" }}</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.title.label_tag }}
-    {{ form.title }}
-    {{ form.due_date.label_tag }}
-    {{ form.due_date }}
-    <button type="submit">Save</button>
-</form>
+<div style="text-align: center;">
+    <h10>{{ form.instance.pk|default:"Create New Task" }}</h10>
+    
+    <form method="post" style="display: inline;">
+        {% csrf_token %}
+        <div>
+            {{ form.title.label_tag }}
+            {{ form.title }}
+        </div>
+        <div>
+            {{ form.due_date.label_tag }}
+            {{ form.due_date }}
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    /* Style the form */
+    form {
+        display: inline;
+    }
+
+    /* Style the form fields and labels */
+    form div {
+        margin: 10px 0;
+    }
+
+    /* Style the "Save" button */
+    .btn.btn-primary {
+        color: #fff;
+        background-color: #333;
+        border: none;
+        padding: 10px 20px;
+    }
+</style>
 {% endblock %}
