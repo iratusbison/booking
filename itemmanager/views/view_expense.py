@@ -3,18 +3,26 @@ from django.shortcuts import render, redirect, get_object_or_404
 from itemmanager.models.expense import Expense, ESection
 from itemmanager.forms import ExpenseForm, ESectionForm
 from django.db.models import Sum
-
+from decimal import Decimal
 
 
 def esection_list(request):
     esections = ESection.objects.all()
     total_expenses = Expense.objects.aggregate(total=Sum('amount'))['total']
+    total_expenses = total_expenses or Decimal('0')  # Convert to Decimal
+
+    # Convert to float for session storage
+    total_expenses_float = float(total_expenses)
+
+    # Store the value in the session
+    request.session['total_expenses'] = total_expenses_float
 
     if request.method == 'POST' and 'delete_esection' in request.POST:
         esection_id = request.POST['delete_esection']
         esection = ESection.objects.get(pk=esection_id)
         esection.delete()
         return redirect('esection_list')
+
 
     return render(request, 'esection_list.html', {'esections': esections, 'total_expenses': total_expenses})
 
@@ -67,13 +75,17 @@ def delete_expense(request, expense_id):
 
 from django.http import HttpResponse
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib import colors
 from io import BytesIO
+from reportlab.lib.styles import getSampleStyleSheet
 
 def generate_pdf(request, esection_id):
     esection = get_object_or_404(ESection, pk=esection_id)
     expenses = Expense.objects.filter(esection=esection)
+
+    # Calculate the total expense
+    total_expense = sum(expense.amount for expense in expenses)
 
     # Create an in-memory PDF file
     buffer = BytesIO()
@@ -81,7 +93,7 @@ def generate_pdf(request, esection_id):
     elements = []
 
     # Create a data list for the table
-    data = [["Expense Date", "Amount","description"]]  # Header row
+    data = [["Expense Date", "Amount", "Description"]]  # Header row
     for expense in expenses:
         data.append([expense.date, expense.amount, expense.description])
 
@@ -99,6 +111,11 @@ def generate_pdf(request, esection_id):
 
     # Add the table to the elements
     elements.append(table)
+
+    # Add a line with the total expense
+    styles = getSampleStyleSheet()
+    total_expense_text = Paragraph(f'<b>Total Expense:</b> Rs {total_expense}', styles['Normal'])
+    elements.append(total_expense_text)
 
     # Build the PDF document
     doc.build(elements)

@@ -24,6 +24,9 @@ def isection_list(request):
     isections = InSection.objects.all()
     total_invest_amount_of_all_isections = Investment.objects.aggregate(total=Sum('amount'))['total'] or 0
 
+    total_invest_amount_of_all_isections = float(total_invest_amount_of_all_isections)
+    request.session['total_invest_amount_of_all_isections'] = total_invest_amount_of_all_isections
+
     return render(request, 'invest/isection_list.html', {'isections': isections, 'total_invest_amount_of_all_isections': total_invest_amount_of_all_isections})
 
 @login_required

@@ -12,7 +12,19 @@
     </ul>
     <a href="{% url 'section_list' %}">Back to Sections</a>
 </section>
+<script>
+    // Add a legend
+    var legendX = canvas.width - 200; // Adjust this value to position the legend to the right
+    var legendY = 20;
 
+    for (var i = 0; i < loanData.length; i++) {
+        ctx.fillStyle = colors[i];
+        ctx.fillRect(legendX, legendY, 10, 10);
+        ctx.fillStyle = "#333";
+        ctx.fillText(loanData[i].label + " (₹" + loanData[i].amount + ")", legendX + 15, legendY + 10);
+        legendY += 20;
+    }
+</script>
 <div style="text-align: center;">
     <h4>Loan List</h4>
     <h5>Total Loan Amount: ₹{{ total_loan_amount }}</h5>
@@ -42,6 +54,12 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <canvas id="loan-chart" width="200" height="200"></canvas> <!-- Smaller canvas for the pie chart -->
+
+    <div id="legend">
+        <!-- Your legend items will be added here dynamically using JavaScript -->
+    </div>
 
     <a href="{% url 'add_loan' section.id %}" style="color: #333;" class="btn btn-primary">Add Loan</a>
 </div>
@@ -74,4 +92,64 @@
         color: #333;
     }
 </style>
+
+<script>
+    // Get the loan data as a list of dictionaries
+    var loanData = [
+        {% for loan in loans %}
+            {
+                label: "{{ loan.id }}",
+                amount: {{ loan.amount }}
+            },
+        {% endfor %}
+    ];
+
+    // Get the canvas element
+    var canvas = document.getElementById("loan-chart");
+    var ctx = canvas.getContext("2d");
+
+    // Calculate the total loan amount
+    var totalLoanAmount = {{ total_loan_amount }};
+
+    // Define colors for the pie slices
+    var colors = ["#FF5733", "#FFC300", "#FF5733", "#FFC300", "#FF5733"];
+
+    var startAngle = 0;
+    for (var i = 0; i < loanData.length; i++) {
+        var sliceAngle = (loanData[i].amount / totalLoanAmount) * (2 * Math.PI);
+
+        // Draw the pie slice
+        ctx.fillStyle = colors[i];
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, canvas.height / 2);
+        ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        startAngle += sliceAngle;
+    }
+
+    // Add a legend
+    var legendDiv = document.getElementById("legend");
+
+    for (var i = 0; i < loanData.length; i++) {
+        var legendItem = document.createElement("div");
+        legendItem.style.display = "flex";
+        legendItem.style.alignItems = "center";
+
+        var colorBox = document.createElement("div");
+        colorBox.style.width = "15px";
+        colorBox.style.height = "15px";
+        colorBox.style.backgroundColor = colors[i];
+        colorBox.style.marginRight = "5px";
+
+        var label = document.createElement("span");
+        label.textContent = loanData[i].label + " (₹" + loanData[i].amount + ")";
+
+        legendItem.appendChild(colorBox);
+        legendItem.appendChild(label);
+
+        legendDiv.appendChild(legendItem);
+    }
+</script>
 {% endblock %}

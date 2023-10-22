@@ -12,34 +12,54 @@
 <link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
 <link rel="stylesheet" href="{% static 'dropify/css/dropify.min.css' %}">
 <style>
+  /* Dark Mode Styles */
+  body {
+    background-color: #1a1a1a;
+    color: #ffffff; /* Light text on dark background */
+  }
 
-.nav-active {
-  border-right: solid .3rem #263238;
-}
-.search-wrapper {
-  position: relative;
-}
-.search-wrapper .label-icon {
-  position: absolute;
-  bottom: 30%;
-}
-.search-wrapper input[type="search"] {
-  padding-left: 2.5rem;
-  width: calc(100% - 2.5rem);
-}
-table.clean tr {
-  border: none;
-}
-.input-field input[type=text]:focus + label {
-  color: #001eff ;
-}
-.input-field input[type=text]:focus {
-  border-bottom: 1px solid #001eff;
-  box-shadow: 0 1px 0 0 #001eff;
-}
+  .nav-active {
+    border-right: solid .3rem #263238;
+  }
+
+  .search-wrapper {
+    position: relative;
+  }
+
+  .search-wrapper .label-icon {
+    position: absolute;
+    bottom: 30%;
+  }
+
+  .search-wrapper input[type="search"] {
+    padding-left: 2.5rem;
+    width: calc(100% - 2.5rem);
+  }
+
+  table.clean tr {
+    border: none;
+  }
+
+  .input-field input[type=text]:focus + label {
+    color: #001eff;
+  }
+
+  .input-field input[type=text]:focus {
+    border-bottom: 1px solid #001eff;
+    box-shadow: 0 1px 0 0 #001eff;
+  }
+
+  /* Dark Mode for Scrollable Section */
+  .ps-container.ps-active-y {
+    background-color: #1a1a1a;
+    color: #ffffff; /* Light text on dark background */
+  }
+
 </style>
 
-{% block dashboard_styles %}{% endblock dashboard_styles %}
+{% block dashboard_styles %}
+  
+{% endblock dashboard_styles %}
 {% endblock styles %}
 
 {% block content %}
@@ -52,16 +72,17 @@ table.clean tr {
           <li>
             <h1 class="logo-wrapper">
               <a href="{% url 'dashboard' %}" class="brand-logo darken-1">
-
                 <span class="logo-text hide-on-med-and-down heading">K</span>
               </a>
             </h1>
           </li>
         </ul>
+        <!-- Add the dark mode toggle button here -->
+        
         <ul class="right hide-on-med-and-down">
-
           <li>
-            <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button" data-activates="profile-dropdown" title="Profile">
+            <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button"
+              data-activates="profile-dropdown" title="Profile">
               <span class="avatar-status avatar-online">
                 <img src="{% static 'images/no-user.png' %}" alt="avatar">
                 <i></i>
@@ -89,62 +110,78 @@ table.clean tr {
   <div class="wrapper">
     <!-- START LEFT SIDEBAR NAV-->
     <aside id="left-sidebar-nav">
-      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y" style="transform: translateX(0%);">
+      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y"
+        style="transform: translateX(0%);">
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
-                <a href="{% url 'esection_list' %}" class="">
-                    <span class="nav-text">Expense section</span>
-                </a>
+              <a href="{% url 'esection_list' %}" class="">
+                <span class="nav-text">Expense section</span>
+              </a>
             </li>
           </ul>
         </li>
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
-                <a href="{% url 'incsection_list' %}" class="">
-                    <span class="nav-text">Income section</span>
-                </a>
+              <a href="{% url 'incsection_list' %}" class="">
+                <span class="nav-text">Income section</span>
+              </a>
             </li>
           </ul>
         </li>
-
-        <li class="no-padding">
+        <li class "no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
-                <a href="{% url 'isection_list' %}" class="">
-                    <span class="nav-text">investment section</span>
-                </a>
-            </li>
-          </ul>
-        </li>
-
-       <li class="no-padding">
-          <ul class="" data-collapsible="accordion">
-            <li class="bold">
-                <a href="{% url 'section_list' %}" class="">
-                    <span class="nav-text">loan section</span>
-                </a>
+              <a href="{% url 'isection_list' %}" class="">
+                <span class="nav-text">investment section</span>
+              </a>
             </li>
           </ul>
         </li>
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
-                <a href="{% url 'task_list' %}" class="">
-                    <span class="nav-text">ToDo_List</span>
-                </a>
+              <a href="{% url 'section_list' %}" class="">
+                <span class="nav-text">loan section</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+              <a href="{% url 'task_list' %}" class="">
+                <span class="nav-text">ToDo_List</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+              <a href="{% url 'dashboard' %}" class="">
+                <span class="nav-text">Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+              <a href="{% url 'another_view' %}" class="">
+                <span class="nav-text">Total</span>
+              </a>
             </li>
           </ul>
         </li>
         <li>
-           <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
-             <span class="nav-text"> exit
-               <i class="material-icons">exit_to_app </i>
-             </span>
-           </a>
-         </li>
-
+          <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
+            <span class="nav-text"> exit
+              <i class="material-icons">exit_to_app</i>
+            </span>
+          </a>
+        </li>
       </ul>
       <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only amber darken-4">
         <i class="material-icons">menu</i>
@@ -154,24 +191,53 @@ table.clean tr {
     <!-- //////////////////////////////////////////////////////////////////////////// -->
     <!-- START CONTENT -->
     {% block dashboard_content %}
-
-
-
-
+     <center>
+        <a href="{% url 'another_view' %}" class="waves-effect waves-light btn">
+          <i class="material-icons left">dashboard</i> Pie Chart
+        </a>
+      </center>
     <section id="content">
       <!--start container-->
       <div class="container">
+        <div class="row">
+          <div class="col s12 m6 l3">
+            <div class="card blue darken-2">
+              <div class="card-content white-text">
+                <span class="card-title">Total Loan Amount</span>
+                <p>{{ total_loan_amount_of_all_sections }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l3">
+            <div class="card green darken-2">
+              <div class="card-content white-text">
+                <span class="card-title">Total Invest Amount</span>
+                <p>{{ total_invest_amount_of_all_isections }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l3">
+            <div class="card red darken-2">
+              <div class="card-content white-text">
+                <span class="card-title">Total Expenses</span>
+                <p>{{ total_expenses }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l3">
+            <div class="card teal darken-2">
+              <div class="card-content white-text">
+                <span class="card-title">Total Income</span>
+                <p>{{ total_income }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <!--end container-->
     </section>
-    {% endblock dashboard_content %}
-    <!-- END CONTENT -->
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-  </div>
-  <!-- END WRAPPER -->
-</div>
+{% endblock dashboard_content %}
 {% endblock content %}
-
 {% block scripts %}
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/materialize.min.js' %}"></script>
@@ -182,6 +248,17 @@ table.clean tr {
   $(window).ready(() => {
     $('.dropify').dropify();
   });
+</script>
+<script>
+    // JavaScript function to toggle dark mode
+    function toggleDarkMode() {
+        const body = document.body;
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+        } else {
+            body.classList.add('dark-mode');
+        }
+    }
 </script>
 {% if messages %}
 <script>
@@ -199,3 +276,4 @@ table.clean tr {
 {% block dashboard_scripts %}
 {% endblock dashboard_scripts %}
 {% endblock scripts %}
+</html>

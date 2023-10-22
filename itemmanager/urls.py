@@ -5,7 +5,7 @@ from itemmanager.views.view_expense import expense_list, add_expense, delete_exp
 from itemmanager.views.view_loan import  loan_list, loan_detail, add_loan, make_payment, delete_payment, section_list, add_section, delete_section
 from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection
 from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
-
+from itemmanager.views.view_total import total_view
 
 urlpatterns = [
     #path('expense', expense_list, name='expense_list'),
@@ -46,4 +46,5 @@ urlpatterns = [
     path('task/<int:pk>/edit/', edit_task, name='edit_task'),
     path('task/<int:pk>/delete/', delete_task, name='delete_task'),
 
+    path('to/', total_view, name='another_view'),
 ]

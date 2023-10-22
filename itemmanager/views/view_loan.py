@@ -4,7 +4,7 @@ from itemmanager.models.loan import Loan, Payment, Section
 from itemmanager.forms import LoanForm, PaymentForm, SectionForm
 from django.db.models import Sum
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 
 
@@ -12,14 +12,18 @@ from django.contrib import messages
 def section_list(request):
     sections = Section.objects.all()
     total_loan_amount_of_all_sections = Loan.objects.aggregate(total=Sum('amount'))['total'] or 0
-    
+    total_loan_amount_of_all_sections = float(total_loan_amount_of_all_sections)
+
+    # Store the value in the session
+    request.session['total_loan_amount_of_all_sections'] = total_loan_amount_of_all_sections
+
     return render(request, 'loan/section_list.html', {'sections': sections, 'total_loan_amount_of_all_sections': total_loan_amount_of_all_sections})
-    
+
 @login_required
 def loan_list(request, section_id):
     section = get_object_or_404(Section, id=section_id)
     loans = Loan.objects.filter(section=section)
-    
+
     total_loan_amount = loans.aggregate(total=Sum('amount'))['total'] or 0
     total_loan_amount_of_all_sections = Loan.objects.aggregate(total=Sum('amount'))['total'] or 0
 
@@ -77,8 +81,8 @@ def add_section(request):
         form = SectionForm()
 
     return render(request, 'loan/add_section.html', {'form': form})
-    
-    
+
+
 @login_required
 def delete_section(request, section_id):
     section = get_object_or_404(Section, id=section_id)

@@ -3,19 +3,27 @@ from django.shortcuts import render, redirect, get_object_or_404
 from itemmanager.models.income import Income, IncSection
 from itemmanager.forms import IncomeForm, IncSectionForm
 from django.db.models import Sum
-
+from decimal import Decimal
 
 
 def incsection_list(request):
     incsections = IncSection.objects.all()
+
     total_income = Income.objects.aggregate(total=Sum('amount'))['total']
-    
+    total_income = total_income or Decimal('0')  # Convert to Decimal
+
+    # Convert to float for session storage
+    total_income_float = float(total_income)
+
+    # Store the value in the session
+    request.session['total_income'] = total_income_float
+
     if request.method == 'POST' and 'delete_incsection' in request.POST:
         incsection_id = request.POST['delete_incsection']
         incsection = IncSection.objects.get(pk=incsection_id)
         incsection.delete()
         return redirect('incsection_list')
-    
+
     return render(request, 'incsection_list.html', {'incsections': incsections, 'total_income': total_income})
 
 def add_incsection(request):

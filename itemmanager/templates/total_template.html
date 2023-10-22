@@ -1,0 +1,44 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+    <html>
+    <head>
+        <title>Another View</title>
+        <!-- Include Chart.js from a CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <h3>Total</h3>
+        <p>Total Loan Amount of All Sections: {{ total_loan_amount_of_all_sections }}</p>
+        <p>Total Invest Amount of All Sections: {{ total_invest_amount_of_all_isections }}</p>
+        <p>Total Expenses: {{ total_expenses }}</p>
+        <p>Total Income: {{ total_income }}</p>
+        <!-- Create a canvas for the pie chart -->
+        <canvas id="pieChart" width="400" height="400"></canvas>
+
+        <script>
+            // Get the total loan and invest amounts from your Django context
+            var totalLoanAmount = {{ total_loan_amount_of_all_sections|default:0 }};
+            var totalInvestAmount = {{ total_invest_amount_of_all_isections|default:0 }};
+            var totalExpenseAmount = {{ total_expenses|default:0 }};
+            var totalIncomeAmount = {{ total_income|default:0 }};
+
+            // Calculate the data for the pie chart
+            var data = {
+                labels: ["Total Loan Amount", "Total Invest Amount", "Total Expense Amount", "Total Income Amount"],
+                datasets: [{
+                    data: [totalLoanAmount, totalInvestAmount, totalExpenseAmount, totalIncomeAmount],
+                    backgroundColor: ["#FF5733", "#33FF57", "#800080", "#B22222"] // Colors for the pie chart segments
+                }]
+            };
+
+            // Get the canvas element and create a pie chart
+            var ctx = document.getElementById("pieChart").getContext('2d');
+            var pieChart = new Chart(ctx, {
+                type: 'pie',
+                data: data
+            });
+        </script>
+    </body>
+    </html>
+{% endblock %}
