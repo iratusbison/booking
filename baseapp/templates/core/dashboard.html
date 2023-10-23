@@ -8,7 +8,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/materialize.css' %}">
-<link rel="stylesheet" href="{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href "{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
 <link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
 <link rel="stylesheet" href="{% static 'dropify/css/dropify.min.css' %}">
 <style>
@@ -49,16 +49,26 @@
     box-shadow: 0 1px 0 0 #001eff;
   }
 
-  /* Dark Mode for Scrollable Section */
-  .ps-container.ps-active-y {
-    background-color: #1a1a1a;
-    color: #ffffff; /* Light text on dark background */
+  /* Improve the styling for your cards and other elements here */
+  .card {
+    background-color: #333; /* Darker card background */
+    color: #fff; /* Light text on dark card background */
+    border-radius: 10px; /* Add rounded corners to cards */
   }
 
+  /* Style the side navigation bar */
+  #slide-out {
+    background-color: #263238; /* Dark background color for the sidebar */
+    color: #ffffff; /* Light text color for sidebar items */
+  }
+
+  #slide-out a {
+    color: #ffffff;
+  }
 </style>
 
 {% block dashboard_styles %}
-  
+ 
 {% endblock dashboard_styles %}
 {% endblock styles %}
 
@@ -68,6 +78,7 @@
   <div class="navbar-fixed">
     <nav class="navbar-color grey darken-4">
       <div class="nav-wrapper">
+        <!-- Your header content here -->
         <ul class="left">
           <li>
             <h1 class="logo-wrapper">
@@ -77,8 +88,7 @@
             </h1>
           </li>
         </ul>
-        <!-- Add the dark mode toggle button here -->
-        
+
         <ul class="right hide-on-med-and-down">
           <li>
             <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button"
@@ -130,7 +140,7 @@
             </li>
           </ul>
         </li>
-        <li class "no-padding">
+        <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'isection_list' %}" class="">
@@ -191,11 +201,13 @@
     <!-- //////////////////////////////////////////////////////////////////////////// -->
     <!-- START CONTENT -->
     {% block dashboard_content %}
-     <center>
+    <center>
+      <td>
         <a href="{% url 'another_view' %}" class="waves-effect waves-light btn">
           <i class="material-icons left">dashboard</i> Pie Chart
         </a>
-      </center>
+      </td>
+    </center>
     <section id="content">
       <!--start container-->
       <div class="container">
@@ -203,32 +215,32 @@
           <div class="col s12 m6 l3">
             <div class="card blue darken-2">
               <div class="card-content white-text">
-                <span class="card-title">Total Loan Amount</span>
-                <p>{{ total_loan_amount_of_all_sections }}</p>
+                <span class="card-title"><a href="{% url 'section_list' %}" style="color: #ffffff;">Total Loan Amount</a></span>
+                <p style="color: #ffffff;">{{ total_loan_amount_of_all_sections }}</p>
               </div>
             </div>
           </div>
           <div class="col s12 m6 l3">
             <div class="card green darken-2">
               <div class="card-content white-text">
-                <span class="card-title">Total Invest Amount</span>
-                <p>{{ total_invest_amount_of_all_isections }}</p>
+                <span class="card-title"><a href="{% url 'isection_list' %}" style="color: #ffffff;">Total Invest Amount</a></span>
+                <p style="color: #ffffff;">{{ total_invest_amount_of_all_isections }}</p>
               </div>
             </div>
           </div>
           <div class="col s12 m6 l3">
             <div class="card red darken-2">
               <div class="card-content white-text">
-                <span class="card-title">Total Expenses</span>
-                <p>{{ total_expenses }}</p>
+                <span class="card-title"><a href="{% url 'esection_list' %}" style="color: #ffffff;">Total Expenses</a></span>
+                <p style="color: #ffffff;">{{ total_expenses }}</p>
               </div>
             </div>
           </div>
           <div class="col s12 m6 l3">
             <div class="card teal darken-2">
               <div class="card-content white-text">
-                <span class="card-title">Total Income</span>
-                <p>{{ total_income }}</p>
+                <span class="card-title"><a href="{% url 'incsection_list' %}" style="color: #ffffff;">Total Income</a></span>
+                <p style="color: #ffffff;">{{ total_income }}</p>
               </div>
             </div>
           </div>
@@ -236,44 +248,48 @@
       </div>
       <!--end container-->
     </section>
-{% endblock dashboard_content %}
-{% endblock content %}
-{% block scripts %}
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/materialize.min.js' %}"></script>
-<script src="{% static 'perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
-<script src="{% static 'js/plugins.js' %}"></script>
-<script src="{% static 'dropify/js/dropify.min.js' %}"></script>
-<script type="text/javascript">
-  $(window).ready(() => {
-    $('.dropify').dropify();
-  });
-</script>
-<script>
-    // JavaScript function to toggle dark mode
-    function toggleDarkMode() {
+    {% endblock dashboard_content %}
+    {% endblock content %}
+    {% block scripts %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/materialize.min.js' %}"></script>
+    <script src="{% static 'perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'dropify/js/dropify.min.js' %}"></script>
+    <script type="text/javascript">
+      $(window).ready(() => {
+        $('.dropify').dropify();
+      });
+    </script>
+    <script>
+      // JavaScript function to toggle dark mode
+      function toggleDarkMode() {
         const body = document.body;
         if (body.classList.contains('dark-mode')) {
-            body.classList.remove('dark-mode');
+          body.classList.remove('dark-mode');
         } else {
-            body.classList.add('dark-mode');
+          body.classList.add('dark-mode');
         }
-    }
-</script>
-{% if messages %}
-<script>
-  $(document).ready(() => {
-    {% for message in messages %}
-      M.toast({
-        html: `{{ message|escape }}`,
-        classes: `{{ message.tags }}`,
-        displayLength: 1500
+      }
+    </script>
+    {% if messages %}
+    <script>
+      $(document).ready(() => {
+        {% for message in messages %}
+        M.toast({
+          html: `{{ message|escape }}`,
+          classes: `{{ message.tags }}`,
+          displayLength: 1500
+        })
+        {% endfor %}
       })
-    {% endfor %}
-  })
-</script>
-{% endif %}
-{% block dashboard_scripts %}
-{% endblock dashboard_scripts %}
-{% endblock scripts %}
+    </script>
+    {% endif %}
+    {% block dashboard_scripts %}
+    {% endblock dashboard_scripts %}
+    {% endblock scripts %}
+  </div>
+</div>
+<!-- END WRAPPER -->
+</div>
 </html>

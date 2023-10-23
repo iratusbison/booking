@@ -1,16 +1,16 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<section id="loan-list">
-    <h4>{{ section.name }}</h4>
+<section id="loan-list" style="border: none;">
+    <h4 style="color: #ffffff;">{{ section.name }}</h4>
     <ul>
         {% for loan in loans %}
             <li>
-                <a href="{% url 'loan_detail' section.id loan.id %}">{{ loan.name }}</a>
+                <a href="{% url 'loan_detail' section.id loan.id %}" style="color: #ffffff;">{{ loan.name }}</a>
             </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'section_list' %}">Back to Sections</a>
+    <a href="{% url 'section_list' %}" style="color: #ffffff;">Back to Sections</a>
 </section>
 <script>
     // Add a legend
@@ -20,34 +20,34 @@
     for (var i = 0; i < loanData.length; i++) {
         ctx.fillStyle = colors[i];
         ctx.fillRect(legendX, legendY, 10, 10);
-        ctx.fillStyle = "#333";
+        ctx.fillStyle = "#ffffff";
         ctx.fillText(loanData[i].label + " (₹" + loanData[i].amount + ")", legendX + 15, legendY + 10);
         legendY += 20;
     }
 </script>
 <div style="text-align: center;">
-    <h4>Loan List</h4>
-    <h5>Total Loan Amount: ₹{{ total_loan_amount }}</h5>
+    <h4 style="color: #ffffff;">Loan List</h4>
+    <h5 style="color: #ffffff;">Total Loan Amount: ₹{{ total_loan_amount }}</h5>
 
-    <table class="table">
+    <table class="table" style="background-color: #333;">
         <thead>
             <tr>
-                <th>Loan ID</th>
-                <th>Amount</th>
-                <th>Actions</th>
+                <th style="color: #ffffff;">Loan ID</th>
+                <th style="color: #ffffff;">Amount</th>
+                <th style="color: #ffffff;">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for loan in loans %}
                 <tr>
-                    <td><a href="{% url 'loan_detail' section.id loan.id %}">{{ loan.id }}</a></td>
-                    <td>₹{{ loan.amount }}</td>
+                    <td><a href="{% url 'loan_detail' section.id loan.id %}" style="color: #ffffff;">{{ loan.id }}</a></td>
+                    <td style="color: #ffffff;">₹{{ loan.amount }}</td>
                     <td>
-                        <a href="{% url 'loan_detail' section.id loan.id %}" style="color: #333;">Details</a>
+                        <a href="{% url 'loan_detail' section.id loan.id %}" style="color: #ffffff;">Details</a>
                         <form method="post" style="display: inline;">
                             {% csrf_token %}
                             <input type="hidden" name="loan_id" value="{{ loan.id }}">
-                            <button type="submit" style="color: #333;">Delete</button>
+                            <button type="submit" style="color: #ffffff;">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -61,7 +61,7 @@
         <!-- Your legend items will be added here dynamically using JavaScript -->
     </div>
 
-    <a href="{% url 'add_loan' section.id %}" style="color: #333;" class="btn btn-primary">Add Loan</a>
+    <a href="{% url 'add_loan' section.id %}" style="color: #ffffff;" class="btn btn-primary">Add Loan</a>
 </div>
 
 <style>
@@ -75,21 +75,25 @@
         width: 80%;
         border-collapse: collapse;
         margin: 20px auto;
-        text-align: center;
     }
 
     table th, table td {
-        border: 1px solid #ddd;
+        border: none; /* Remove cell borders */
         padding: 8px;
     }
 
     table th {
-        background-color: #f2f2f2;
+        background-color: #333;
     }
 
     /* Style the "Add Loan" button */
     .btn.btn-primary {
-        color: #333;
+        color: #ffffff;
+    }
+
+    /* Style the section without borders */
+    #loan-list {
+        border: none;
     }
 </style>
 
@@ -111,8 +115,8 @@
     // Calculate the total loan amount
     var totalLoanAmount = {{ total_loan_amount }};
 
-    // Define colors for the pie slices
-    var colors = ["#FF5733", "#FFC300", "#FF5733", "#FFC300", "#FF5733"];
+    // Define vibrant colors for the pie slices
+    var colors = ["#FF5733", "#FFC300", "#33FF33", "#FF33D3", "#33F3FF"];
 
     var startAngle = 0;
     for (var i = 0; i < loanData.length; i++) {

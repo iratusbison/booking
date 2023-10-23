@@ -2,62 +2,61 @@
 
 {% block dashboard_content %}
 <div style="text-align: center;">
-    <h5>Sections - Total Incomes: ₹ {{ total_income }}</h5>
+    <h5 style="color: #ffffff;">Sections - Total Incomes: ₹ {{ total_income }}</h5>
 
-    <table class="section-table">
-        <thead>
-            <tr>
-                <th>Section Name</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for incsection in incsections %}
-                <tr>
-                    <td><a href="{% url 'income_list' incsection.id %}" style="color: #333;">{{ incsection.name }}</a></td>
-                    <td>
-                        <form method="post" style="display: inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="delete_incsection" value="{{ incsection.id }}">
-                            <button type="submit" style="color: #333;">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="section-container">
+        {% for incsection in incsections %}
+        <div class="section-item">
+            <div class="section-details">
+                <a href="{% url 'income_list' incsection.id %}" style="color: #ffffff;">{{ incsection.name }}</a>
+            </div>
+            <div class="section-actions">
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete_incsection" value="{{ incsection.id }}">
+                    <button type="submit" style="color: #ffffff;">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
-    <a href="{% url 'add_incsection' %}" style="color: #333;">Add Section</a>
+    <a href="{% url 'add_incsection' %}" style="color: #ffffff;">Add Section</a>
 </div>
 
 <style>
     /* Style hyperlink text color and remove underlines */
     a {
         text-decoration: none;
+        color: #ffffff; /* Font color for links */
     }
 
-    /* Style the section table */
-    .section-table {
+    /* Style the section items for dark mode */
+    .section-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
         width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
     }
 
-    .section-table th, .section-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-
-    .section-table th {
-        background-color: #f2f2f2;
+    .section-details a {
+        color: #ffffff;
+        text-decoration: none;
     }
 
     /* Style the "Delete" buttons */
-    button {
+    .section-actions button {
         background-color: transparent;
         border: none;
         cursor: pointer;
+        color: #ffffff;
     }
 </style>
 {% endblock %}

@@ -3,7 +3,7 @@
 {% load custom_filter %}
 
 <div style="text-align: center;">
-    <table class="loan-details">
+    <table class="loan-details" style="background-color: #333; color: #fff;">
         <tr>
             <th>Loan Details</th>
             <th>Values</th>
@@ -34,8 +34,8 @@
         </tr>
     </table>
 
-    <table class="payment-details">
-        <h4>Payments</h4>
+    <table class="payment-details" style="background-color: #333; color: #fff;">
+        <h4 style="color: #fff;">Payments</h4>
         <thead>
             <tr>
                 <th>Payment Amount</th>
@@ -52,7 +52,7 @@
                         <form method="post" action="{% url 'delete_payment' section.id loan.id %}" onsubmit="return confirm('Are you sure you want to delete this payment?')">
                             {% csrf_token %}
                             <input type="hidden" name="payment_id" value="{{ payment.id }}">
-                            <input type="submit" value="Delete">
+                            <input type="submit" value="Delete" style="background-color: transparent; border: none; cursor: pointer; color: #fff;">
                         </form>
                     </td>
                 </tr>
@@ -60,17 +60,11 @@
         </tbody>
     </table>
 
-    <a href="{% url 'make_payment' section.id loan.id %}" style="color: #333;">Make Payment</a>
+    <a href="{% url 'make_payment' section.id loan.id %}" style="color: #fff;">Make Payment</a>
 </div>
 
 <style>
-    /* Style hyperlink text color and remove underlines */
-    a {
-        text-decoration: none;
-        color: #333;
-    }
-
-    /* Style tables */
+    /* Style tables for dark mode */
     table {
         width: 80%;
         border-collapse: collapse;
@@ -78,13 +72,19 @@
     }
 
     table th, table td {
-        border: 1px solid #ddd;
+        border: none; /* Remove cell borders */
         padding: 8px;
         text-align: center;
     }
 
     table th {
-        background-color: #f2f2f2;
+        background-color: #333;
+    }
+
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+        color: #fff;
     }
 </style>
 {% endblock %}

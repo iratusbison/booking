@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from itemmanager.forms import TaskForm
-
 from itemmanager.models.todolist import Task
-
 
 def task_list(request):
     tasks = Task.objects.all()

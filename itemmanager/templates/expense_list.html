@@ -2,11 +2,11 @@
 
 {% block dashboard_content %}
 <div style="text-align: center;">
-    <h4>Expense List</h4>
-    <h5>Total Expenses: ₹ {{ total_expenses|default:"0.00" }}</h5>
+    <h4 style="color: #ffffff;">Expense List</h4>
+    <h5 style="color: #ffffff;">Total Expenses: ₹ {{ total_expenses|default:"0.00" }}</h5>
 
     <div style="display: flex; flex-direction: column; align-items: center;">
-        <table class="table table-bordered" style="margin-top: 20px;">
+        <table class="table table-bordered" style="margin-top: 20px; background-color: #333; color: #ffffff;">
             <thead>
                 <tr>
                     <th>Description</th>
@@ -21,7 +21,7 @@
                     <td>{{ expense.description }}</td>
                     <td>₹ {{ expense.amount }}</td>
                     <td>{{ expense.date }}</td>
-                    <td><a href="{% url 'delete_expense' expense.id %}" style="color: #333;">Delete</a></td>
+                    <td><a href="{% url 'delete_expense' expense.id %}" style="color: #ffffff;">Delete</a></td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -32,10 +32,10 @@
         </table>
     </div>
 
-    <a href="{% url 'add_expense' esection.id %}" style="color: #333; margin-top: 20px;">Add Expense</a>
+    <a href="{% url 'add_expense' esection.id %}" style="color: #ffffff; margin-top: 20px;">Add Expense</a>
 
     <!-- Add a "Save as PDF" button with an ID for JavaScript -->
-    <a href="{% url 'generate_pdf' esection.id %}" class="btn btn-primary">Generate PDF</a>
+    <a href="{% url 'generate_pdf' esection.id %}" class="btn btn-primary" style="background-color: #007bff; color: #ffffff;">Generate PDF</a>
 
 </div>
 
@@ -45,6 +45,5 @@
         text-decoration: none;
     }
 </style>
-
 
 {% endblock %}

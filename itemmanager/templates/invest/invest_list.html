@@ -2,22 +2,22 @@
 
 {% block dashboard_content %}
 <section id="investment-list">
-    <h4>{{ isection.name }}</h4>
+    <h4 style="color: #ffffff;">{{ isection.name }}</h4>
     <ul>
         {% for investment in investments %}
             <li>
-                <a href="{% url 'investment_detail' isection.id investment.id %}">{{ investment.name }}</a>
+                <a href="{% url 'investment_detail' isection.id investment.id %}" style="color: #ffffff;">{{ investment.name }}</a>
             </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'isection_list' %}">Back to Sections</a>
+    <a href="{% url 'isection_list' %}" style="color: #ffffff;">Back to Sections</a>
 </section>
 
 <div style="text-align: center;">
-    <h4>Investment List</h4>
-    <h5>Total Investment Amount: ₹{{ total_invest_amount }}</h5>
+    <h4 style="color: #ffffff;">Investment List</h4>
+    <h5 style="color: #ffffff;">Total Investment Amount: ₹{{ total_invest_amount }}</h5>
 
-    <table class="table">
+    <table class="table" style="background-color: #333; color: #ffffff;">
         <thead>
             <tr>
                 <th>Investment ID</th>
@@ -28,14 +28,14 @@
         <tbody>
             {% for investment in investments %}
                 <tr>
-                    <td><a href="{% url 'investment_detail' isection.id investment.id %}">{{ investment.id }}</a></td>
+                    <td><a href="{% url 'investment_detail' isection.id investment.id %}" style="color: #ffffff;">{{ investment.id }}</a></td>
                     <td>₹{{ investment.amount }}</td>
                     <td>
-                        <a href="{% url 'investment_detail' isection.id investment.id %}" style="color: #333;">Details</a>
+                        <a href="{% url 'investment_detail' isection.id investment.id %}" style="color: #ffffff;">Details</a>
                         <form method="post" style="display: inline;">
                             {% csrf_token %}
                             <input type="hidden" name="invest_id" value="{{ investment.id }}">
-                            <button type="submit" style="color: #333;">Delete</button>
+                            <button type="submit" style="color: #ffffff; background-color: transparent; border: none; cursor: pointer;">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -43,7 +43,7 @@
         </tbody>
     </table>
 
-    <a href="{% url 'add_investment' isection.id %}" style="color: #333;" class="btn btn-primary">Add Investment</a>
+    <a href="{% url 'add_investment' isection.id %}" style="color: #ffffff;" class="btn btn-primary">Add Investment</a>
 </div>
 
 <style>
@@ -52,26 +52,28 @@
         text-decoration: none;
     }
 
-    /* Style the table */
+    /* Style the "Add Investment" button */
+    .btn.btn-primary {
+        color: #ffffff;
+    }
+
+    /* Remove borders from the table and adjust the width */
     table {
         width: 80%;
         border-collapse: collapse;
         margin: 20px auto;
+        border: none;
     }
 
     table th, table td {
-        border: 1px solid #ddd;
         padding: 8px;
         text-align: center;
+        border: none;
     }
 
-    table th {
-        background-color: #f2f2f2;
-    }
-
-    /* Style the "Add Investment" button */
-    .btn.btn-primary {
-        color: #333;
+    /* Set the background color and font color for the table and sections */
+    #investment-list, table {
+        background-color: #333;
     }
 </style>
 {% endblock %}

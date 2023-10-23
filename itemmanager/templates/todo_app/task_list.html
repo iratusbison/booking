@@ -1,35 +1,55 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<div style="text-align: center;">
-    <h5>Task List</h5>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Due Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
+<div style="text-align: center; color: #ffffff;">
+    <div style="margin-bottom: 20px;">
+        <h5>Task List</h5>
+    </div>
+    <div style="background-color: #333; margin: 0 auto;">
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>{{ task.title }}</td>
-                    <td>{{ task.due_date }}</td>
-                    <td>
-                        <a href="{% url 'edit_task' task.pk %}" style="color: #333;">Edit</a>
-                        <!-- Add a new table cell for the Delete link -->
-                        <td>
-                            <a href="{% url 'delete_task' task.pk %}" style="color: #333;">Delete</a>
-                        </td>
-                    </td>
+                    <th>Title</th>
+                    <th>Start Date</th>
+                    <th>Due Date</th>
+                    <th>Completion</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td style="color: #ffffff;">{{ task.title }}</td>
+                        <td style="color: #ffffff;">{{ task.start_date }}</td>
+                        <td style="color: #ffffff;">{{ task.due_date }}</td>
+                        <td>
+                            {% if task.completion == 100 %}
+                                <span style="color: #00FF00;">{{ task.completion }}%</span>
+                            {% elif task.completion >= 75 %}
+                                <span style="color: #FFFF00;">{{ task.completion }}%</span>
+                            {% elif task.completion >= 50 %}
+                                <span style="color: #FFA500;">{{ task.completion }}%</span>
+                            {% else %}
+                                <span style="color: #FF0000;">{{ task.completion }}%</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'edit_task' task.pk %}" style="color: #ffffff; margin-right: 10px;">
+                                <i class="material-icons">edit</i>Edit
+                            </a>
+                            <a href="{% url 'delete_task' task.pk %}" style="color: #ffffff;">
+                                <i class="material-icons">delete</i>Delete
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{% url 'create_task' %}" style="color: #333;" class="btn btn-primary">Create New Task</a>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'create_task' %}" style="color: #ffffff;" class="btn btn-dark">Create New Task</a>
+    </div>
 </div>
 
 <style>
@@ -38,26 +58,29 @@
         text-decoration: none;
     }
 
-    /* Style the table */
-    table {
-        width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
+    /* Style the "Create New Task" button */
+    .btn-dark {
+        color: #ffffff;
+        background-color: #333;
+    }
+
+    /* Improved styling to separate table data */
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #333; /* Use a darker color for table borders */
+        padding: 8px;
         text-align: center;
     }
 
-    table th, table td {
-        border: 1px solid #ddd;
-        padding: 8px;
+    /* Set background color for the table header */
+    .table-bordered th {
+        background-color: #222; /* Darker background color for table headers */
     }
 
-    table th {
-        background-color: #f2f2f2;
-    }
-
-    /* Style the "Create New Task" button */
-    .btn.btn-primary {
-        color: #333;
+    /* Add a margin for the "Edit" and "Delete" buttons on mobile devices */
+    @media (max-width: 768px) {
+        .table-bordered td:last-child {
+            padding-right: 20px;
+        }
     }
 </style>
 {% endblock %}

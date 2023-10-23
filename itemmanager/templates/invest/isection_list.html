@@ -1,27 +1,27 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<div style="text-align: center;">
+<div style="text-align: center; color: #ffffff;"> <!-- Set the font color to white for dark mode -->
 
   <!-- Display the total investment amount of all sections -->
   <p>Total Investment Amount: ₹{{ total_invest_amount_of_all_isections }}</p>
 
-  <table style="margin: 0 auto;">
+  <table style="margin: 0 auto; background-color: #333; color: #ffffff; border-collapse: collapse; width: 80%;"> <!-- Set the table background and font color for dark mode, remove table borders, and adjust the table width -->
     <thead>
       <tr>
-       <th>Section Name</th>
+        <th>Section Name</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       {% for isection in isections %}
         <tr>
-          <td style="text-align: center;"><a href="{% url 'invest_list' isection.id %}" style="color: #333;">{{ isection.name }}</a></td>
+          <td style="text-align: center;"><a href="{% url 'invest_list' isection.id %}" style="color: #ffffff;">{{ isection.name }}</a></td> <!-- Set the font color to white -->
           <td>
              <form method="post" action="{% url 'isection_list' %}">
                {% csrf_token %}
                <input type="hidden" name="isection_id" value="{{ isection.id }}">
-               <button type="submit">Delete</button>
+               <button type="submit" style="background-color: #333; color: #ffffff; border: none; cursor: pointer;">Delete</button> <!-- Adjust button styles for dark mode -->
              </form>
           </td>
         </tr>
@@ -29,6 +29,6 @@
     </tbody>
   </table>
 
-  <a href="{% url 'iadd_section' %}" class="btn btn-primary">Add Section</a>
+  <a href="{% url 'iadd_section' %}" style="color: #ffffff;">Add Section</a> <!-- Set the font color to white for the "Add Section" link -->
 </div>
 {% endblock %}

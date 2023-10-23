@@ -84,8 +84,9 @@ class InvestmentForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'due_date']
+        fields = ['title', 'start_date', 'due_date', 'completion', 'notes']
         widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
             'due_date': forms.DateInput(attrs={'type': 'date'}),
         }
 

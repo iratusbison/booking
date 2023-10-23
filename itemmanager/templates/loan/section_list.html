@@ -3,34 +3,26 @@
 {% block dashboard_content %}
 <div style="text-align: center;">
     <!-- Display the total loan amount -->
-    <h4>Total Loan Amount: ₹{{ total_loan_amount_of_all_sections }}</h4>
+    <h4 style="color: #ffffff;">Total Loan Amount: ₹{{ total_loan_amount_of_all_sections }}</h4>
 
-    <table class="section-table">
-        <thead>
-            <tr>
-                <th>Section Name</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for section in sections %}
-                <tr>
-                    <td><a href="{% url 'loan_list' section.id %}" style="color: #333;">{{ section.name }}</a></td>
-                    <td>
-                        <form method="post" action="{% url 'delete_section' section.id %}" style="display: inline;">
+    <div class="section-container">
+        {% for section in sections %}
+            <div class="section-item">
+                <div class="section-details">
+                    <a href="{% url 'loan_list' section.id %}" style="color: #ffffff;">{{ section.name }}</a>
+                </div>
+                <div class="section-actions">
+                    <form method="post" action="{% url 'delete_section' section.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="delete_section" value="{{ section.id }}">
+                        <button type="submit" style="color: #ffffff;">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
-                            {% csrf_token %}
-                            <input type="hidden" name="delete_section" value="{{ section.id }}">
-
-                            <button type="submit" style="color: #333;">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{% url 'add_section' %}" style="color: #333;" class="btn btn-primary">Add Section</a>
+    <a href="{% url 'add_section' %}" style="color: #ffffff;" class="btn btn-primary">Add Section</a>
 </div>
 
 <style>
@@ -39,26 +31,41 @@
         text-decoration: none;
     }
 
-    /* Style the section table */
-    .section-table {
+    /* Style the section items for dark mode */
+    .section-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
         width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
     }
 
-    .section-table th, .section-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
+    .section-details {
+        display: flex;
+        align-items: center;
     }
 
-    .section-table th {
-        background-color: #f2f2f2;
+    /* Style the "Delete" buttons */
+    .section-actions button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Set the font color to white for dark mode */
+    .section-container, .section-details, .section-actions {
+        color: #ffffff;
     }
 
     /* Style the "Add Section" button */
     .btn.btn-primary {
-        color: #333;
+        color: #ffffff;
     }
 </style>
 {% endblock %}
