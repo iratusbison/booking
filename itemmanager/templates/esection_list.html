@@ -14,7 +14,7 @@
         <div class="section-item">
             <div class="section-details">
                 <span>{{ forloop.counter }}.</span>
-                <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">folder</i> <!-- Icon for the section -->
+                <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">folder</i>
                 <a href="{% url 'expense_list' esection.id %}" style="color: #ffffff;">{{ esection.name }}</a>
             </div>
             <div class="section-actions">
@@ -22,17 +22,17 @@
                     {% csrf_token %}
                     <input type="hidden" name="delete_esection" value="{{ esection.id }}">
                     <button type="submit" style="color: #ffffff;">
-                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">delete</i> <!-- Delete icon for the button -->
+                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">delete</i>
                         Delete
                     </button>
                 </form>
             </div>
         </div>
         {% endfor %}
-    </div>
-
+    </div><br>
+<div>
     <a href="{% url 'add_esection' %}" style="color: #ffffff;">
-        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">add</i> <!-- Icon for the "Add Section" link -->
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">add</i>
         Add Section
     </a>
 </div>
@@ -41,7 +41,7 @@
     /* Style hyperlink text color and remove underlines */
     a {
         text-decoration: none;
-        color: #ffffff; /* Font color for links */
+        color: #ffffff;
     }
 
     /* Style the section items for dark mode */
@@ -49,7 +49,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #3498db; /* Dark blue background color */
+        background-color: #3498db;
         padding: 10px;
         border-radius: 5px;
         margin-top: 20px;

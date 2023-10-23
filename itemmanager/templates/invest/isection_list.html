@@ -11,16 +11,16 @@
 
   <ul style="list-style-type: none; padding: 0; text-align: center;">
     {% for isection in isections %}
-      <li style="margin: 10px; display: flex; justify-content: space-between; align-items: center;">
+      <li style="margin: 10px; display: flex; justify-content: space-between; align-items: center; background-color: #FFA500; padding: 10px; border-radius: 5px;"> <!-- Dark green background and rounded corners -->
         <a href="{% url 'invest_list' isection.id %}" style="color: #ffffff; text-decoration: none;">
-          <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">account_balance</i>
+          <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">account_balance</i>
           {{ isection.name }}
         </a>
         <form method="post" action="{% url 'isection_list' %}">
           {% csrf_token %}
           <input type="hidden" name="isection_id" value="{{ isection.id }}">
           <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ffffff;">
-            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">delete</i> <!-- Delete icon -->
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">delete</i> <!-- Delete icon -->
             Delete
           </button> <!-- Adjust button styles for dark mode -->
         </form>

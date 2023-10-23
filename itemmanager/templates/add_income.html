@@ -11,4 +11,32 @@
 </form>
 
 <a href="{% url 'income_list' incsection.id %}">Back to Income List</a>
+<style>
+    /* Dark mode suited button */
+    .dark-mode-button {
+        color: #ffffff;
+        background-color: #333; /* Dark background color */
+        border: 1px solid #555; /* Dark border */
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .dark-mode-button:hover {
+        background-color: #222; /* Dark background color on hover */
+    }
+
+    /* Dark mode suited link */
+    .dark-mode-link {
+        color: #00FF00; /* Bright color for links in dark mode */
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .dark-mode-link:hover {
+        color: #33FF33; /* Bright color for links in dark mode on hover */
+    }
+</style>
+
 {% endblock dashboard_content %}
