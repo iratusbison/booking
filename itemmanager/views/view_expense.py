@@ -79,6 +79,11 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib import colors
 from io import BytesIO
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
 
 def generate_pdf(request, esection_id):
     esection = get_object_or_404(ESection, pk=esection_id)
@@ -92,30 +97,33 @@ def generate_pdf(request, esection_id):
     doc = SimpleDocTemplate(buffer, pagesize=letter)
     elements = []
 
-    # Create a data list for the table
-    data = [["Expense Date", "Amount", "Description"]]  # Header row
-    for expense in expenses:
-        data.append([expense.date, expense.amount, expense.description])
-
-    # Create a table and style
-    table = Table(data)
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ]))
-
-    # Add the table to the elements
-    elements.append(table)
-
     # Add a line with the total expense
     styles = getSampleStyleSheet()
     total_expense_text = Paragraph(f'<b>Total Expense:</b> Rs {total_expense}', styles['Normal'])
     elements.append(total_expense_text)
+
+    # Create a data list for the table
+    data = [["Date", "Description", "Amount"]]  # Header row
+    for expense in expenses:
+        data.append([expense.date, expense.description, f'Rs {expense.amount}'])
+
+    # Define a custom table style
+    custom_table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), (0.2, 0.2, 0.2)),
+        ('TEXTCOLOR', (0, 0), (-1, 0), (1, 1, 1)),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), (0.9, 0.9, 0.9)),
+        ('GRID', (0, 0), (-1, -1), 1, (0, 0, 0))
+    ])
+
+    # Create the table with the custom style
+    table = Table(data)
+    table.setStyle(custom_table_style)
+
+    # Add the table to the elements
+    elements.append(table)
 
     # Build the PDF document
     doc.build(elements)
@@ -131,4 +139,3 @@ def generate_pdf(request, esection_id):
     buffer.close()
 
     return response
-
