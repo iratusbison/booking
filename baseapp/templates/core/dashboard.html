@@ -68,7 +68,23 @@
 </style>
 
 {% block dashboard_styles %}
+<style>
+  /* Harry Potter Themed Styles */
+  .card {
+    background-color: #3a0e0e; /* Dark red background for cards */
+  }
 
+  .card-title a {
+    color: #FFA500; /* Golden text color for card titles with links */
+  }
+
+  .card-content p {
+    color: #ffffff; /* White text color for card content */
+  }
+
+  /* Add some custom styling for your Harry Potter theme */
+  /* For example, you can add Harry Potter-related background images or icons here */
+</style>
 {% endblock dashboard_styles %}
 {% endblock styles %}
 
@@ -83,7 +99,7 @@
           <li>
             <h1 class="logo-wrapper">
               <a href="{% url 'dashboard' %}" class="brand-logo darken-1">
-                <span class="logo-text hide-on-med-and-down heading">K</span>
+                <span class="logo-text hide-on-med-and-down heading">⚡ Hogwarts</span> <!-- Added lightning bolt symbol for Hogwarts -->
               </a>
             </h1>
           </li>
@@ -94,7 +110,7 @@
             <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button"
               data-activates="profile-dropdown" title="Profile">
               <span class="avatar-status avatar-online">
-                <img src="{% static 'images/no-user.png' %}" alt="avatar">
+                
                 <i></i>
               </span>
             </a>
@@ -127,7 +143,7 @@
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'dashboard' %}" class="">
-                <span class="nav-text">Dashboard</span>
+                <span class="nav-text">🏰 Hogwarts</span> <!-- Added a castle emoji for the Hogwarts dashboard -->
               </a>
             </li>
           </ul>
@@ -135,7 +151,7 @@
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'incsection_list' %}" class="">
-                <span class="nav-text">Income section</span>
+                <span class="nav-text">⚡ Income section</span> <!-- Added a lightning bolt for the Income section -->
               </a>
             </li>
           </ul>
@@ -144,7 +160,7 @@
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'isection_list' %}" class="">
-                <span class="nav-text">investment section</span>
+                <span class="nav-text">💰 Investment section</span> <!-- Added a money bag for the Investment section -->
               </a>
             </li>
           </ul>
@@ -153,7 +169,7 @@
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'esection_list' %}" class="">
-                <span class="nav-text">Expense section</span>
+                <span class="nav-text">💼 Expense section</span> <!-- Added a briefcase for the Expense section -->
               </a>
             </li>
           </ul>
@@ -162,7 +178,7 @@
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'section_list' %}" class="">
-                <span class="nav-text">loan section</span>
+                <span class="nav-text">💰 Loan section</span> <!-- Added a money bag for the Loan section -->
               </a>
             </li>
           </ul>
@@ -171,17 +187,15 @@
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'task_list' %}" class="">
-                <span class="nav-text">ToDo_List</span>
+                <span class="nav-text">📝 ToDo_List</span> <!-- Added a notepad for the ToDo List -->
               </a>
             </li>
           </ul>
         </li>
 
-
-
         <li>
           <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
-            <span class="nav-text"> exit
+            <span class="nav-text">🚪 exit
               <i class="material-icons">exit_to_app</i>
             </span>
           </a>
@@ -203,44 +217,46 @@
           <div class="col s12 m6 l3">
             <div class="card green darken-2">
               <div class="card-content white-text">
-                <span class="card-title"><a href="{% url 'section_list' %}" style="color: #ffffff;">Total Loan Amount</a></span>
-                <p style="color: #ffffff;">{{ total_loan_amount_of_all_sections }}</p>
+                <span class="card-title"><a href="{% url 'section_list' %}" style="color: #ffffff;">🏦 Total Loan Amount</a></span> <!-- Added a bank emoji -->
+                <p style="color: #ffffff;">₹ {{ total_loan_amount_of_all_sections }}</p>
               </div>
             </div>
           </div>
           <div class="col s12 m6 l3">
             <div class="card yellow darken-2">
               <div class="card-content white-text">
-                <span class="card-title"><a href="{% url 'isection_list' %}" style="color: #ffffff;">Total Invest Amount</a></span>
-                <p style="color: #ffffff;">{{ total_invest_amount_of_all_isections }}</p>
+                <span class="card-title"><a href="{% url 'isection_list' %}" style="color: #ffffff;">💰 Total Invest Amount</a></span> <!-- Added a money bag emoji -->
+                <p style="color: #ffffff;">₹ {{ total_invest_amount_of_all_isections }}</p>
               </div>
             </div>
           </div>
           <div class="col s12 m6 l3">
-            <div class="card blue darken-2">
-              <div class="card-content white-text">
-                <span class="card-title"><a href="{% url 'esection_list' %}" style="color: #ffffff;">Total Expenses</a></span>
-                <p style="color: #ffffff;">{{ total_expenses }}</p>
-              </div>
-            </div>
-          </div>
+    <div class="card blue darken-2">
+        <div class="card-content white-text">
+            <span class="card-title"><a href="{% url 'esection_list' %}" style="color: #ffffff;">💼 Total Expenses</a></span>
+            <p style="color: #ffffff;">₹ {{ total_expenses }}</p>
+        </div>
+    </div>
+</div>
+
+        
           <div class="col s12 m6 l3">
             <div class="card red darken-2">
               <div class="card-content white-text">
-                <span class="card-title"><a href="{% url 'incsection_list' %}" style="color: #ffffff;">Total Income</a></span>
-                <p style="color: #ffffff;">{{ total_income }}</p>
+                <span class="card-title"><a href="{% url 'incsection_list' %}" style="color: #ffffff;">⚡ Total Income</a></span> <!-- Added a lightning bolt emoji -->
+                <p style="color: #ffffff;">₹ {{ total_income }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-       <center>
-    <td>
-        <a href="{% url 'another_view' %}" class="btn orange">
+      <center>
+        <td>
+          <a href="{% url 'another_view' %}" class="btn orange">
             <i class="material-icons left">pie_chart</i> Pie Chart
-        </a>
-    </td>
-</center>
+          </a>
+        </td>
+      </center>
       <!--end container-->
     </section>
     {% endblock dashboard_content %}
@@ -282,6 +298,7 @@
     {% endif %}
     {% block dashboard_scripts %}
     {% endblock dashboard_scripts %}
+    </script>
     {% endblock scripts %}
   </div>
 </div>

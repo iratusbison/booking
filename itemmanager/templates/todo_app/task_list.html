@@ -1,12 +1,11 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<div style="text-align: center; color: #ffffff;">
-    <div style="margin-bottom: 20px;">
-        <h5>Task List</h5>
-    </div>
-    <div style="background-color: #333; margin: 0 auto;">
-        <table class="table table-bordered">
+<div class="task-list-container">
+    <h4 class="harry-potter-title">🪄 Task List</h4>
+
+    <div class="task-list">
+        <table class="task-table">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -19,26 +18,26 @@
             <tbody>
                 {% for task in tasks %}
                     <tr>
-                        <td style="color: #ffffff;">{{ task.title }}</td>
-                        <td style="color: #ffffff;">{{ task.start_date }}</td>
-                        <td style="color: #ffffff;">{{ task.due_date }}</td>
-                        <td>
-                            {% if task.completion == 100 %}
-                                <span style="color: #00FF00;">{{ task.completion }}%</span>
-                            {% elif task.completion >= 75 %}
-                                <span style="color: #FFFF00;">{{ task.completion }}%</span>
-                            {% elif task.completion >= 50 %}
-                                <span style="color: #FFA500;">{{ task.completion }}%</span>
+                        <td class="task-title">{{ task.title }}</td>
+                        <td class="task-date">{{ task.start_date }}</td>
+                        <td class="task-date">{{ task.due_date }}</td>
+                        <td class="task-completion">
+                            {% if task.completion >= 90 %}
+                                <i class="material-icons harry-potter-icon" style="color: #00FF00;">wb_sunny</i> <!-- Sun icon for high completion -->
+                            {% elif task.completion >= 60 %}
+                                <i class="material-icons harry-potter-icon" style="color: #FFFF00;">star</i> <!-- Star icon for medium completion -->
+                            {% elif task.completion >= 30 %}
+                                <i class="material-icons harry-potter-icon" style="color: #FFA500;">whatshot</i> <!-- Fire icon for low completion -->
                             {% else %}
-                                <span style="color: #FF0000;">{{ task.completion }}%</span>
+                                <i class="material-icons harry-potter-icon" style="color: #FF0000;">cloud</i> <!-- Cloud icon for very low completion -->
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'edit_task' task.pk %}" style="color: #ffffff; margin-right: 10px;">
-                                <i class="material-icons">edit</i>Edit
+                            <a href="{% url 'edit_task' task.pk %}" class="task-action edit-action">
+                                <i class="material-icons harry-potter-icon">edit</i>
                             </a>
-                            <a href="{% url 'delete_task' task.pk %}" style="color: #ffffff;">
-                                <i class="material-icons">delete</i>Delete
+                            <a href="{% url 'delete_task' task.pk %}" class="task-action delete-action">
+                                <i class="material-icons harry-potter-icon">delete</i>
                             </a>
                         </td>
                     </tr>
@@ -47,40 +46,84 @@
         </table>
     </div>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="{% url 'create_task' %}" style="color: #ffffff;" class="btn btn-dark">Create New Task</a>
+    <div class="create-button">
+        <a href="{% url 'create_task' %}" class="btn btn-dark">Create New Task</a>
     </div>
 </div>
 
 <style>
-    /* Style hyperlink text color and remove underlines */
-    a {
-        text-decoration: none;
-    }
-
     /* Style the "Create New Task" button */
     .btn-dark {
         color: #ffffff;
         background-color: #333;
+        border: 2px solid #00FF00;
+        transition: background-color 0.3s ease;
     }
 
-    /* Improved styling to separate table data */
-    .table-bordered th, .table-bordered td {
-        border: 1px solid #333; /* Use a darker color for table borders */
-        padding: 8px;
+    .btn-dark:hover {
+        background-color: #222;
+    }
+
+    /* Styling for task list */
+    .task-list-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #d4a017; /* Golden text color */
+    }
+
+    .harry-potter-title {
+        font-family: 'Harry Potter', cursive;
+        font-size: 28px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .task-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .task-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #333;
+    }
+
+    .task-table th, .task-table td {
+        border: 1px solid #444;
+        padding: 10px;
         text-align: center;
     }
 
-    /* Set background color for the table header */
-    .table-bordered th {
-        background-color: #222; /* Darker background color for table headers */
+    .task-table th {
+        background-color: #222;
     }
 
-    /* Add a margin for the "Edit" and "Delete" buttons on mobile devices */
-    @media (max-width: 768px) {
-        .table-bordered td:last-child {
-            padding-right: 20px;
-        }
+    .harry-potter-icon {
+        font-size: 24px;
+    }
+
+    .task-action {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 24px;
+        margin: 0 10px;
+    }
+
+    .edit-action:hover {
+        color: #FFA500;
+    }
+
+    .delete-action:hover {
+        color: #FF0000;
+    }
+    
+    .task-title, .task-date, .task-completion {
+        padding: 5px;
     }
 </style>
+</div>
 {% endblock %}
