@@ -1,8 +1,11 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<section id="loan-list" style="border: none;">
-    <h4 style="color: #ffffff;">{{ section.name }}</h4>
+<section id="loan-list" style="background-color: #388E3C; color: #ffffff; text-align: center;">
+    <h4>
+        <i class="fas fa-hand-holding-usd" style="font-size: 24px; vertical-align: middle; color: #ffffff;"></i> <!-- Added a hand holding dollar icon from Font Awesome -->
+        {{ section.name }}
+    </h4>
     <ul>
         {% for loan in loans %}
             <li>
@@ -12,42 +15,36 @@
     </ul>
     <a href="{% url 'section_list' %}" style="color: #ffffff;">Back to Sections</a>
 </section>
-<script>
-    // Add a legend
-    var legendX = canvas.width - 200; // Adjust this value to position the legend to the right
-    var legendY = 20;
 
-    for (var i = 0; i < loanData.length; i++) {
-        ctx.fillStyle = colors[i];
-        ctx.fillRect(legendX, legendY, 10, 10);
-        ctx.fillStyle = "#ffffff";
-        ctx.fillText(loanData[i].label + " (₹" + loanData[i].amount + ")", legendX + 15, legendY + 10);
-        legendY += 20;
-    }
-</script>
 <div style="text-align: center;">
-    <h4 style="color: #ffffff;">Loan List</h4>
-    <h5 style="color: #ffffff;">Total Loan Amount: ₹{{ total_loan_amount }}</h5>
+    <h4>Loan List</h4>
+    <h5>Total Loan Amount: ₹{{ total_loan_amount }}</h5>
 
-    <table class="table" style="background-color: #333;">
+    <table class="table" style="color: #ffffff; border: none; width: 100%;"> <!-- Remove borders and center the table -->
         <thead>
             <tr>
-                <th style="color: #ffffff;">Loan ID</th>
-                <th style="color: #ffffff;">Amount</th>
-                <th style="color: #ffffff;">Actions</th>
+                <th>Loan ID</th>
+                <th>Amount</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for loan in loans %}
                 <tr>
                     <td><a href="{% url 'loan_detail' section.id loan.id %}" style="color: #ffffff;">{{ loan.id }}</a></td>
-                    <td style="color: #ffffff;">₹{{ loan.amount }}</td>
+                    <td>₹{{ loan.amount }}</td>
                     <td>
-                        <a href="{% url 'loan_detail' section.id loan.id %}" style="color: #ffffff;">Details</a>
+                        <a href="{% url 'loan_detail' section.id loan.id %}" style="color: #ffffff;">
+                            <i class="fas fa-info-circle" style="font-size: 18px;"></i> <!-- Added an info circle icon from Font Awesome -->
+                            Details
+                        </a>
                         <form method="post" style="display: inline;">
                             {% csrf_token %}
                             <input type="hidden" name="loan_id" value="{{ loan.id }}">
-                            <button type="submit" style="color: #ffffff;">Delete</button>
+                            <button type="submit" style="color: #ffffff; background-color: transparent; border: none; cursor: pointer;">
+                                <i class="fas fa-trash-alt" style="font-size: 18px;"></i> <!-- Added a trash icon for delete from Font Awesome -->
+                                Delete
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -55,13 +52,10 @@
         </tbody>
     </table>
 
-    <canvas id="loan-chart" width="200" height="200"></canvas> <!-- Smaller canvas for the pie chart -->
-
-    <div id="legend">
-        <!-- Your legend items will be added here dynamically using JavaScript -->
-    </div>
-
-    <a href="{% url 'add_loan' section.id %}" style="color: #ffffff;" class="btn btn-primary">Add Loan</a>
+    <a href="{% url 'add_loan' section.id %}" style="color: #ffffff; background-color: #388E3C; border: none; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+        <i class="fas fa-plus-circle" style="font-size: 24px; vertical-align: middle; margin-right: 10px;"></i> <!-- Added a plus circle icon from Font Awesome before text -->
+        Add Loan
+    </a>
 </div>
 
 <style>
@@ -69,91 +63,5 @@
     a {
         text-decoration: none;
     }
-
-    /* Style the table */
-    table {
-        width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
-    }
-
-    table th, table td {
-        border: none; /* Remove cell borders */
-        padding: 8px;
-    }
-
-    table th {
-        background-color: #333;
-    }
-
-    /* Style the "Add Loan" button */
-    .btn.btn-primary {
-        color: #ffffff;
-    }
-
-    /* Style the section without borders */
-    #loan-list {
-        border: none;
-    }
 </style>
-
-<script>
-    // Get the loan data as a list of dictionaries
-    var loanData = [
-        {% for loan in loans %}
-            {
-                label: "{{ loan.id }}",
-                amount: {{ loan.amount }}
-            },
-        {% endfor %}
-    ];
-
-    // Get the canvas element
-    var canvas = document.getElementById("loan-chart");
-    var ctx = canvas.getContext("2d");
-
-    // Calculate the total loan amount
-    var totalLoanAmount = {{ total_loan_amount }};
-
-    // Define vibrant colors for the pie slices
-    var colors = ["#FF5733", "#FFC300", "#33FF33", "#FF33D3", "#33F3FF"];
-
-    var startAngle = 0;
-    for (var i = 0; i < loanData.length; i++) {
-        var sliceAngle = (loanData[i].amount / totalLoanAmount) * (2 * Math.PI);
-
-        // Draw the pie slice
-        ctx.fillStyle = colors[i];
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 2, canvas.height / 2);
-        ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, startAngle, startAngle + sliceAngle);
-        ctx.closePath();
-        ctx.fill();
-
-        startAngle += sliceAngle;
-    }
-
-    // Add a legend
-    var legendDiv = document.getElementById("legend");
-
-    for (var i = 0; i < loanData.length; i++) {
-        var legendItem = document.createElement("div");
-        legendItem.style.display = "flex";
-        legendItem.style.alignItems = "center";
-
-        var colorBox = document.createElement("div");
-        colorBox.style.width = "15px";
-        colorBox.style.height = "15px";
-        colorBox.style.backgroundColor = colors[i];
-        colorBox.style.marginRight = "5px";
-
-        var label = document.createElement("span");
-        label.textContent = loanData[i].label + " (₹" + loanData[i].amount + ")";
-
-        legendItem.appendChild(colorBox);
-        legendItem.appendChild(label);
-
-        legendDiv.appendChild(legendItem);
-    }
-</script>
 {% endblock %}

@@ -68,7 +68,7 @@
 </style>
 
 {% block dashboard_styles %}
- 
+
 {% endblock dashboard_styles %}
 {% endblock styles %}
 
@@ -122,16 +122,16 @@
     <aside id="left-sidebar-nav">
       <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y"
         style="transform: translateX(0%);">
+
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
-              <a href="{% url 'esection_list' %}" class="">
-                <span class="nav-text">Expense section</span>
+              <a href="{% url 'dashboard' %}" class="">
+                <span class="nav-text">Dashboard</span>
               </a>
             </li>
           </ul>
-        </li>
-        <li class="no-padding">
+          <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'incsection_list' %}" class="">
@@ -139,12 +139,21 @@
               </a>
             </li>
           </ul>
-        </li>
-        <li class="no-padding">
+           </li>
+          <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'isection_list' %}" class="">
                 <span class="nav-text">investment section</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+              <a href="{% url 'esection_list' %}" class="">
+                <span class="nav-text">Expense section</span>
               </a>
             </li>
           </ul>
@@ -167,24 +176,9 @@
             </li>
           </ul>
         </li>
-        <li class="no-padding">
-          <ul class="" data-collapsible="accordion">
-            <li class="bold">
-              <a href="{% url 'dashboard' %}" class="">
-                <span class="nav-text">Dashboard</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="no-padding">
-          <ul class="" data-collapsible="accordion">
-            <li class="bold">
-              <a href="{% url 'another_view' %}" class="">
-                <span class="nav-text">Total</span>
-              </a>
-            </li>
-          </ul>
-        </li>
+
+
+
         <li>
           <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
             <span class="nav-text"> exit
@@ -201,19 +195,13 @@
     <!-- //////////////////////////////////////////////////////////////////////////// -->
     <!-- START CONTENT -->
     {% block dashboard_content %}
-    <center>
-      <td>
-        <a href="{% url 'another_view' %}" class="waves-effect waves-light btn">
-          <i class="material-icons left">dashboard</i> Pie Chart
-        </a>
-      </td>
-    </center>
+
     <section id="content">
       <!--start container-->
       <div class="container">
         <div class="row">
           <div class="col s12 m6 l3">
-            <div class="card blue darken-2">
+            <div class="card green darken-2">
               <div class="card-content white-text">
                 <span class="card-title"><a href="{% url 'section_list' %}" style="color: #ffffff;">Total Loan Amount</a></span>
                 <p style="color: #ffffff;">{{ total_loan_amount_of_all_sections }}</p>
@@ -221,7 +209,7 @@
             </div>
           </div>
           <div class="col s12 m6 l3">
-            <div class="card green darken-2">
+            <div class="card yellow darken-2">
               <div class="card-content white-text">
                 <span class="card-title"><a href="{% url 'isection_list' %}" style="color: #ffffff;">Total Invest Amount</a></span>
                 <p style="color: #ffffff;">{{ total_invest_amount_of_all_isections }}</p>
@@ -229,7 +217,7 @@
             </div>
           </div>
           <div class="col s12 m6 l3">
-            <div class="card red darken-2">
+            <div class="card blue darken-2">
               <div class="card-content white-text">
                 <span class="card-title"><a href="{% url 'esection_list' %}" style="color: #ffffff;">Total Expenses</a></span>
                 <p style="color: #ffffff;">{{ total_expenses }}</p>
@@ -237,7 +225,7 @@
             </div>
           </div>
           <div class="col s12 m6 l3">
-            <div class="card teal darken-2">
+            <div class="card red darken-2">
               <div class="card-content white-text">
                 <span class="card-title"><a href="{% url 'incsection_list' %}" style="color: #ffffff;">Total Income</a></span>
                 <p style="color: #ffffff;">{{ total_income }}</p>
@@ -246,6 +234,13 @@
           </div>
         </div>
       </div>
+       <center>
+    <td>
+        <a href="{% url 'another_view' %}" class="btn orange">
+            <i class="material-icons left">pie_chart</i> Pie Chart
+        </a>
+    </td>
+</center>
       <!--end container-->
     </section>
     {% endblock dashboard_content %}

@@ -1,23 +1,23 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<section id="investment-list">
-    <h4 style="color: #ffffff;">{{ isection.name }}</h4>
-    <ul>
-        {% for investment in investments %}
-            <li>
-                <a href="{% url 'investment_detail' isection.id investment.id %}" style="color: #ffffff;">{{ investment.name }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'isection_list' %}" style="color: #ffffff;">Back to Sections</a>
+<section id="investment-list" style="background-color: #333; color: #ffffff;">
+    <h4 style="color: #FFA500;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">account_balance_wallet</i> <!-- Icon for the section name -->
+        {{ isection.name }}
+    </h4>
+    
+    <a href="{% url 'isection_list' %}" style="color: #FFA500;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">arrow_back</i> <!-- Back arrow icon -->
+        Back to Sections
+    </a>
 </section>
 
 <div style="text-align: center;">
     <h4 style="color: #ffffff;">Investment List</h4>
     <h5 style="color: #ffffff;">Total Investment Amount: ₹{{ total_invest_amount }}</h5>
 
-    <table class="table" style="background-color: #333; color: #ffffff;">
+    <table class="table" style="background-color: #333; color: #ffffff; border: none;"> <!-- Remove borders -->
         <thead>
             <tr>
                 <th>Investment ID</th>
@@ -35,7 +35,10 @@
                         <form method="post" style="display: inline;">
                             {% csrf_token %}
                             <input type="hidden" name="invest_id" value="{{ investment.id }}">
-                            <button type="submit" style="color: #ffffff; background-color: transparent; border: none; cursor: pointer;">Delete</button>
+                            <button type="submit" style="color: #ffffff; background-color: transparent; border: none; cursor: pointer;">
+                                <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">delete</i> <!-- Delete icon -->
+                                Delete
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -43,37 +46,16 @@
         </tbody>
     </table>
 
-    <a href="{% url 'add_investment' isection.id %}" style="color: #ffffff;" class="btn btn-primary">Add Investment</a>
+    <a href="{% url 'add_investment' isection.id %}" style="color: #ffffff; background-color: #FFA500; border: none; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #333;">add</i> <!-- Add icon -->
+        Add Investment
+    </a>
 </div>
 
 <style>
     /* Style hyperlink text color and remove underlines */
     a {
         text-decoration: none;
-    }
-
-    /* Style the "Add Investment" button */
-    .btn.btn-primary {
-        color: #ffffff;
-    }
-
-    /* Remove borders from the table and adjust the width */
-    table {
-        width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
-        border: none;
-    }
-
-    table th, table td {
-        padding: 8px;
-        text-align: center;
-        border: none;
-    }
-
-    /* Set the background color and font color for the table and sections */
-    #investment-list, table {
-        background-color: #333;
     }
 </style>
 {% endblock %}

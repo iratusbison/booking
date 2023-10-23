@@ -1,71 +1,35 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<div style="text-align: center;">
-    <!-- Display the total loan amount -->
-    <h4 style="color: #ffffff;">Total Loan Amount: ₹{{ total_loan_amount_of_all_sections }}</h4>
+<div style="text-align: center; color: #ffffff;"> <!-- Set the font color to white for dark mode -->
 
-    <div class="section-container">
-        {% for section in sections %}
-            <div class="section-item">
-                <div class="section-details">
-                    <a href="{% url 'loan_list' section.id %}" style="color: #ffffff;">{{ section.name }}</a>
-                </div>
-                <div class="section-actions">
-                    <form method="post" action="{% url 'delete_section' section.id %}" style="display: inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="delete_section" value="{{ section.id }}">
-                        <button type="submit" style="color: #ffffff;">Delete</button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+  <!-- Display the total investment amount of all sections -->
+  <div style="background-color: #388E3C; padding: 10px; border-radius: 5px; color: #fff; margin-bottom: 20px;"> <!-- Dark green background and light text color -->
+    <i class="fas fa-money-bill-wave" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #fff;"></i> <!-- Changed the icon to a money-related icon from Font Awesome -->
+    <h4 style="display: inline;">Loan Sections - Total Loan Amount: ₹{{ total_loan_amount_of_all_sections }}</h4>
+  </div>
 
-    <a href="{% url 'add_section' %}" style="color: #ffffff;" class="btn btn-primary">Add Section</a>
+  <ul style="list-style-type: none; padding: 0; text-align: center;">
+    {% for section in sections %}
+      <li style="margin: 10px; display: flex; justify-content: space-between; align-items: center; background-color: #2E7D32; padding: 10px; border-radius: 5px;"> <!-- Dark green background and rounded corners -->
+        <a href="{% url 'loan_list' section.id %}" style="color: #ffffff; text-decoration: none;">
+          <i class="fas fa-hand-holding-usd" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;"></i> <!-- Changed the icon to a hand holding dollar icon from Font Awesome -->
+          {{ section.name }}
+        </a>
+        <form method="post" action="{% url 'section_list' %}">
+          {% csrf_token %}
+          <input type="hidden" name="isection_id" value="{{ section.id }}">
+          <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ffffff;">
+            <i class="fas fa-trash-alt" style="font-size: 24px; color: #ffffff;"></i> <!-- Added a trash icon for the delete button from Font Awesome -->
+          </button> <!-- Adjust button styles for dark mode -->
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'add_section' %}" style="color: #388E3C;">
+    <i class="fas fa-plus-circle" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #388E3C;"></i> <!-- Added a plus circle icon from Font Awesome before text -->
+    Add Loan Section
+  </a> <!-- Set the font color to dark green for the "Add Loan Section" link -->
 </div>
-
-<style>
-    /* Style hyperlink text color and remove underlines */
-    a {
-        text-decoration: none;
-    }
-
-    /* Style the section items for dark mode */
-    .section-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .section-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-        width: 80%;
-    }
-
-    .section-details {
-        display: flex;
-        align-items: center;
-    }
-
-    /* Style the "Delete" buttons */
-    .section-actions button {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-    }
-
-    /* Set the font color to white for dark mode */
-    .section-container, .section-details, .section-actions {
-        color: #ffffff;
-    }
-
-    /* Style the "Add Section" button */
-    .btn.btn-primary {
-        color: #ffffff;
-    }
-</style>
 {% endblock %}

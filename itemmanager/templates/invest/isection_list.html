@@ -4,31 +4,33 @@
 <div style="text-align: center; color: #ffffff;"> <!-- Set the font color to white for dark mode -->
 
   <!-- Display the total investment amount of all sections -->
-  <p>Total Investment Amount: ₹{{ total_invest_amount_of_all_isections }}</p>
+  <div style="background-color: #FFA500; padding: 10px; border-radius: 5px; color: #333; margin-bottom: 20px;"> <!-- Dark yellow background and dark text color -->
+    <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #333;">account_balance</i>
+    <h4 style="display: inline;">Investment Sections - Total Investment Amount: ₹{{ total_invest_amount_of_all_isections }}</h4>
+  </div>
 
-  <table style="margin: 0 auto; background-color: #333; color: #ffffff; border-collapse: collapse; width: 80%;"> <!-- Set the table background and font color for dark mode, remove table borders, and adjust the table width -->
-    <thead>
-      <tr>
-        <th>Section Name</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for isection in isections %}
-        <tr>
-          <td style="text-align: center;"><a href="{% url 'invest_list' isection.id %}" style="color: #ffffff;">{{ isection.name }}</a></td> <!-- Set the font color to white -->
-          <td>
-             <form method="post" action="{% url 'isection_list' %}">
-               {% csrf_token %}
-               <input type="hidden" name="isection_id" value="{{ isection.id }}">
-               <button type="submit" style="background-color: #333; color: #ffffff; border: none; cursor: pointer;">Delete</button> <!-- Adjust button styles for dark mode -->
-             </form>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <ul style="list-style-type: none; padding: 0; text-align: center;">
+    {% for isection in isections %}
+      <li style="margin: 10px; display: flex; justify-content: space-between; align-items: center;">
+        <a href="{% url 'invest_list' isection.id %}" style="color: #ffffff; text-decoration: none;">
+          <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">account_balance</i>
+          {{ isection.name }}
+        </a>
+        <form method="post" action="{% url 'isection_list' %}">
+          {% csrf_token %}
+          <input type="hidden" name="isection_id" value="{{ isection.id }}">
+          <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ffffff;">
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">delete</i> <!-- Delete icon -->
+            Delete
+          </button> <!-- Adjust button styles for dark mode -->
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
 
-  <a href="{% url 'iadd_section' %}" style="color: #ffffff;">Add Section</a> <!-- Set the font color to white for the "Add Section" link -->
+  <a href="{% url 'iadd_section' %}" style="color: #ffffff;">
+    <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">add</i> <!-- Add icon -->
+    Add Investment Section
+  </a> <!-- Set the font color to dark yellow for the "Add Investment Section" link -->
 </div>
 {% endblock %}

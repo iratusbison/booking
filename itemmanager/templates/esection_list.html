@@ -2,27 +2,39 @@
 
 {% block dashboard_content %}
 <div style="text-align: center;">
-    <h5 style="color: #ffffff;">Sections - Total Expenses: ₹ {{ total_expenses }}</h5>
-
+    <div style="background-color: #3498db; padding: 10px; border-radius: 5px; text-align: center;">
+        <h5 style="color: #ffffff;">
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px;">insert_chart</i>
+            Sections - Total Expenses: ₹ {{ total_expenses }}
+        </h5>
+    </div>
+    <hr style="border: 1px solid #3498db; margin: 20px 0;">
     <div class="section-container">
         {% for esection in esections %}
         <div class="section-item">
             <div class="section-details">
                 <span>{{ forloop.counter }}.</span>
+                <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">folder</i> <!-- Icon for the section -->
                 <a href="{% url 'expense_list' esection.id %}" style="color: #ffffff;">{{ esection.name }}</a>
             </div>
             <div class="section-actions">
                 <form method="post" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" name="delete_esection" value="{{ esection.id }}">
-                    <button type="submit" style="color: #ffffff;">Delete</button>
+                    <button type="submit" style="color: #ffffff;">
+                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">delete</i> <!-- Delete icon for the button -->
+                        Delete
+                    </button>
                 </form>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <a href="{% url 'add_esection' %}" style="color: #ffffff;">Add Section</a>
+    <a href="{% url 'add_esection' %}" style="color: #ffffff;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #3498db;">add</i> <!-- Icon for the "Add Section" link -->
+        Add Section
+    </a>
 </div>
 
 <style>
@@ -37,6 +49,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        background-color: #3498db; /* Dark blue background color */
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 20px;
     }
 
     .section-item {

@@ -2,35 +2,44 @@
 
 {% block dashboard_content %}
 <div style="text-align: center;">
-    <h5 style="color: #ffffff;">Sections - Total Incomes: ₹ {{ total_income }}</h5>
+    <div style="background-color: #8B0000; padding: 10px; border-radius: 5px; text-align: center; color: #ffffff;">
+        <h5>
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">monetization_on</i>
+            Sections - Total Incomes: ₹ {{ total_income }}
+        </h5>
+    </div>
 
-    <div class="section-container">
+    <!-- Add a visual separation, for example, a horizontal line with a different color -->
+    <hr style="border: 1px solid #6B0000; margin: 20px 0; background-color: #6B0000;">
+
+    <div class="section-container" style="background-color: #8B0000;">
         {% for incsection in incsections %}
         <div class="section-item">
             <div class="section-details">
-                <a href="{% url 'income_list' incsection.id %}" style="color: #ffffff;">{{ incsection.name }}</a>
+                <i class="material-icons" style="font-size: 24px; color: #ffffff;">attach_money</i> <!-- Income icon -->
+                <a href="{% url 'income_list' incsection.id %}" style="color: #ffffff; text-decoration: none;">{{ incsection.name }}</a>
             </div>
             <div class="section-actions">
                 <form method="post" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" name="delete_incsection" value="{{ incsection.id }}">
-                    <button type="submit" style="color: #ffffff;">Delete</button>
+                    <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ff9999;"> <!-- Delete button with a different color -->
+                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">delete</i> <!-- Delete icon for the button -->
+                        Delete
+                    </button>
                 </form>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <a href="{% url 'add_incsection' %}" style="color: #ffffff;">Add Section</a>
+    <a href="{% url 'add_incsection' %}" style="color: #ffffff;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">add</i> <!-- Add icon for the "Add Section" link -->
+        Add Section
+    </a>
 </div>
 
 <style>
-    /* Style hyperlink text color and remove underlines */
-    a {
-        text-decoration: none;
-        color: #ffffff; /* Font color for links */
-    }
-
     /* Style the section items for dark mode */
     .section-container {
         display: flex;
@@ -46,17 +55,22 @@
         width: 80%;
     }
 
-    .section-details a {
-        color: #ffffff;
-        text-decoration: none;
-    }
-
     /* Style the "Delete" buttons */
     .section-actions button {
         background-color: transparent;
         border: none;
         cursor: pointer;
+        color: #ff9999; /* Different color for delete button text */
+    }
+
+    /* Style the icon color */
+    .material-icons {
         color: #ffffff;
+    }
+
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
     }
 </style>
 {% endblock %}
