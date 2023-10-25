@@ -1,0 +1,12 @@
+
+
+{% block content %}
+  <h1>Revenue Report</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ report_form.as_table }}
+    <button type="submit">Report Revenue</button>
+  </form>
+  <p>Total Revenue: {{ total_revenue }}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+
+
+{% block content %}
+  <h1>Works List</h1>
+  <ul>
+    {% for work in works %}
+      <li>{{ work.description }} ({{ work.status }})</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'addw' %}">Add Work</a>
+</div>
+{% endblock %}

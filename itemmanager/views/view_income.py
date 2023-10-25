@@ -62,6 +62,21 @@ def add_income(request,incsection_id):
 
     return render(request, 'add_income.html', {'incsection': incsection, 'form': form, 'incomes': incomes, 'total_income': total_income})
 
+from django.forms import modelformset_factory
+
+def edit_income(request, income_id):
+    income = get_object_or_404(Income, pk=income_id)
+
+    if request.method == 'POST':
+        form = IncomeForm(request.POST, instance=income)
+        if form.is_valid():
+            form.save()
+            return redirect('income_list', incsection_id=income.incsection.id)
+    else:
+        form = IncomeForm(instance=income)
+
+    return render(request, 'edit_income.html', {'form': form, 'income': income})
+
 
 def delete_income(request, income_id):
     income = get_object_or_404(Income, pk=income_id)
@@ -70,3 +85,5 @@ def delete_income(request, income_id):
         income.delete()
         return redirect('income_list',incsection_id=incsection_id)
     return render(request, 'delete_income.html', {'income': income, 'incsection_id':incsection_id})
+
+

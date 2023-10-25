@@ -1,9 +1,0 @@
-{% extends "core/dashboard.html" %}
-{% block dashboard_content %}
-<h2>Add Investment</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Investment</button>
-</form>
-{% endblock dashboard_content %}

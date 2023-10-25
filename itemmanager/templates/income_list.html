@@ -2,49 +2,36 @@
 
 {% block dashboard_content %}
 <div style="text-align: center;">
-    <div style="background-color: #8B0000; padding: 10px; border-radius: 5px; text-align: center; color: #ffffff;">
+    <div style="background-color: #007acc; padding: 10px; border-radius: 5px; text-align: center; color: #ffffff;">
         <h4>
-            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">account_balance_wallet</i>
-            Income List
+            <i class="material-icons" style="font-size: 36px; vertical-align: middle; margin-right: 10px; color: #ffffff;">palette</i> <!-- Palette icon for artists -->
+            Drawing Work List
         </h4>
-        <h5>Total Income: ₹ {{ total_income|default:"0.00" }}</h5>
+        <h5>Total : ₹ {{ total_income|default:"0.00" }}</h5>
     </div>
 
     <div class="section-container">
-        <table class="table table-bordered" style="margin-top: 20px; background-color: #333; color: #ffffff;">
-            <thead>
-                <tr>
-                    <th style="text-align: center;">S.No</th>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for income in incomes %}
-                <tr>
-                    <td style="text-align: center;">{{ forloop.counter }}</td>
-                    <td>{{ income.date }}</td>
-                    <td>{{ income.description }}</td>
-                    <td>₹ {{ income.amount }}</td>
-                    <td><a href="{% url 'delete_income' income.id %}" style="color: #ff9999;"> <!-- Delete icon color -->
-                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">delete</i> <!-- Delete icon for the "Delete" link -->
-                        Delete
-                    </a></td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5">No income yet.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% for income in incomes %}
+        <div class="card" style="background-color: #f2f2f2; color: #000; margin: 10px; border: 1px solid #007acc;">
+            <div class="card-header" style="background-color: #007acc; color: #ffffff; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+                <h5 style="margin: 0;">{{ income.description }}</h5>
+                <button class="minimize-button" onclick="toggleCard(this)">&#9660;</button> <!-- Downward-pointing arrow for minimize -->
+            </div>
+            <div class="card-body">
+                <p><strong>Due Date:</strong> {{ income.date }}</p>
+                <p><strong>Amount:</strong> ₹ {{ income.amount }}</p>
+                <p><strong>Status:</strong> {{ income.status }}</p>
+            </div>
+            <div class="card-footer" style="display: none; background-color: #007acc; color: #ffffff; padding: 5px; text-align: center;">
+                <a href="{% url 'edit_income' income.id %}" class="edit-link" style="color: #009900;"><i class="material-icons">edit</i> Edit</a>
+                <a href="{% url 'delete_income' income.id %}" class="delete-link" style="color: #ff0000;"><i class="material-icons">delete</i> Delete</a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
-    <a href="{% url 'add_income' incsection.id %}" style="color: #ffffff; margin-top: 20px;">
-        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">attach_money</i> <!-- Add icon for the "Add Income" link -->
-        Add Income
+    <a href="{% url 'add_income' incsection.id %}" class="add-income-link" style="background-color: #007acc; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none;"> <!-- Artist-themed color -->
+        <i class="material-icons" style="vertical-align: middle;">add</i> Add
     </a>
 </div>
 
@@ -53,5 +40,30 @@
     a {
         text-decoration: none;
     }
+
+    /* Style the Edit and Delete links */
+    .edit-link {
+        float: left;
+        color: #009900; /* Edit icon color */
+    }
+
+    .delete-link {
+        float: right;
+        color: #ff0000; /* Delete icon color */
+    }
 </style>
+<script>
+    // JavaScript function to toggle card visibility
+    function toggleCard(button) {
+        const card = button.parentNode.parentNode;
+        const footer = card.querySelector('.card-footer');
+        if (footer.style.display === "none" || footer.style.display === "") {
+            footer.style.display = "block";
+            button.innerHTML = "&#9650;"; // Upward-pointing arrow for maximize
+        } else {
+            footer.style.display = "none";
+            button.innerHTML = "&#9660;"; // Downward-pointing arrow for minimize
+        }
+    }
+</script>
 {% endblock %}

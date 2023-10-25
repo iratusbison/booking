@@ -2,30 +2,30 @@
 
 {% block dashboard_content %}
 <div style="text-align: center;">
-    <div style="background-color: #8B0000; padding: 10px; border-radius: 5px; text-align: center; color: #ffffff;">
+    <div style="background-color: #007acc; padding: 10px; border-radius: 5px; text-align: center; color: #ffffff;">
         <h5>
-            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">monetization_on</i>
-            Sections - Total Incomes: ₹ {{ total_income }}
+            <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">palette</i> <!-- Palette icon for artists -->
+            Artistic Sections - Total : ₹ {{ total_income }}
         </h5>
     </div>
 
     <!-- Add a visual separation, for example, a horizontal line with a different color -->
-    <hr style="border: 1px solid #6B0000; margin: 20px 0; background-color: #6B0000;">
+    <hr style="border: 1px solid #005a9e; margin: 20px 0; background-color: #005a9e;">
 
-    <div class="section-container" style="background-color: #8B0000;">
+    <div class="section-container" style="background-color: #007acc;">
         {% for incsection in incsections %}
         <div class="section-item">
             <div class="section-details">
-                <i class="material-icons" style="font-size: 24px; color: #ffffff;">attach_money</i> <!-- Income icon -->
+               
                 <a href="{% url 'income_list' incsection.id %}" style="color: #ffffff; text-decoration: none;">{{ incsection.name }}</a>
             </div>
             <div class="section-actions">
                 <form method="post" style="display: inline;">
                     {% csrf_token %}
                     <input type="hidden" name="delete_incsection" value="{{ incsection.id }}">
-                    <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ff9999;"> <!-- Delete button with a different color -->
-                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">delete</i> <!-- Delete icon for the button -->
-                        Delete
+                    <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ff0000;"> <!-- Delete button with a different color -->
+                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px; color: #ff0000;">delete</i> <!-- Delete icon for the button -->
+                        Remove
                     </button>
                 </form>
             </div>
@@ -55,12 +55,12 @@
         width: 80%;
     }
 
-    /* Style the "Delete" buttons */
+    /* Style the "Remove" buttons */
     .section-actions button {
         background-color: transparent;
         border: none;
         cursor: pointer;
-        color: #ff9999; /* Different color for delete button text */
+        color: #ff0000; /* Different color for delete button text */
     }
 
     /* Style the icon color */
