@@ -1,0 +1,73 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<div style="text-align: center;">
+    <h4 style="color: #ffffff; font-size: 24px; background-color: #007bff; padding: 10px; border-radius: 5px;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">monetization_on</i>
+        Monthly Incomes
+    </h4>
+    <h5 style="color: #ffffff; margin-top: 10px;">Total Monthly Income: ₹ {{ total_monthly_income|default:"0.00" }}</h5>
+
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <table class="table table-bordered" style="margin-top: 20px; background-color: #333; color: #ffffff;">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">S.No</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for income in monthly_incomes %}
+                <tr>
+                    <td style="text-align: center;">{{ forloop.counter }}</td>
+                    <td>{{ income.description }}</td>
+                    <td>₹ {{ income.amount }}</td>
+                    <td>{{ income.date }}</td>
+                    <td>
+                        <a href="{% url 'edit_monthly_income' income.id %}" style="color: #2196F3;">
+                            <i class="material-icons" style="margin-right: 5px; color: #2196F3;">edit</i> Edit
+                        </a>
+                        <a href="{% url 'delete_monthly_income' income.id %}" style="color: #ff9999;">
+                            <i class="material-icons" style="margin-right: 5px; color: #ff9999;">delete</i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No monthly incomes yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+        <a href="{% url 'add_monthly_income' %}" style="color: #ffffff; display: flex; align-items: center;">
+            <i class="material-icons" style="margin-right: 5px;">add</i> Add Monthly Income
+        </a>
+
+       
+    </div>
+</div>
+
+<style>
+    /* Style hyperlink text color and remove underlines */
+    a {
+        text-decoration: none;
+    }
+
+    /* Style the topic header with a decorative blue background and padding */
+    h4 {
+        background-color: #007bff;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    /* Add some margin to the topic header */
+    h4, h5 {
+        margin: 10px 0;
+    }
+</style>
+{% endblock %}

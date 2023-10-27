@@ -1,10 +1,10 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
-from itemmanager.models.income import Income, IncSection
-from itemmanager.forms import IncomeForm, IncSectionForm
+from itemmanager.models.income import Income, IncSection, MonthlyIncome
+from itemmanager.forms import IncomeForm, IncSectionForm, MonthlyIncomeForm
 from django.db.models import Sum
 from decimal import Decimal
-
+from django.db.models import F, ExpressionWrapper, DecimalField
+from django.db.models import Sum, Value
 
 def incsection_list(request):
     incsections = IncSection.objects.all()
@@ -37,23 +37,21 @@ def add_incsection(request):
 
     return render(request, 'add_incsection.html', {'form': form})
 
-
-
 def income_list(request, incsection_id):
     incsection = get_object_or_404(IncSection, pk=incsection_id)
     incomes = Income.objects.filter(incsection=incsection)
     incsection = IncSection.objects.get(pk=incsection_id)
     total_income = incomes.aggregate(total=Sum('amount'))['total']
-    return render(request, 'income_list.html', {'incomes': incomes, 'total_income': total_income, 'incsection':incsection})
+    return render(request, 'income_list.html', {'incomes': incomes, 'total_income': total_income, 'incsection': incsection})
 
-def add_income(request,incsection_id):
+def add_income(request, incsection_id):
     incsection = IncSection.objects.get(pk=incsection_id)
     if request.method == 'POST':
         form = IncomeForm(request.POST)
         if form.is_valid():
             form.instance.incsection = incsection
             form.save()
-            return redirect('income_list',incsection_id=incsection_id)
+            return redirect('income_list', incsection_id=incsection_id)
     else:
         form = IncomeForm()
 
@@ -61,8 +59,6 @@ def add_income(request,incsection_id):
     total_income = sum(income.amount for income in incomes)
 
     return render(request, 'add_income.html', {'incsection': incsection, 'form': form, 'incomes': incomes, 'total_income': total_income})
-
-from django.forms import modelformset_factory
 
 def edit_income(request, income_id):
     income = get_object_or_404(Income, pk=income_id)
@@ -77,13 +73,71 @@ def edit_income(request, income_id):
 
     return render(request, 'edit_income.html', {'form': form, 'income': income})
 
-
 def delete_income(request, income_id):
     income = get_object_or_404(Income, pk=income_id)
     incsection_id = income.incsection.id
     if request.method == 'POST':
         income.delete()
-        return redirect('income_list',incsection_id=incsection_id)
-    return render(request, 'delete_income.html', {'income': income, 'incsection_id':incsection_id})
+        return redirect('income_list', incsection_id=incsection_id)
+    return render(request, 'delete_income.html', {'income': income, 'incsection_id': incsection_id})
 
+def monthly_income_list(request):
+    monthly_incomes = MonthlyIncome.objects.all()
+    total_monthly_income = monthly_incomes.aggregate(total=Sum('amount'))['total'] or Decimal('0')
 
+    # Calculate the total of all sections' incomes
+    total_section_income = Income.objects.aggregate(total=Sum('amount'))['total'] or Decimal('0')
+
+   
+
+    return render(request, 'monthlyincome/monthly_income_list.html', {'monthly_incomes': monthly_incomes, 'total_monthly_income': total_monthly_income})
+
+from decimal import Decimal
+from itemmanager.models.income import Income, MonthlyIncome
+
+def calculate_total_income_pool():
+    # Calculate the total of all sections' incomes
+    total_section_income = Income.objects.aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    
+    # Calculate the total monthly income
+    total_monthly_income = MonthlyIncome.objects.aggregate(total=Sum('amount'))['total'] or Decimal('0')
+
+    # Calculate the combined total income pool
+    total_income_pool = total_monthly_income + total_section_income
+
+    return total_income_pool
+
+def add_monthly_income(request):
+    if request.method == 'POST':
+        form = MonthlyIncomeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('monthly_income_list')
+    else:
+        form = MonthlyIncomeForm()
+
+    return render(request, 'monthlyincome/add_monthly_income.html', {'form': form})
+
+from django.http import Http404
+
+def delete_monthly_income(request, monthly_income_id):
+    monthly_income = get_object_or_404(MonthlyIncome, pk=monthly_income_id)
+
+    if request.method == 'POST':
+        monthly_income.delete()
+        return redirect('monthly_income_list')
+
+    return render(request, 'monthlyincome/delete_monthly_income.html', {'monthly_income': monthly_income})
+
+def edit_monthly_income(request, monthly_income_id):
+    monthly_income = get_object_or_404(MonthlyIncome, pk=monthly_income_id)
+
+    if request.method == 'POST':
+        form = MonthlyIncomeForm(request.POST, instance=monthly_income)
+        if form.is_valid():
+            form.save()
+            return redirect('monthlyincome/monthly_income_list')
+    else:
+        form = MonthlyIncomeForm(instance=monthly_income)
+
+    return render(request, 'monthlyincome/edit_monthly_income.html', {'form': form, 'monthly_income': monthly_income})

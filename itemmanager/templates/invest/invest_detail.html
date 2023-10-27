@@ -1,0 +1,57 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<div style="text-align: center;">
+    <table class="investment-details">
+        <tr>
+            <th>Investment Details</th>
+            <th>Values</th>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td>₹ {{ investment.amount }}</td>
+        </tr>
+        <tr>
+            <td>Interest Rate</td>
+            <td>{{ investment.interest_rate }}%</td>
+        </tr>
+        <tr>
+            <td>Start Date</td>
+            <td>{{ investment.start_date }}</td>
+        </tr>
+        <tr>
+            <td>End Date</td>
+            <td>{{ investment.end_date }}</td>
+        </tr>
+        <tr>
+            <td>Interest</td>
+            <td>₹ {{ investment.calculate_interest|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <td>Interest added with investment amount</td>
+            <td>₹ {{ total_amount|floatformat:2 }}</td>
+        </tr>
+    </table>
+</div>
+
+<style>
+    /* Style the table for dark mode */
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        text-align: center;
+        background-color: #333; /* Dark background */
+        color: #ffffff; /* Font color for the table text */
+    }
+
+    table th, table td {
+        border: 1px solid #555; /* Slightly lighter border color */
+        padding: 8px;
+    }
+
+    table th {
+        background-color: #444; /* Slightly lighter background for header */
+    }
+</style>
+{% endblock %}

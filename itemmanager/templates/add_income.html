@@ -1,6 +1,5 @@
 {% extends "core/dashboard.html" %}
 
-
 {% block dashboard_content %}
 <h5>Add Income</h5>
 
@@ -11,6 +10,21 @@
 </form>
 
 <a href="{% url 'income_list' incsection.id %}">Back to Income List</a>
+
+{% if is_monthly %}
+<h3>Monthly Income</h3>
+{% else %}
+<h3>Regular Income</h3>
+{% endif %}
+
+<ul>
+    {% for income in incomes %}
+    <li>{{ income.description }} - ${{ income.amount }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Total Income</h3>
+<p>Total: ${{ total_income }}
 <style>
     /* Dark mode suited button */
     .dark-mode-button {
@@ -38,5 +52,4 @@
         color: #33FF33; /* Bright color for links in dark mode on hover */
     }
 </style>
-
 {% endblock dashboard_content %}

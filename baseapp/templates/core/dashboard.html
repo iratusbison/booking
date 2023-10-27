@@ -176,6 +176,15 @@
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
+              <a href="{% url 'monthly_income_list' %}" class="">
+                <span class="nav-text">💼 monthly income</span> <!-- Added a briefcase emoji for the Expense section -->
+              </a>
+            </li>
+          </ul>
+
+        <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
               <a href="{% url 'task_list' %}" class="">
                 <span class="nav-text">✏️ ToDo List</span> <!-- Added a pencil emoji for the ToDo List -->
               </a>
@@ -229,13 +238,15 @@
           </div>
         </div>
       </div>
-      <center>
-        <td>
-          <a href="{% url 'another_view' %}" class="btn orange">
-            <i class="material-icons left">pie_chart</i> Pie Chart
-          </a>
-        </td>
-      </center>
+          <div class="col s12 m6 l3">
+            <div class="card yellow darken-2">
+              <div class="card-content white-text">
+                <span class="card-title"><a href="{% url 'isection_list' %}" style="color: #ffffff;">💰 Total Invest </a></span> <!-- Added a money bag emoji -->
+                <p style="color: #ffffff;">₹ {{ total_invest_amount_of_all_isections }}</p>
+              </div>
+            </div>
+          </div>
+
       <!-- end container -->
     </section>
     {% endblock dashboard_content %}

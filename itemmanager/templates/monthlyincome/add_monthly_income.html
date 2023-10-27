@@ -1,0 +1,15 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+    <h2>Add Monthly Income</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+
+    <a href="{% url 'monthly_income_list' %}" class="btn btn-secondary">Cancel</a>
+</div>
+
+{% endblock %}

@@ -4,7 +4,7 @@ from itemmanager.models.expense import Expense, ESection
 from itemmanager.forms import ExpenseForm, ESectionForm
 from django.db.models import Sum
 from decimal import Decimal
-
+from itemmanager.views.view_income import calculate_total_income_pool
 
 def esection_list(request):
     esections = ESection.objects.all()
@@ -13,6 +13,11 @@ def esection_list(request):
 
     # Convert to float for session storage
     total_expenses_float = float(total_expenses)
+
+    total_income_pool = calculate_total_income_pool()
+
+    # Subtract the total expenses from the total income pool
+    total_income_pool -= total_expenses
 
     # Store the value in the session
     request.session['total_expenses'] = total_expenses_float
@@ -24,7 +29,7 @@ def esection_list(request):
         return redirect('esection_list')
 
 
-    return render(request, 'esection_list.html', {'esections': esections, 'total_expenses': total_expenses})
+    return render(request, 'esection_list.html', {'esections': esections, 'total_expenses': total_expenses, 'total_income_pool' : total_income_pool})
 
 def add_esection(request):
     if request.method == 'POST':
@@ -39,28 +44,57 @@ def add_esection(request):
 
 
 
+from decimal import Decimal
+
 def expense_list(request, esection_id):
     esection = get_object_or_404(ESection, pk=esection_id)
     expenses = Expense.objects.filter(esection=esection)
     esection = ESection.objects.get(pk=esection_id)
-    total_expenses = expenses.aggregate(total=Sum('amount'))['total']
-    return render(request, 'expense_list.html', {'expenses': expenses, 'total_expenses': total_expenses, 'esection':esection})
 
-def add_expense(request,esection_id):
+    # Check if total_expenses is None and handle it
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total']
+    total_expenses_float = Decimal(total_expenses) if total_expenses is not None else Decimal('0')
+
+    total_income_pool = calculate_total_income_pool()
+
+    # Subtract the total expenses from the total income pool
+    total_income_pool -= total_expenses_float
+    return render(request, 'expense_list.html', {'expenses': expenses, 'total_expenses': total_expenses_float, 'esection': esection, 'total_income_pool': total_income_pool})
+
+
+
+from decimal import Decimal
+
+# ...
+
+def add_expense(request, esection_id):
     esection = ESection.objects.get(pk=esection_id)
+
+    # Retrieve the current total_income_pool from the session, converting it back to Decimal
+    total_income_pool = Decimal(request.session.get('total_income_pool', 0))
+
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
             form.instance.esection = esection
             form.save()
-            return redirect('expense_list',esection_id=esection_id)
+
+            # Deduct the expense amount from the total_income_pool
+            expense_amount = form.cleaned_data['amount']
+            total_income_pool -= Decimal(expense_amount)
+
+            # Update the session with the new total_income_pool value, converted to string
+            request.session['total_income_pool'] = str(total_income_pool)
+
+            return redirect('expense_list', esection_id=esection_id)
     else:
         form = ExpenseForm()
 
     expenses = Expense.objects.filter(esection=esection)
     total_expense = sum(expense.amount for expense in expenses)
 
-    return render(request, 'add_expense.html', {'esection': esection, 'form': form, 'expenses': expenses, 'total_expense': total_expense})
+    return render(request, 'add_expense.html', {'esection': esection, 'form': form, 'expenses': expenses, 'total_expense': total_expense, 'total_income_pool': total_income_pool})
+
 
 
 def delete_expense(request, expense_id):

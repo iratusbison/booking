@@ -1,0 +1,30 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+    <h2>Delete Monthly Income</h2>
+    <p>Are you sure you want to delete the following monthly income?</p>
+
+    <table class="table">
+        <tr>
+            <th>Description:</th>
+            <td>{{ monthly_income.description }}</td>
+        </tr>
+        <tr>
+            <th>Amount:</th>
+            <td>{{ monthly_income.amount }}</td>
+        </tr>
+        <tr>
+            <th>Date:</th>
+            <td>{{ monthly_income.date }}</td>
+        </tr>
+    </table>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+
+    <a href="{% url 'monthly_income_list' %}" class="btn btn-secondary">Cancel</a>
+</div>
+
+{% endblock %}

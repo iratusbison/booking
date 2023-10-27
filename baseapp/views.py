@@ -46,7 +46,7 @@ def dashboard(request):
     total_expenses = request.session.get('total_expenses',0)
     total_income = request.session.get('total_income',0)
     context = {
-         'total_expenses':total_expenses , 'total_income':total_income}
+         'total_expenses':total_expenses , 'total_income':total_income, total_invest_amount_of_all_isections : 'total_invest_amount_of_all_isections'}
 
     return render(request, 'core/dashboard.html', context)
 
