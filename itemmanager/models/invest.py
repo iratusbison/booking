@@ -15,6 +15,7 @@ class Investment(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     is_approved = models.BooleanField(default=False)
+    description = models.TextField(blank=True, null=True)
 
     def calculate_interest(self):
         # Calculate the number of days between start_date and end_date

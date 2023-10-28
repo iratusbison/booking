@@ -39,14 +39,16 @@ def logout(request):
     auth_logout(request)
     return redirect('/')
 
+
 @login_required(login_url='/login')
 def dashboard(request):
 
     total_invest_amount_of_all_isections = request.session.get('total_invest_amount_of_all_isections',0)
+    total_income_pool = request.session.get('total_income_pool',0)
     total_expenses = request.session.get('total_expenses',0)
     total_income = request.session.get('total_income',0)
     context = {
-         'total_expenses':total_expenses , 'total_income':total_income, total_invest_amount_of_all_isections : 'total_invest_amount_of_all_isections'}
+         'total_expenses':total_expenses , 'total_income' : total_income ,'total_income_pool':total_income_pool, 'total_invest_amount_of_all_isections' : total_invest_amount_of_all_isections}
 
     return render(request, 'core/dashboard.html', context)
 
