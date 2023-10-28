@@ -47,8 +47,9 @@ def dashboard(request):
     total_income_pool = request.session.get('total_income_pool',0)
     total_expenses = request.session.get('total_expenses',0)
     total_income = request.session.get('total_income',0)
+    total_monthly_income = request.session.get('total_monthly_income',0)
     context = {
-         'total_expenses':total_expenses , 'total_income' : total_income ,'total_income_pool':total_income_pool, 'total_invest_amount_of_all_isections' : total_invest_amount_of_all_isections}
+         'total_expenses':total_expenses , 'total_income' : total_income ,'total_income_pool':total_income_pool, 'total_invest_amount_of_all_isections' : total_invest_amount_of_all_isections, 'total_monthly_income' : total_monthly_income}
 
     return render(request, 'core/dashboard.html', context)
 

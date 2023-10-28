@@ -11,20 +11,7 @@
 
 <a href="{% url 'income_list' incsection.id %}">Back to Income List</a>
 
-{% if is_monthly %}
-<h3>Monthly Income</h3>
-{% else %}
-<h3>Regular Income</h3>
-{% endif %}
 
-<ul>
-    {% for income in incomes %}
-    <li>{{ income.description }} - ${{ income.amount }}</li>
-    {% endfor %}
-</ul>
-
-<h3>Total Income</h3>
-<p>Total: ${{ total_income }}
 <style>
     /* Dark mode suited button */
     .dark-mode-button {
