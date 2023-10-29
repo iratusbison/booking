@@ -21,6 +21,7 @@ def esection_list(request):
 
     # Store the value in the session
     request.session['total_expenses'] = total_expenses_float
+    request.session['total_income_pool'] = str(total_income_pool)
 
     if request.method == 'POST' and 'delete_esection' in request.POST:
         esection_id = request.POST['delete_esection']
@@ -54,11 +55,7 @@ def expense_list(request, esection_id):
     # Check if total_expenses is None and handle it
     total_expenses = expenses.aggregate(total=Sum('amount'))['total']
     total_expenses_float = Decimal(total_expenses) if total_expenses is not None else Decimal('0')
-
-    total_income_pool = calculate_total_income_pool()
-
-    # Subtract the total expenses from the total income pool
-    total_income_pool -= total_expenses_float
+    total_income_pool = Decimal(request.session.get('total_income_pool', 0))
     return render(request, 'expense_list.html', {'expenses': expenses, 'total_expenses': total_expenses_float, 'esection': esection, 'total_income_pool': total_income_pool})
 
 
