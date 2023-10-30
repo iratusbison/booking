@@ -72,4 +72,7 @@ class InvestmentForm(forms.ModelForm):
             'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
-
+class TaxCalculationForm(forms.Form):
+    income = forms.DecimalField()
+    deductions = forms.DecimalField(required=False)
+    exemptions = forms.DecimalField(required=False)
