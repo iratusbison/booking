@@ -1,0 +1,57 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<!DOCTYPE html>
+<html>
+<head>
+    Tax Calculation
+    <!-- Include Font Awesome CSS for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Dark Mode Styles */
+        .dark-mode-form {
+            background-color: #121212;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .dark-mode-form label {
+            color: #fff;
+        }
+
+        .dark-mode-form input[type="number"] {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        .dark-mode-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        /* Font Awesome Icon Color */
+        .fas {
+            color: #ffcc00; /* You can adjust the color as per your preference */
+        }
+    </style>
+</head>
+<body>
+    
+    <form method="post" action="{% url 'calculate_tax' %}" class="dark-mode-form">
+        {% csrf_token %}
+        <label for="income"><i class="fas fa-money-bill"></i> Annual Income:</label>
+        <input type="number" id="income" name="income" required>
+        <br>
+        <label for="deductions"><i class="fas fa-minus-circle"></i> Deductions:</label>
+        <input type="number" id="deductions" name="deductions" value="0">
+        <br>
+        <label for "exemptions"><i class="fas fa-percent"></i> Exemptions:</label>
+        <input type="number" id="exemptions" name="exemptions" value="0">
+        <br>
+        <input type="submit" value="Calculate Tax" class="dark-mode-button">
+    </form>
+</body>
+</html>
+{% endblock %}

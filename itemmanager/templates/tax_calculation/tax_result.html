@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tax Calculation Result</title>
+   
+    <style>
+        /* Dark Mode Styles */
+        body {
+            background-color: #121212;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ffcc00; /* Header color */
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        /* Font Awesome Icon Color */
+        .fas {
+            color: #ffcc00; /* You can adjust the color as per your preference */
+        }
+    </style>
+</head>
+<body><center>
+    <p><i class="fas fa-money-bill"></i> Annual Income: ₹{{ user_profile.annual_income }}</p>
+    <p><i class="fas fa-minus-circle"></i> Deductions: ₹{{ user_profile.deductions }}</p>
+    <p><i class="fas fa-percent"></i> Exemptions: ₹{{ user_profile.exemptions }}</p>
+    <p><i class="fas fa-coins"></i> Tax Liability: ₹{{ user_profile.tax_liability }}</p>
+    <p><i class="fas fa-percentage"></i> Tax Percentage: {{ user_profile.tax_percentage }}%</p>
+</center></body>
+</html>
+{% endblock %}

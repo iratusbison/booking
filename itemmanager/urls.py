@@ -6,7 +6,7 @@ from itemmanager.views.view_invest import  invest_list, investment_detail, add_i
 from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection, edit_income, monthly_income_list, add_monthly_income, edit_monthly_income, delete_monthly_income
 from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
 from itemmanager.views.view_total import total_view
-
+from itemmanager.views.view_tax import calculate_tax
 
 urlpatterns = [
     #path('expense', expense_list, name='expense_list'),
@@ -45,4 +45,7 @@ urlpatterns = [
     path('isection/<int:isection_id>/invest/add/', add_investment, name='add_investment'),
     path('isection/list/', isection_list, name='isection_list'),
     path('isection/add/', iadd_section, name='iadd_section'),
+
+    path('calculate_tax/', calculate_tax, name='calculate_tax'),
+
 ]
