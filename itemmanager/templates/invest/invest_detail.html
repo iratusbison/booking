@@ -28,6 +28,10 @@
             <td>{{ investment.end_date }}</td>
         </tr>
         <tr>
+            <td>Compounding Frequency</td>
+            <td>{{ investment.get_compound_frequency_display }}</td>
+        </tr>
+        <tr>
             <td>Interest</td>
             <td>₹ {{ investment.calculate_interest|floatformat:2 }}</td>
         </tr>

@@ -5,7 +5,7 @@
     <div style="background-color: #007acc; padding: 10px; border-radius: 5px; text-align: center; color: #ffffff;">
         <h5>
             <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">palette</i> <!-- Palette icon for artists -->
-            Artistic Sections - Total : ₹ {{ total_income }}
+         Project Sections - Total : ₹ {{ total_income }}
         </h5>
     </div>
 
@@ -16,7 +16,7 @@
         {% for incsection in incsections %}
         <div class="section-item">
             <div class="section-details">
-               
+
                 <a href="{% url 'income_list' incsection.id %}" style="color: #ffffff; text-decoration: none;">{{ incsection.name }}</a>
             </div>
             <div class="section-actions">
