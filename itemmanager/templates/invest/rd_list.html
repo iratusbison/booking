@@ -1,0 +1,42 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+  <h4 style="color: #ffffff;">{{ rdsection.name }} - RDs</h4>
+  <!-- Display RDs and total amounts -->
+  <!-- Add form for deleting RDs -->
+  <!-- Link to create a new RD -->
+
+  {% for rd in rds %}
+    <div class="rd-item" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; color: #ffffff;">
+      <a href="{% url 'rd_detail' rdsection_id=rdsection.id rd_id=rd.id %}" style="color: #ffffff; text-decoration: none;">
+        <strong>{{ rd.principal_amount }}</strong>
+      </a>
+      
+      <p style="color: #ffffff;">Interest Rate: {{ rd.interest_rate }} %</p>
+      <!-- Add other details you want to display -->
+
+      <!-- Delete RD Form with Icon -->
+      <form method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="rd_id" value="{{ rd.id }}">
+                            <button type="submit" style="color: #ffffff; background-color: transparent; border: none; cursor: pointer;">
+                                <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">delete</i> <!-- Delete icon -->
+                                Delete
+                            </button>
+                        </form>
+    </div>
+  {% endfor %}
+
+  <a href="{% url 'add_rd' rdsection_id=rdsection.id %}" style="color: #ffffff; text-decoration: none;">
+    <button style="background-color: #ffffff; color: #3366cc; border: none; padding: 8px 12px; cursor: pointer;">
+      <i class="fas fa-plus" aria-hidden="true"></i> Add RD
+    </button>
+  </a>
+  
+{% endblock %}
+
+<!-- Font Awesome Link -->
+<head>
+  <!-- other head elements -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-ez0PBvb1K1CEaI74ugt8ZhEZl3bopFVz9FmHhqNjp8mXazA2QoqFCp5pyD7zwG8B" crossorigin="anonymous">
+</head>

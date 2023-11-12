@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection, generate_pdf
-from itemmanager.views.view_invest import  invest_list, investment_detail, add_investment,  isection_list, iadd_section
+from itemmanager.views.view_invest import  invest_list, investment_detail, add_investment,  isection_list, iadd_section, rdsection_list, rd_list, rd_detail, Radd_section, add_rd
 from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection, edit_income, monthly_income_list, add_monthly_income, edit_monthly_income, delete_monthly_income
 from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
 from itemmanager.views.view_total import total_view
@@ -45,6 +45,12 @@ urlpatterns = [
     path('isection/<int:isection_id>/invest/add/', add_investment, name='add_investment'),
     path('isection/list/', isection_list, name='isection_list'),
     path('isection/add/', iadd_section, name='iadd_section'),
+
+    path('rdsection_list/', rdsection_list, name='rdsection_list'),
+    path('rd_list/<int:rdsection_id>/', rd_list, name='rd_list'),
+    path('rd_detail/<int:rdsection_id>/<int:rd_id>/', rd_detail, name='rd_detail'),
+    path('Radd_section/', Radd_section, name='Radd_section'),
+    path('add_rd/<int:rdsection_id>/', add_rd, name='add_rd'),
 
     path('calculate_tax/', calculate_tax, name='calculate_tax'),
 

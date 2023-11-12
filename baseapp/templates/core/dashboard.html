@@ -178,7 +178,7 @@
         <li class="bold">
             <a href="{% url 'monthly_income_list' %}" class="">
                 <span class="nav-icon"><i class="fas fa-calendar-alt"></i></span>
-                <span class="nav-text">Monthly Income</span>
+                <span class="nav-text">Income</span>
             </a>
         </li>
     </ul>
@@ -188,7 +188,17 @@
         <li class="bold">
             <a href = "{% url 'isection_list' %}" class="">
                 <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
-                <span class="nav-text">Investment</span>
+                <span class="nav-text">FD</span>
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="no-padding">
+    <ul class="" data-collapsible="accordion">
+        <li class="bold">
+            <a href = "{% url 'rdsection_list' %}" class="">
+                <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
+                <span class="nav-text">RD</span>
             </a>
         </li>
     </ul>
@@ -203,6 +213,8 @@
         </li>
     </ul>
 </li>
+
+
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">

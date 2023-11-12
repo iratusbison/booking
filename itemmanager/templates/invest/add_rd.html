@@ -1,0 +1,16 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+
+  <h2>Add RD for {{ rdsection.name }}</h2>
+  <!-- Add form for creating a new RD -->
+
+  <form method="post" action="{% url 'add_rd' rdsection_id=rdsection.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+
+  <a href="{% url 'rd_list' rdsection_id=rdsection.id %}">Back to RDs</a>
+
+{% endblock %}

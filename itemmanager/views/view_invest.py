@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from itemmanager.models.invest import Investment,  InSection
-from itemmanager.forms import  InSectionForm, InvestmentForm
+from itemmanager.models.invest import Investment,  InSection, RD, RDSection
+from itemmanager.forms import  InSectionForm, InvestmentForm, RDSectionForm, RDForm
 from django.db.models import Sum
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -101,4 +101,91 @@ def add_investment(request, isection_id):
     else:
         form = InvestmentForm()
     return render(request, 'invest/add_invest.html', {'isection': isection, 'form': form})
+
+
+
+@login_required
+def rdsection_list(request):
+    if request.method == 'POST':
+        rdsection_id = request.POST.get('rdsection_id')
+        try:
+            rdsection = RDSection.objects.get(id=rdsection_id)
+            rdsection.delete()
+            messages.success(request, 'RD Section deleted successfully.')
+        except RDSection.DoesNotExist:
+            messages.error(request, 'RD Section not found or could not be deleted.')
+
+    rdsections = RDSection.objects.all()
+    total_rd_amount_of_all_rdsections = RD.objects.aggregate(total=Sum('principal_amount'))['total'] or 0
+
+    total_rd_amount_of_all_rdsections = float(total_rd_amount_of_all_rdsections)
+    request.session['total_rd_amount_of_all_rdsections'] = total_rd_amount_of_all_rdsections
+
+    return render(request, 'invest/rdsection_list.html', {'rdsections': rdsections, 'total_rd_amount_of_all_rdsections': total_rd_amount_of_all_rdsections})
+
+@login_required
+def rd_list(request, rdsection_id):
+    rdsection = get_object_or_404(RDSection, id=rdsection_id)
+    rds = RD.objects.filter(section=rdsection)
+
+    total_rd_amount = rds.aggregate(total=Sum('principal_amount'))['total'] or 0
+    total_rd_amount_of_all_rdsections = RD.objects.aggregate(total=Sum('principal_amount'))['total'] or 0
+
+    if request.method == 'POST':
+        rd_id = request.POST.get('rd_id')
+        try:
+            rd = RD.objects.get(id=rd_id)
+            rd.delete()
+            messages.success(request, 'RD Investment deleted successfully.')
+        except RD.DoesNotExist:
+            messages.error(request, 'RD Investment not found or could not be deleted.')
+        return redirect('rd_list', rdsection_id=rdsection_id)
+
+    return render(request, 'invest/rd_list.html', {'rdsection': rdsection, 'rds': rds, 'total_rd_amount': total_rd_amount, 'total_rd_amount_of_all_rdsections': total_rd_amount_of_all_rdsections})
+
+
+@login_required
+def rd_detail(request, rdsection_id, rd_id):
+    rd = get_object_or_404(RD, id=rd_id)
+    rdsection = get_object_or_404(RDSection, id=rdsection_id)
+
+    # Calculate the total amount using the calculate_total_amount method
+    total_amount = rd.calculate_total_amount()
+    print("Total Amount:", total_amount)
+
+    return render(request, 'invest/rd_detail.html', {'rdsection': rdsection, 'rd': rd, 'total_amount': total_amount})
+
+@login_required
+def Radd_section(request):
+    if request.method == 'POST':
+        form = RDSectionForm(request.POST)
+        if form.is_valid():
+            rdsection = form.save()
+            return redirect('rd_list', rdsection_id=rdsection.id)
+    else:
+        form = InSectionForm()
+
+    return render(request, 'invest/rdadd_section.html', {'form': form})
+
+
+
+@login_required
+def add_rd(request, rdsection_id):
+    rdsection = get_object_or_404(RDSection, id=rdsection_id)
+
+    if request.method == 'POST':
+        form = RDForm(request.POST)
+        if form.is_valid():
+            rd = form.save(commit=False)
+            rd.section = rdsection
+            rd.save()
+            return redirect('rd_list', rdsection_id=rdsection_id)
+    else:
+        form = RDForm()
+
+    return render(request, 'invest/add_rd.html', {'rdsection': rdsection, 'form': form})
+
+
+
+
 

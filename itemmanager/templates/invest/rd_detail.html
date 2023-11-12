@@ -1,0 +1,20 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+
+<center>
+<h4>RD Detail</h4>
+<p>RD Section: {{ rdsection.name }}</p>
+<p>Principal Amount: {{ rd.principal_amount }}</p>
+<p>Interest Rate: {{ rd.interest_rate }}</p>
+<p>Start Date: {{ rd.start_date }}</p>
+<p>End Date: {{ rd.end_date }}</p>
+<p>Installment Cycle: {{ rd.installment_cycle }}</p>
+
+<!-- Display the calculated total amount -->
+<p>Total Amount: {{ total_amount }}</p>
+
+
+  <a href="{% url 'rd_list' rdsection_id=rdsection.id %}">Back to RDs</a>
+ </center>
+{% endblock %}

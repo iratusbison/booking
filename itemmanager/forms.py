@@ -2,7 +2,7 @@ from django import forms
 from django.forms import formset_factory, inlineformset_factory
 from django.forms.formsets import BaseFormSet
 from django.utils.translation import gettext_lazy as _
-from itemmanager.models.invest import  Investment, InSection
+from itemmanager.models.invest import  Investment, InSection, RD, RDSection
 from collections import defaultdict
 from itemmanager.models.expense import Expense, ESection
 
@@ -71,6 +71,24 @@ class InvestmentForm(forms.ModelForm):
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+class RDSectionForm(forms.ModelForm):
+    class Meta:
+        model = RDSection
+        fields = ['name']
+
+class RDForm(forms.ModelForm):
+    class Meta:
+        model = RD
+        fields = '__all__'
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+
+
+
 
 class TaxCalculationForm(forms.Form):
     income = forms.DecimalField()

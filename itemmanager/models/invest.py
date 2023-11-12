@@ -60,20 +60,45 @@ class Investment(models.Model):
         return amount
 
 
+class RDSection(models.Model):
+    name = models.CharField(max_length=100, null=True)
 
+    def __str__(self):
+        return self.name
 
-class InPayment(models.Model):
-    investment = models.ForeignKey(Investment, on_delete=models.CASCADE, null=True)
-    INSTALLMENT = 'Installment'
-    WHOLE_AMOUNT = 'Whole Amount'
-    PAYMENT_CHOICES = [
-        (INSTALLMENT, 'Installment'),
-        (WHOLE_AMOUNT, 'Whole Amount'),
+class RD(models.Model):
+    section = models.ForeignKey(RDSection, on_delete=models.CASCADE, null=True)
+    principal_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)
+
+    # Add start and end dates
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+
+    # Add a field to specify the installment cycle
+    INSTALLMENT_CHOICES = [
+        ('Monthly', 'Monthly'),
+        ('Quarterly', 'Quarterly'),
+        ('HalfYearly', 'Half-Yearly'),
     ]
-    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    payment_date = models.DateField()
-    payment_type = models.CharField(
+    installment_cycle = models.CharField(
         max_length=20,
-        choices=PAYMENT_CHOICES,
-        default=INSTALLMENT,
+        choices=INSTALLMENT_CHOICES,
+        default='Monthly',  # Set a default value
     )
+
+    def calculate_total_amount(self):
+        # Calculate the number of installments
+        if self.installment_cycle == 'Monthly':
+            n = (self.end_date.year - self.start_date.year) * 12 + self.end_date.month - self.start_date.month
+        elif self.installment_cycle == 'Quarterly':
+            n = (self.end_date.year - self.start_date.year) * 4 + (self.end_date.month - self.start_date.month) // 3
+        elif self.installment_cycle == 'HalfYearly':
+            n = (self.end_date.year - self.start_date.year) * 2 + (self.end_date.month - self.start_date.month) // 6
+        else:
+            n = 0  # Default to 0 if the installment cycle is not recognized
+
+        r = self.interest_rate / 100 / 12  # Monthly interest rate
+
+        total_amount = self.principal_amount * (((1 + r)**n - 1) / r) * (1 + r)
+        return round(total_amount, 2)
