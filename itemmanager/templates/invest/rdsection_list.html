@@ -10,7 +10,7 @@
       </a>
       <form method="post" style="display: inline;">
         {% csrf_token %}
-        <input type="hidden" name="rd_id" value="{{ rdsection.id }}">
+        <input type="hidden" name="rdsection_id" value="{{ rdsection.id }}">
         <button type="submit" style="color: #ffffff; background-color: transparent; border: none; cursor: pointer;">
           <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #FFA500;">delete</i> <!-- Delete icon -->
           Delete

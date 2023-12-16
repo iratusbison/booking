@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'baseapp.apps.BaseAppConfig',
     'itemmanager.apps.ItemmanagerConfig',
     'usermanager.apps.UsermanagerConfig',
+
 ]
 
 MIDDLEWARE = [

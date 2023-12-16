@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatGPT Demo</title>
+</head>
+<body>
+    <form method="post" action="{% url 'query' %}">
+        {% csrf_token %}
+        <label for="prompt">Enter your prompt:</label><br>
+        <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+    <hr>
+    {% if prompt %}
+        <h3>Your prompt:</h3>
+        <p>{{ prompt }}</p>
+    {% endif %}
+    {% if response %}
+        <h3>GPT-3 Response:</h3>
+        <p>{{ response }}</p>
+    {% endif %}
+</body>
+</html>

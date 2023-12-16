@@ -123,6 +123,7 @@ def rdsection_list(request):
 
     return render(request, 'invest/rdsection_list.html', {'rdsections': rdsections, 'total_rd_amount_of_all_rdsections': total_rd_amount_of_all_rdsections})
 
+
 @login_required
 def rd_list(request, rdsection_id):
     rdsection = get_object_or_404(RDSection, id=rdsection_id)
@@ -139,6 +140,7 @@ def rd_list(request, rdsection_id):
             messages.success(request, 'RD Investment deleted successfully.')
         except RD.DoesNotExist:
             messages.error(request, 'RD Investment not found or could not be deleted.')
+
         return redirect('rd_list', rdsection_id=rdsection_id)
 
     return render(request, 'invest/rd_list.html', {'rdsection': rdsection, 'rds': rds, 'total_rd_amount': total_rd_amount, 'total_rd_amount_of_all_rdsections': total_rd_amount_of_all_rdsections})
