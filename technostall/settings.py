@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['udesh.pythonanywhere.com','https://kashfolio.onrender.com','kashfolio.onrender.com']
 
-CSRF_TRUSTED_ORIGINS = ['https://kashfolio.onrender.com','kashfolio.onrender.com'] # Replace with your Render domain
+CSRF_TRUSTED_ORIGINS = ['https://kashfolio.onrender.com'] # Replace with your Render domain
 
 # Application definition
 
