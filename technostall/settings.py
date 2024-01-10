@@ -25,8 +25,9 @@ SECRET_KEY = 'django-insecure-_bvzg+nczp^c%5lqk)@3o+ri0szb_9z9n^ofcc5ryx3o_087t%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['udesh.pythonanywhere.com','localhost','127.0.0.1','https://dot-p1k7.onrender.com','dot-p1k7.onrender.com']
+ALLOWED_HOSTS = ['udesh.pythonanywhere.com','https://kashfolio.onrender.com']
 
+CSRF_TRUSTED_ORIGINS = ['https://kashfolio.onrender.com'] # Replace with your Render domain
 
 # Application definition
 
