@@ -7,30 +7,30 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Description</th>
+
                 <th>Availability</th>
                 <th>Booking</th>
-               
+
             </tr>
         </thead>
         <tbody>
             {% for room in rooms %}
             <tr>
                 <td>{{ room.name }}</td>
-                <td>{{ room.description }}</td>
+
                 <td>{% if room.is_available %} Available {% else %} Not Available {% endif %}</td>
                 <td>
                     {% if room.booking %}
                         <div class="booking-info">
                             <div>ID: {{ room.booking.id }}</div>
-                            
+
                             <div>Date: {{ room.booking.end_date }}</div>
                         </div>
                     {% else %}
                         No Booking
                     {% endif %}
-               
-                
+
+
             </tr>
             {% endfor %}
         </tbody>

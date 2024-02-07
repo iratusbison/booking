@@ -264,40 +264,64 @@ def delete_booking(request, booking_id):
     booking.delete()  # Delete the booking
     return redirect('booking_list')
 
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from io import BytesIO
+from decimal import Decimal
+
 def generate_pdf_bill(booking):
     buffer = BytesIO()
 
-    p = canvas.Canvas(buffer, pagesize=letter)
+    # Create a PDF document
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
 
-    # Customize SV Mahal and contact details design
-   # p.setFont("Helvetica-Bold", 12)
-    p.drawString(50, 750, "SV Mahal")
-    p.drawString(50, 735, "456 Main Street, Cityville, Countryland")
-    p.drawString(50, 720, "Phone: +9876543210")
+    # Define styles
+    styles = getSampleStyleSheet()
+
+    # Content for the PDF
+    content = []
+
+    # Add SV Mahal and contact details
+    content.append(Paragraph("SV Mahal", styles['Title']))
+    content.append(Paragraph("456 Main Street, Cityville, Countryland", styles['Normal']))
+    content.append(Paragraph("Phone: +9876543210", styles['Normal']))
 
     # Calculate GST dynamically
     price = Decimal(booking.price)  # Convert to Decimal
     gst = price * Decimal('0.12')  # Assuming GST is 12%
     total_price = price + gst
-    p.drawString(80, 540, f"GST (12%): {gst} - Total: {total_price}")
 
     # Add booking details in a table
     booking_data = [
-
-        ['Booking ID', booking.id],
+        ['Booking ID', str(booking.id)],
         ['Start Date', booking.start_date.strftime('%Y-%m-%d')],
         ['End Date', booking.end_date.strftime('%Y-%m-%d')],
-        ['Price', f"{booking.price}"],
-        ['GST (12%)', f"{gst}"],
-        ['Total Price', f"{total_price}"],
+        ['Price', str(booking.price)],
+        ['GST (12%)', str(gst)],
+        ['Total Price', str(total_price)],
         ['Name', booking.name],
-        ['Address', booking.address],
+        ['Address', "\n".join(booking.address.split(','))],  # Split address by comma and add newline
         ['Aadhar', booking.aadhar],
         ['Phone', booking.phone],
         ['Email', booking.email],
+        ['Rooms', ', '.join([room.name for room in booking.rooms.all()])],  # Include rooms in the PDF
     ]
 
-    booking_table = Table(booking_data, colWidths=[200, 200])
+    # Separate room numbers into lines with a maximum of 5 numbers per line
+    room_numbers = [room.name for room in booking.rooms.all()]
+    room_lines = [", ".join(room_numbers[i:i+5]) for i in range(0, len(room_numbers), 5)]
+    room_numbers_text = "\n".join(room_lines)
+
+    booking_data[11][1] = room_numbers_text
+
+    # Adjust column widths for longer room names and addresses
+    colWidths = [1.5 * inch, 2 * inch]  # Adjust widths as needed
+    booking_table = Table(booking_data, colWidths=colWidths)
+
+    # Apply table styles
     booking_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -305,18 +329,22 @@ def generate_pdf_bill(booking):
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Vertical alignment middle
     ]))
 
-    booking_table.wrapOn(p, 400, 300)
-    booking_table.drawOn(p, 80, 400)
+    content.append(booking_table)
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
+    # Build the PDF document
+    doc.build(content)
 
     # File is done, rewind the buffer.
     buffer.seek(0)
     return buffer
+
+
+
+
+
 
 
 def download_pdf(request, booking_id):
