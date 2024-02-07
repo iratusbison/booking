@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from itemmanager.views.view_aksinn import room_list, booking_create, booking_list, booking_detail, download_pdf, edit_booking, delete_booking, add_room, delete_room
+from itemmanager.views.view_aksinn import room_list, booking_create, booking_list, booking_detail, download_pdf, edit_booking, delete_booking, add_room, delete_room, download_pdf_bookings
 from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection, generate_pdf
 from itemmanager.views.view_invest import  invest_list, investment_detail, add_investment,  isection_list, iadd_section, rdsection_list, rd_list, rd_detail, Radd_section, add_rd
 from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection, edit_income, monthly_income_list, add_monthly_income, edit_monthly_income, delete_monthly_income,generate_pdf_income
@@ -66,6 +66,7 @@ urlpatterns = [
     path('booking/list/', booking_list, name='booking_list'),
     path('booking/<int:booking_id>/', booking_detail, name='booking_detail'),
     path('booking/<int:booking_id>/download-pdf/', download_pdf, name='download_pdf'),
+    path('download_pdf_bookings/', download_pdf_bookings, name='download_pdf_bookings'),
 
 
 ]

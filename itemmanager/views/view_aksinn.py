@@ -358,4 +358,107 @@ def download_pdf(request, booking_id):
     return response
 
 
+def generate_pdf_bookings(bookings, start_date, end_date, total_revenue):
+    buffer = BytesIO()
 
+    # Create a PDF document
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+
+    # Define styles
+    styles = getSampleStyleSheet()
+
+    # Content for the PDF
+    content = []
+
+    # Add SV Mahal and contact details
+    content.append(Paragraph("SV Mahal", styles['Title']))
+    content.append(Paragraph("456 Main Street, Cityville, Countryland", styles['Normal']))
+    content.append(Paragraph("Phone: +9876543210", styles['Normal']))
+
+    # Table header for booking details
+    header = ['Booking ID', 'Price', 'GST (12%)', 'Total Price', 'Name',
+              'Aadhar', 'Phone']
+
+    # Prepare data for the PDF table
+    booking_data = [header]
+    for booking in bookings:
+        # Calculate GST dynamically
+        price = Decimal(booking.price)
+        gst = price * Decimal('0.12')
+        total_price = price + gst
+
+        # Add booking details to the table
+        room_names = [room.name for room in booking.rooms.all()]
+        room_lines = [", ".join(room_names[i:i + 5]) for i in range(0, len(room_names), 5)]
+        room_text = "\n".join(room_lines)
+
+        row = [
+            str(booking.id),
+
+            str(booking.price),
+            str(gst),
+            str(total_price),
+            booking.name,
+
+            booking.aadhar,
+            booking.phone,
+
+
+        ]
+
+        booking_data.append(row)
+
+    # Create the PDF table
+    booking_table = Table(booking_data)
+
+    # Apply table styles
+    booking_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Vertical alignment middle
+    ]))
+
+    content.append(booking_table)
+
+    # Display total revenue
+    content.append(Paragraph(f'Total Revenue: {total_revenue}', styles['Normal']))
+
+    # Build the PDF document
+    doc.build(content)
+
+    # File is done, rewind the buffer.
+    buffer.seek(0)
+    return buffer
+
+
+
+
+
+def download_pdf_bookings(request):
+    # Get start and end dates from the request, defaulting to the last 30 days if not provided
+    start_date_str = request.GET.get('start_date', '')
+    end_date_str = request.GET.get('end_date', '')
+    if not start_date_str or not end_date_str:
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=30)
+    else:
+        start_date = make_aware(datetime.strptime(start_date_str, '%Y-%m-%d'))
+        end_date = make_aware(datetime.strptime(end_date_str, '%Y-%m-%d'))
+
+    # Fetch bookings based on the date range
+    bookings = Booking.objects.filter(start_date__range=(start_date, end_date))
+
+    # Calculate total revenue for the given date range
+    total_revenue = bookings.aggregate(Sum('price'))['price__sum']
+
+    pdf_buffer = generate_pdf_bookings(bookings, start_date, end_date, total_revenue)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename=bookings_list_{start_date_str}_{end_date_str}.pdf'
+    response.write(pdf_buffer.read())
+
+    return response

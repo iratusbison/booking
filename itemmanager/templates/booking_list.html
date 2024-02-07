@@ -78,6 +78,7 @@
     <label for="end_date">End Date:</label>
     <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
     <button type="submit">Apply Filter</button>
+    <a href="{% url 'download_pdf_bookings' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
 </form>
 
 <p>Total Revenue: {{ total_revenue|default:"0.00" }}</p>
@@ -122,58 +123,9 @@
     </tbody>
 </table>
 
-<button id="download_btn">Download Booking List</button>
 
-<script>
-    document.getElementById('download_btn').addEventListener('click', function() {
-        // Create CSV content
-        var csvContent = "data:text/csv;charset=utf-8,";
-        var rows = document.querySelectorAll("#booking_table tr");
 
-        // Initialize total revenue
-        var totalRevenue = 0;
 
-        rows.forEach(function(row, index) {
-            var rowData = [];
-            row.querySelectorAll("td").forEach(function(cell) {
-                // Append cell data to rowData array
-                rowData.push(cell.textContent);
-                // If it's the price column, update total revenue
-                if (index > 0 && cell.cellIndex === 3) {
-                    totalRevenue += parseFloat(cell.textContent) || 0;
-                }
-            });
-            csvContent += rowData.join(",") + "\n";
-        });
 
-        // Add total revenue row to the CSV content
-        csvContent += "Total Revenue:," + totalRevenue.toFixed(2) + "\n";
-
-        // Create a hidden link to initiate download
-        var encodedUri = encodeURI(csvContent);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "booking_list.csv");
-        document.body.appendChild(link);
-
-        // Simulate clicking the link to start the download
-        link.click();
-    });
-
-    // Search Functionality
-    document.getElementById('search_button').addEventListener('click', function() {
-    var searchValue = document.getElementById('search_booking_id').value.trim().toLowerCase();
-    var rows = document.querySelectorAll("#booking_table tbody tr");
-
-    rows.forEach(function(row, index) {
-        var bookingID = row.querySelector("td:first-child").textContent.trim().toLowerCase();
-        if (bookingID.includes(searchValue)) {
-            row.style.display = ""; // Show the row
-        } else {
-            row.style.display = "none"; // Hide the row
-        }
-    });
-});
-</script>
 </body>
 {% endblock %}

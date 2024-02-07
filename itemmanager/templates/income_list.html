@@ -8,8 +8,7 @@
          Booking List
         </h4>
         <h5>Total(with gst 18%) : ₹ {{ total_income|default:"0.00" }}</h5>
-    </div>
-
+    </div><div></div>
     <div class="section-container">
         {% for income in incomes %}
         <div class="card" style="background-color: #f2f2f2; color: #000; margin: 10px; border: 1px solid #007acc;">
@@ -34,11 +33,14 @@
     <a href="{% url 'add_income' incsection.id %}" class="add-income-link" style="background-color: #007acc; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none;"> <!-- Artist-themed color -->
         <i class="material-icons" style="vertical-align: middle;">add</i> Add
     </a>
-</div>
-<a href="{% url 'generate_pdf_income' incsection.id %}" style="color: #ffffff; background-color: #2196F3; padding: 5px 10px; border-radius: 5px; display: flex; align-items: center;">
+<div>_____________________</div>
+<div><a href="{% url 'generate_pdf_income' incsection.id %}" class="add-income-link" style="background-color: #007acc; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
             Generate PDF
-            <i class="material-icons" style="margin-left: 5px;">file_download</i>
+            <i class="material-icons" style="margin-left: 1px;">file_download</i>
         </a>
+</div>
+</div>
+
 <style>
     /* Style hyperlink text color and remove underlines */
     a {
