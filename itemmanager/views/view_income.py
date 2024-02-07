@@ -108,6 +108,73 @@ def delete_income(request, income_id):
         return redirect('income_list', incsection_id=incsection_id)
     return render(request, 'delete_income.html', {'income': income, 'incsection_id': incsection_id})
 
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib import colors
+from io import BytesIO
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
+
+def generate_pdf_income(request, incsection_id):
+    incsection = get_object_or_404(IncSection, pk=incsection_id)
+    incomes = Income.objects.filter(incsection=incsection)
+
+    # Calculate the total income
+    total_income = sum(income.amount for income in incomes)
+
+    # Create an in-memory PDF file
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    elements = []
+
+    # Add a line with the total expense
+    styles = getSampleStyleSheet()
+    total_income_text = Paragraph(f'<b>Total income:</b> Rs {total_income}', styles['Normal'])
+    elements.append(total_income_text)
+
+    # Create a data list for the table
+    data = [["Date", "Description", "Amount"]]  # Header row
+    for income in incomes:
+        data.append([income.date, income.description, f'Rs {income.amount}'])
+
+    # Define a custom table style
+    custom_table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), (0.2, 0.2, 0.2)),
+        ('TEXTCOLOR', (0, 0), (-1, 0), (1, 1, 1)),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), (0.9, 0.9, 0.9)),
+        ('GRID', (0, 0), (-1, -1), 1, (0, 0, 0))
+    ])
+
+    # Create the table with the custom style
+    table = Table(data)
+    table.setStyle(custom_table_style)
+
+    # Add the table to the elements
+    elements.append(table)
+
+    # Build the PDF document
+    doc.build(elements)
+
+    # Reset the buffer's position to the start
+    buffer.seek(0)
+
+    # Create a Django HttpResponse with the PDF file
+    response = HttpResponse(buffer.read(), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="income_list_{incsection_id}.pdf"'
+
+    # Close the buffer
+    buffer.close()
+
+    return response
+
 def monthly_income_list(request):
     monthly_incomes = MonthlyIncome.objects.all()
     total_monthly_income = monthly_incomes.aggregate(total=Sum('amount'))['total'] or Decimal('0')

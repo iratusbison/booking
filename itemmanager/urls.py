@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from itemmanager.views.view_aksinn import room_list, booking_create, booking_list, booking_detail, download_pdf, edit_booking, delete_booking, add_room, delete_room
 from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection, generate_pdf
 from itemmanager.views.view_invest import  invest_list, investment_detail, add_investment,  isection_list, iadd_section, rdsection_list, rd_list, rd_detail, Radd_section, add_rd
-from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection, edit_income, monthly_income_list, add_monthly_income, edit_monthly_income, delete_monthly_income
+from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection, edit_income, monthly_income_list, add_monthly_income, edit_monthly_income, delete_monthly_income,generate_pdf_income
 from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
 from itemmanager.views.view_total import total_view
 from itemmanager.views.view_tax import calculate_tax
@@ -27,6 +27,7 @@ urlpatterns = [
     path('incsection/<int:incsection_id>/add_income/', add_income, name='add_income'),
     path('incsection/income/<int:income_id>/delete/', delete_income, name='delete_income'),
     path('incsection/edit_income/<int:income_id>/', edit_income, name='edit_income'),
+    path('generate-pdf-income/<int:incsection_id>/', generate_pdf_income, name='generate_pdf_income'),
 
 
     path('task_list', task_list, name='task_list'),
