@@ -3,7 +3,7 @@
 {% load define_action %}
 
 {% block title %}
-{{ "Artistic Dashboard" }}
+{{ "Dashboard" }}
 {% endblock title %}
 
 {% block styles %}
@@ -148,16 +148,25 @@
   <ul class="" data-collapsible="accordion">
     <li class="bold">
       <a href="{% url 'dashboard' %}" class="">
-        <span class="nav-text"><i class="fas fa-palette"></i> Dashboard </span> <!-- Updated with palette icon -->
+        <span class="nav-text"><i class="fas fa-home"></i> Dashboard </span>
       </a>
     </li>
   </ul>
 </li>
 <li class="no-padding">
+          <ul class="" data-collapsible="accordion">
+            <li class="bold">
+              <a href="{% url 'incsection_list' %}" class="">
+                <span class="nav-text"><i class="fas fa-hotel"></i>  SV Mahal </span> <!-- Updated with brush icon -->
+              </a>
+            </li>
+          </ul>
+        </li>
+<li class="no-padding">
     <ul class="" data-collapsible="accordion">
         <li class="bold">
             <a href="{% url 'room_list' %}" class="">
-                <span class="nav-icon"><i class="fas fa-bed"></i></span>
+                <span class="nav-icon"><i class="fas fa-door-closed"></i></span>
                 <span class="nav-text">Rooms</span>
             </a>
         </li>
@@ -185,15 +194,7 @@
 </li>
 
 
-        <li class="no-padding">
-          <ul class="" data-collapsible="accordion">
-            <li class="bold">
-              <a href="{% url 'incsection_list' %}" class="">
-                <span class="nav-text"><i class="fas fa-brush"></i> Projects </span> <!-- Updated with brush icon -->
-              </a>
-            </li>
-          </ul>
-        </li>
+
         <li class="no-padding">
     <ul class="" data-collapsible="accordion">
         <li class="bold">
@@ -223,7 +224,7 @@
           <ul class="" data-collapsible="accordion">
             <li class="bold">
               <a href="{% url 'task_list' %}" class="">
-                <span class="nav-text"><i class="fas fa-pencil-alt"></i> ToDo List</span> <!-- Updated with pencil-alt icon -->
+                <span class="nav-text"><i class="fas fa-pencil-alt"></i> Enquiries </span> <!-- Updated with pencil-alt icon -->
               </a>
             </li>
           </ul>
@@ -274,7 +275,7 @@
               <div class="card-content white-text">
                 <span class="card-title">
                   <a href="{% url 'incsection_list' %}" style="color: #ffffff;">
-                    🎨 Projects
+                    🏛️ SV Mahal
                   </a>
                 </span>
                 <p style="color: #ffffff;">  ₹ {{ total_income}}</p>

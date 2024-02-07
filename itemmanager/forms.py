@@ -41,10 +41,10 @@ class ESectionForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'start_date', 'due_date', 'completion', 'notes']
+        fields = ['title', 'start_date',  'notes']
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'due_date': forms.DateInput(attrs={'type': 'date'}),
+
         }
 
 class MonthlyIncomeForm(forms.ModelForm):

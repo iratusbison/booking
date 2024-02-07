@@ -1,58 +1,93 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-<div class="task-list-container">
-    <h4 class="harry-potter-title">🪄 Task List</h4>
+<div class="enquiry-list-container">
+    <h4 class="enquiry-title">🔍 Enquiry List</h4>
 
-    <div class="task-list">
-        <table class="task-table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Start Date</th>
-                    <th>Due Date</th>
-                    <th>Completion</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for task in tasks %}
-                    <tr>
-                        <td class="task-title">{{ task.title }}</td>
-                        <td class="task-date">{{ task.start_date }}</td>
-                        <td class="task-date">{{ task.due_date }}</td>
-                        <td class="task-completion">
-                            {% if task.completion >= 90 %}
-                                <i class="material-icons harry-potter-icon" style="color: #00FF00;">wb_sunny</i> <!-- Sun icon for high completion -->
-                            {% elif task.completion >= 60 %}
-                                <i class="material-icons harry-potter-icon" style="color: #FFFF00;">star</i> <!-- Star icon for medium completion -->
-                            {% elif task.completion >= 30 %}
-                                <i class="material-icons harry-potter-icon" style="color: #FFA500;">whatshot</i> <!-- Fire icon for low completion -->
-                            {% else %}
-                                <i class="material-icons harry-potter-icon" style="color: #FF0000;">cloud</i> <!-- Cloud icon for very low completion -->
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'edit_task' task.pk %}" class="task-action edit-action">
-                                <i class="material-icons harry-potter-icon">edit</i>
-                            </a>
-                            <a href="{% url 'delete_task' task.pk %}" class="task-action delete-action">
-                                <i class="material-icons harry-potter-icon">delete</i>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="enquiry-list">
+        {% for task in tasks %}
+        <div class="enquiry-item">
+            <div class="enquiry-header">
+                <h3 class="enquiry-title">{{ task.title }}</h3>
+
+            </div>
+            <div class = "enquiry-item"><span class="enquiry-dates">Date: {{ task.start_date }} </span></div>
+            <div class="enquiry-details">
+                <p class="enquiry-notes"><strong></strong> {{ task.notes }}</p>
+
+            </div>
+            <div class="enquiry-actions">
+                <a href="{% url 'edit_task' task.pk %}" class="enquiry-action edit-action">
+                    Edit
+                </a>
+                <a href="{% url 'delete_task' task.pk %}" class="enquiry-action delete-action">
+                    Delete
+                </a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
     <div class="create-button">
-        <a href="{% url 'create_task' %}" class="btn btn-dark">Create New Task</a>
+        <a href="{% url 'create_task' %}" class="btn btn-dark">Create New Enquiry</a>
     </div>
 </div>
 
 <style>
-    /* Style the "Create New Task" button */
+    /* Styling for enquiry list */
+    .enquiry-list-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .enquiry-title {
+        font-size: 28px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .enquiry-list {
+        width: 80%;
+    }
+
+    .enquiry-item {
+        background-color: #000708;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        padding: 10px;
+    }
+
+    .enquiry-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .enquiry-details {
+        margin-bottom: 10px;
+    }
+
+    .enquiry-notes {
+        margin-bottom: 5px;
+    }
+
+    .enquiry-actions {
+        text-align: right;
+    }
+
+    .enquiry-action {
+        color: #333;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+
+    .enquiry-action:hover {
+        color: #FFA500;
+    }
+
     .btn-dark {
         color: #ffffff;
         background-color: #333;
@@ -63,67 +98,5 @@
     .btn-dark:hover {
         background-color: #222;
     }
-
-    /* Styling for task list */
-    .task-list-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        color: #d4a017; /* Golden text color */
-    }
-
-    .harry-potter-title {
-        font-family: 'Harry Potter', cursive;
-        font-size: 28px;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .task-list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .task-table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: #333;
-    }
-
-    .task-table th, .task-table td {
-        border: 1px solid #444;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .task-table th {
-        background-color: #222;
-    }
-
-    .harry-potter-icon {
-        font-size: 24px;
-    }
-
-    .task-action {
-        color: #ffffff;
-        text-decoration: none;
-        font-size: 24px;
-        margin: 0 10px;
-    }
-
-    .edit-action:hover {
-        color: #FFA500;
-    }
-
-    .delete-action:hover {
-        color: #FF0000;
-    }
-    
-    .task-title, .task-date, .task-completion {
-        padding: 5px;
-    }
 </style>
-</div>
 {% endblock %}
