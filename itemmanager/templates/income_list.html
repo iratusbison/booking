@@ -4,10 +4,10 @@
 <div style="text-align: center;">
     <div style="background-color: #007acc; padding: 10px; border-radius: 5px; text-align: center; color: #ffffff;">
         <h4>
-            <i class="material-icons" style="font-size: 36px; vertical-align: middle; margin-right: 10px; color: #ffffff;">palette</i> <!-- Palette icon for artists -->
+            <i class="fas fa-calendar-check" style="font-size: 36px; vertical-align: middle; margin-right: 10px; color: #ffffff;"></i> <!-- Palette icon for artists -->
          Booking List
         </h4>
-        <h5>Total : ₹ {{ total_income|default:"0.00" }}</h5>
+        <h5>Total(with gst 18%) : ₹ {{ total_income|default:"0.00" }}</h5>
     </div>
 
     <div class="section-container">
@@ -21,6 +21,7 @@
                 <p><strong>Due Date:</strong> {{ income.date }}</p>
                 <p><strong>Amount:</strong> ₹ {{ income.amount }}</p>
                 <p><strong>Status:</strong> {{ income.status }}</p>
+                <p>Amount with GST(18%) : {{ income.amount_with_gst }}</p>
             </div>
             <div class="card-footer" style="display: none; background-color: #007acc; color: #ffffff; padding: 5px; text-align: center;">
                 <a href="{% url 'edit_income' income.id %}" class="edit-link" style="color: #009900;"><i class="material-icons">edit</i> Edit</a>

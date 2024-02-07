@@ -20,9 +20,11 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 from django.contrib.auth.decorators import login_required
+@login_required(login_url='/login')
 def make_aware_with_time(value):
-
+    
     return make_aware(datetime.combine(value, datetime.min.time()))
+
 
 @login_required(login_url='/login')
 def add_room(request):
@@ -34,12 +36,14 @@ def add_room(request):
         room = Room.objects.create(name=name, description=description, available=available, unavailable=unavailable)
         return redirect('room_list')  # Redirect to the room list page after adding a room
     return render(request, 'add_room.html')
-@login_required(login_url='/login')
+
+
 def delete_room(request, room_id):
     room = Room.objects.get(id=room_id)
     room.delete()
     return redirect('room_list')
-@login_required(login_url='/login')
+
+
 def update_room_availability(rooms, start_date, end_date):
     try:
         with transaction.atomic():
@@ -60,7 +64,7 @@ def update_room_availability(rooms, start_date, end_date):
 
 
 from django.http import HttpResponseServerError
-@login_required(login_url='/login')
+
 @transaction.atomic
 def booking_create(request):
     if request.method == 'POST':
@@ -87,13 +91,13 @@ def booking_create(request):
                 return HttpResponse("End date cannot be before the start date.")
 
             booking = Booking.objects.create(
-                start_date=start_date,
-                end_date=end_date,
-                price=price,
-                name=name,
-                address=address,
-                aadhar=aadhar,
-                email=email,
+                start_date=start_date, 
+                end_date=end_date, 
+                price=price, 
+                name=name, 
+                address=address, 
+                aadhar=aadhar, 
+                email=email, 
                 phone=phone
             )
             booking.rooms.set(rooms)
@@ -179,16 +183,16 @@ def booking_list(request):
         }
 
         bookings_with_details.append(booking_details)
-
-
-
-
+    
+    
+    
+   
     return render(request, 'booking_list.html', {
         'bookings': bookings_with_details,
         'start_date': start_date,
         'end_date': end_date,
         'total_revenue': total_revenue,
-
+        
     })
 
 @login_required(login_url='/login')
@@ -236,7 +240,7 @@ def edit_booking(request, booking_id):
         return redirect('room_list')
     else:
         return render(request, 'edit_booking.html', {'booking': booking})
-@login_required(login_url='/login')
+        
 @transaction.atomic
 def delete_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
@@ -246,7 +250,7 @@ def delete_booking(request, booking_id):
         room.save()
     booking.delete()  # Delete the booking
     return redirect('booking_list')
-@login_required(login_url='/login')
+
 def generate_pdf_bill(booking):
     buffer = BytesIO()
 
@@ -266,7 +270,7 @@ def generate_pdf_bill(booking):
 
     # Add booking details in a table
     booking_data = [
-
+     
         ['Booking ID', booking.id],
         ['Start Date', booking.start_date.strftime('%Y-%m-%d')],
         ['End Date', booking.end_date.strftime('%Y-%m-%d')],
@@ -300,7 +304,8 @@ def generate_pdf_bill(booking):
     # File is done, rewind the buffer.
     buffer.seek(0)
     return buffer
-@login_required(login_url='/login')
+    
+
 def download_pdf(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
     pdf_buffer = generate_pdf_bill(booking)
