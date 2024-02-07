@@ -22,7 +22,7 @@ from reportlab.platypus import Table, TableStyle
 from django.contrib.auth.decorators import login_required
 @login_required(login_url='/login')
 def make_aware_with_time(value):
-    
+
     return make_aware(datetime.combine(value, datetime.min.time()))
 
 
@@ -91,13 +91,13 @@ def booking_create(request):
                 return HttpResponse("End date cannot be before the start date.")
 
             booking = Booking.objects.create(
-                start_date=start_date, 
-                end_date=end_date, 
-                price=price, 
-                name=name, 
-                address=address, 
-                aadhar=aadhar, 
-                email=email, 
+                start_date=start_date,
+                end_date=end_date,
+                price=price,
+                name=name,
+                address=address,
+                aadhar=aadhar,
+                email=email,
                 phone=phone
             )
             booking.rooms.set(rooms)
@@ -183,16 +183,16 @@ def booking_list(request):
         }
 
         bookings_with_details.append(booking_details)
-    
-    
-    
-   
+
+
+
+
     return render(request, 'booking_list.html', {
         'bookings': bookings_with_details,
         'start_date': start_date,
         'end_date': end_date,
         'total_revenue': total_revenue,
-        
+
     })
 
 @login_required(login_url='/login')
@@ -227,20 +227,33 @@ def booking_detail(request, booking_id):
 @login_required(login_url='/login')
 def edit_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
+
     if request.method == 'POST':
-        booking.checkin_datetime = request.POST.get('checkin_datetime')
-        booking.checkout_datetime = request.POST.get('checkout_datetime')
+        # Update the booking fields with new values from the form
+        booking.start_date = request.POST.get('start_date')
+        booking.end_date = request.POST.get('end_date')
         booking.name = request.POST.get('name')
         booking.address = request.POST.get('address')
         booking.phone = request.POST.get('phone')
         booking.aadhar = request.POST.get('aadhar')
         booking.price = request.POST.get('price')
 
+        # Update rooms associated with the booking
+        room_ids = request.POST.getlist('rooms')
+        rooms = Room.objects.filter(pk__in=room_ids)
+        booking.rooms.set(rooms)
+
+        # Save the updated booking object
         booking.save()
-        return redirect('room_list')
+
+        # Redirect to the booking list page after saving changes
+        return redirect('booking_list')
     else:
-        return render(request, 'edit_booking.html', {'booking': booking})
-        
+        # Render the edit booking form with the current booking object
+        # Also, pass available rooms for reselection
+        rooms = Room.objects.all()
+        return render(request, 'edit_booking.html', {'booking': booking, 'rooms': rooms})
+
 @transaction.atomic
 def delete_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
@@ -270,7 +283,7 @@ def generate_pdf_bill(booking):
 
     # Add booking details in a table
     booking_data = [
-     
+
         ['Booking ID', booking.id],
         ['Start Date', booking.start_date.strftime('%Y-%m-%d')],
         ['End Date', booking.end_date.strftime('%Y-%m-%d')],
@@ -304,7 +317,7 @@ def generate_pdf_bill(booking):
     # File is done, rewind the buffer.
     buffer.seek(0)
     return buffer
-    
+
 
 def download_pdf(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id)
