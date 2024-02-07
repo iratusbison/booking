@@ -1,0 +1,110 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Booking</title>
+    <style>
+        /* Dark Mode Styles */
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #333;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #333;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        /* Checkboxes */
+        .checkbox-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-item {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h4>Create Booking</h4>
+    <form method="POST" action="{% url 'booking_create' %}">
+        {% csrf_token %}
+        <label for="rooms">Select Rooms:</label><br>
+        <div class="checkbox-container">
+            {% for room in rooms %}
+            <div class="checkbox-item">
+                <input type="checkbox" id="room{{ room.id }}" name="rooms" value="{{ room.id }}">
+                <label for="room{{ room.id }}">{{ room.name }} - {{ room.description }}</label><br>
+            </div>
+            {% endfor %}
+        </div>
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="address">Address:</label><br>
+        <input type="text" id="address" name="address"><br>
+        <label for="phone">Phone:</label><br>
+        <input type="text" id="phone" name="phone"><br>
+        <label for="aadhar">Aadhar:</label><br>
+        <input type="text" id="aadhar" name="aadhar"><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+        <label for="start_date">Start Date:</label><br>
+        <input type="date" id="start_date" name="start_date"><br>
+        <label for="end_date">End Date:</label><br>
+        <input type="date" id="end_date" name="end_date"><br>
+        <label for="price">Price:</label><br>
+        <input type="text" id="price" name="price"><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+{% endblock %}

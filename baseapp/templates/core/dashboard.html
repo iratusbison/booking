@@ -105,7 +105,7 @@
           <li>
             <h1 class="logo-wrapper">
               <a href="{% url 'dashboard' %}" class="brand-logo darken-1">
-                <span class="logo-text hide-on-med-and-down heading">FINANCE MANAGEMENT</span> <!-- Added a lightning bolt symbol for Hogwarts -->
+                <span class="logo-text hide-on-med-and-down heading">Finance Manager</span> <!-- Added a lightning bolt symbol for Hogwarts -->
               </a>
             </h1>
           </li>
@@ -186,9 +186,9 @@
 <li class="no-padding">
     <ul class="" data-collapsible="accordion">
         <li class="bold">
-            <a href = "{% url 'isection_list' %}" class="">
+            <a href = "{% url 'room_list' %}" class="">
                 <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
-                <span class="nav-text">FD</span>
+                <span class="nav-text">Rooms</span>
             </a>
         </li>
     </ul>
@@ -196,9 +196,19 @@
 <li class="no-padding">
     <ul class="" data-collapsible="accordion">
         <li class="bold">
-            <a href = "{% url 'rdsection_list' %}" class="">
+            <a href = "{% url 'booking_list' %}" class="">
                 <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
-                <span class="nav-text">RD</span>
+                <span class="nav-text">Booking list</span>
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="no-padding">
+    <ul class="" data-collapsible="accordion">
+        <li class="bold">
+            <a href = "{% url 'booking_create' %}" class="">
+                <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
+                <span class="nav-text">Add Booking</span>
             </a>
         </li>
     </ul>

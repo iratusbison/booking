@@ -1,0 +1,74 @@
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+    <style>
+        /* Dark Mode Styles */
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .action-btn i {
+            margin-right: 5px;
+        }
+
+        .action-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h4>Booking Details</h4>
+    <p><strong>Booking ID:</strong> {{ booking.id }}</p>
+    <p><strong>Rooms:</strong> {{ rooms }}</p>
+    <p><strong>Booking Name:</strong> {{ booking.name}}</p>
+    <p><strong>Aadhar:</strong> {{ booking.aadhar }}</p>
+    <p><strong>Phone:</strong> {{ booking.phone}}</p>
+    <p><strong>Address:</strong> {{ booking.address}}</p>
+    <p><strong>Email:</strong> {{ booking.email}}</p>
+    <p><strong>Start Date:</strong> {{ start_date }}</p>
+    <p><strong>End Date:</strong> {{ end_date }}</p>
+    <p><strong>Price:</strong> {{ price }}</p>
+    <p><strong>GST:</strong> {{ gst }}</p>
+    <p><strong>Total Price</strong> {{ total_price }}</p>
+    
+
+    <!-- Download PDF Link -->
+    <a href="{% url 'download_pdf' booking.id %}" target="_blank">Download PDF Bill</a>
+    <a href="{% url 'edit_booking' booking.id %}" class="action-btn"><i class="icon edit-icon fas fa-edit"></i>Edit</a>
+    <a href="{% url 'delete_booking' booking.id %}" class="action-btn"><i class="icon delete-icon fas fa-trash"></i>Delete</a>
+</body>
+{% endblock %}

@@ -5,7 +5,8 @@ from itemmanager.forms import ExpenseForm, ESectionForm
 from django.db.models import Sum
 from decimal import Decimal
 from itemmanager.views.view_income import calculate_total_income_pool
-
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='/login')
 def esection_list(request):
     esections = ESection.objects.all()
     total_expenses = Expense.objects.aggregate(total=Sum('amount'))['total']
@@ -46,7 +47,7 @@ def add_esection(request):
 
 
 from decimal import Decimal
-
+@login_required(login_url='/login')
 def expense_list(request, esection_id):
     esection = get_object_or_404(ESection, pk=esection_id)
     expenses = Expense.objects.filter(esection=esection)
