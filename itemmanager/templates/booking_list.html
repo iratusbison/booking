@@ -6,83 +6,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking List</title>
     <style>
-        /* Dark Mode Styles */
+        .date-input {
+          position: relative;
+          display: inline-block;
+    }
+
+       .calendar-icon {
+         position: absolute;
+         top: 50%;
+         right: 5px;
+         transform: translateY(-50%);
+         cursor: pointer;
+    }
+        /* Add custom styles for the Booking List */
         body {
-            background-color: #222;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            background-color: #333; /* Dark background color */
+            color: #f4f4f4; /* Light text color */
         }
 
-        h1 {
-            color: #fff;
+        h4 {
+            color: #007bff; /* Blue heading color */
         }
 
+        /* Style for the form and buttons */
         form {
             margin-bottom: 20px;
         }
 
         label {
-            color: #fff;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, button {
+            padding: 8px;
             margin-right: 10px;
         }
 
-        input[type="date"],
-        input[type="text"] {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #333;
-            color: #fff;
-        }
-
         button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
             background-color: #007bff;
             color: #fff;
             cursor: pointer;
+            border: none;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        /* Style for the search form */
+        #search_form {
+            margin-top: 20px;
+            margin-bottom: 30px;
         }
 
+        /* Style for the booking table */
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
 
         th, td {
-            border: 1px solid #666;
-            padding: 8px;
+            padding: 12px;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
 
         th {
-            background-color: #333;
+            background-color: #007bff;
             color: #fff;
         }
 
-        #search_form {
-            margin-bottom: 20px;
+        td {
+            background-color: #333;
+        }
+
+        /* Style for the link in the rooms column */
+        #booking_table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media only screen and (max-width: 600px) {
+            table, th, td {
+                font-size: 14px;
+            }
         }
     </style>
+    
 </head>
 <body>
-
+<script>
+    // Add this JavaScript function to toggle the calendar
+    function toggleCalendar(inputId) {
+        document.getElementById(inputId).click();
+    }
+</script>
+<!-- Filter Form -->
 <form method="get" action="{% url 'booking_list' %}">
     <label for="start_date">Start Date:</label>
-    <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+    <div class="date-input">
+        <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+       
+    </div>
     <label for="end_date">End Date:</label>
-    <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+    <div class="date-input">
+        <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+        
+    </div>
     <button type="submit">Apply Filter</button>
     <a href="{% url 'download_pdf_bookings' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
 </form>
 
-<p>Total Revenue: {{ total_revenue|default:"0.00" }}</p>
+<!-- Total Revenue -->
+<p>Total Revenue: ₹{{ total_revenue|default:"0.00" }}</p>
 
+<!-- Booking List -->
 <h4>Booking List</h4>
 
 <!-- Search Form -->
@@ -92,6 +130,7 @@
     <button type="button" id="search_button">Search</button>
 </form>
 
+<!-- Booking Table -->
 <table id="booking_table">
     <thead>
         <tr>
@@ -109,7 +148,7 @@
             <td>{{ booking_detail.booking.id }}</td>
             <td>{{ booking_detail.start_date }}</td>
             <td>{{ booking_detail.end_date }}</td>
-            <td>{{ booking_detail.price }}</td>
+            <td>₹{{ booking_detail.price }}</td>
             <td>{{ booking_detail.gst }}</td>
             <td>
                 {% if booking_detail.booking.id %}
@@ -122,10 +161,6 @@
         {% endfor %}
     </tbody>
 </table>
-
-
-
-
 
 </body>
 {% endblock %}

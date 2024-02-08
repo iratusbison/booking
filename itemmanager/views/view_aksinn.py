@@ -281,13 +281,31 @@ def generate_pdf_bill(booking):
     # Define styles
     styles = getSampleStyleSheet()
 
+    title_style = ParagraphStyle(
+    name='Title',
+    fontName='Helvetica-Bold',
+    fontSize=16,
+    alignment=1,  # Center alignment
+    spaceAfter=20
+      )
+
+    detail_style = ParagraphStyle(
+        name='Detail',
+        fontName='Helvetica',
+        fontSize=8,
+        alignment=1
+        )
+
     # Content for the PDF
     content = []
 
-    # Add SV Mahal and contact details
-    content.append(Paragraph("SV Mahal", styles['Title']))
-    content.append(Paragraph("456 Main Street, Cityville, Countryland", styles['Normal']))
-    content.append(Paragraph("Phone: +9876543210", styles['Normal']))
+    # Add title
+    content.append(Paragraph("SV Mahal", title_style))
+
+# Add details
+    content.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
+    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265, 8608381175", detail_style))
+    content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
 
     # Calculate GST dynamically
     price = Decimal(booking.price)  # Convert to Decimal
@@ -357,7 +375,7 @@ def download_pdf(request, booking_id):
 
     return response
 
-
+from reportlab.lib.styles import ParagraphStyle
 def generate_pdf_bookings(bookings, start_date, end_date, total_revenue):
     buffer = BytesIO()
 
@@ -367,13 +385,31 @@ def generate_pdf_bookings(bookings, start_date, end_date, total_revenue):
     # Define styles
     styles = getSampleStyleSheet()
 
+    title_style = ParagraphStyle(
+    name='Title',
+    fontName='Helvetica-Bold',
+    fontSize=16,
+    alignment=1,  # Center alignment
+    spaceAfter=20
+      )
+
+    detail_style = ParagraphStyle(
+        name='Detail',
+        fontName='Helvetica',
+        fontSize=8,
+        alignment=1
+        )
+
     # Content for the PDF
     content = []
 
-    # Add SV Mahal and contact details
-    content.append(Paragraph("SV Mahal", styles['Title']))
-    content.append(Paragraph("456 Main Street, Cityville, Countryland", styles['Normal']))
-    content.append(Paragraph("Phone: +9876543210", styles['Normal']))
+    # Add title
+    content.append(Paragraph("SV Mahal", title_style))
+
+# Add details
+    content.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
+    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265, 8608381175", detail_style))
+    content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
 
     # Table header for booking details
     header = ['Booking ID', 'Price', 'GST (12%)', 'Total Price', 'Name',

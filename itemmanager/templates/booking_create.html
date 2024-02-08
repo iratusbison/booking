@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Booking</title>
     <style>
+        .date-input {
+          position: relative;
+          display: inline-block;
+    }
+
+       .calendar-icon {
+         position: absolute;
+         top: 50%;
+         right: 5px;
+         transform: translateY(-50%);
+         cursor: pointer;
+    }
     /* Dark Mode Styles */
     body {
         background-color: #222;
@@ -72,7 +84,7 @@
     <form method="POST" action="{% url 'booking_create' %}">
         {% csrf_token %}
 
-        
+
 
         <!-- Select/Unselect All Rooms -->
         <input type="checkbox" id="select-all-rooms">
@@ -100,17 +112,26 @@
         <input type="text" id="aadhar" name="aadhar"><br>
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email"><br>
-        <label for="start_date">Start Date:</label><br>
-        <input type="date" id="start_date" name="start_date"><br>
-        <label for="end_date">End Date:</label><br>
-        <input type="date" id="end_date" name="end_date"><br>
+        <label for="start_date">Start Date:</label>
+    <div class="date-input">
+        <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+
+    </div>
+    <label for="end_date">End Date:</label>
+    <div class="date-input">
+        <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
         <label for="price">Price:</label><br>
         <input type="text" id="price" name="price"><br>
 
         <!-- Submit Button -->
         <input type="submit" value="Submit">
     </form>
-
+<script>
+    // Add this JavaScript function to toggle the calendar
+    function toggleCalendar(inputId) {
+        document.getElementById(inputId).click();
+    }
+</script>
     <script>
         // Select/Unselect All Rooms
         const selectAllCheckbox = document.getElementById('select-all-rooms');
