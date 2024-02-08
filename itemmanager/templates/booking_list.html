@@ -92,7 +92,7 @@
             }
         }
     </style>
-    
+
 </head>
 <body>
 <script>
@@ -106,12 +106,12 @@
     <label for="start_date">Start Date:</label>
     <div class="date-input">
         <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
-       
+
     </div>
     <label for="end_date">End Date:</label>
     <div class="date-input">
         <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
-        
+
     </div>
     <button type="submit">Apply Filter</button>
     <a href="{% url 'download_pdf_bookings' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
@@ -121,7 +121,10 @@
 <p>Total Revenue: ₹{{ total_revenue|default:"0.00" }}</p>
 
 <!-- Booking List -->
-<h4>Booking List</h4>
+<h4 style="color: #ffffff; font-size: 24px; background-color: #007bff; padding: 10px; border-radius: 5px;">
+        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">money_off</i>
+        Booking List
+    </h4>
 
 <!-- Search Form -->
 <form id="search_form">

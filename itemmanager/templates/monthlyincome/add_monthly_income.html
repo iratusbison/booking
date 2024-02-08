@@ -1,14 +1,14 @@
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
-    <h2>Add Monthly Income</h2>
-
+    <h4>Add Income</h4>
+<div>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Save</button>
-    </form>
-
+    </form></div>
+<div>
     <a href="{% url 'monthly_income_list' %}" class="btn btn-secondary">Cancel</a>
 </div>
 

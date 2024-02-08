@@ -50,7 +50,7 @@
         border-radius: 5px;
         border: 1px solid #ccc;
         background-color: #ffffff;
-        color: #000; /* Set input text color */
+        color: #fff; /* Set input text color */
         margin-bottom: 10px;
     }
 
@@ -83,12 +83,21 @@
     <h4>Create Booking</h4>
     <form method="POST" action="{% url 'booking_create' %}">
         {% csrf_token %}
+       <center> <label for="start_date">Start Date:</label>
+        <div class="date-input">
+        <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+
+        </div>
+        <label for="end_date">End Date:</label>
+        <div class="date-input">
+        <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+        </div></center>
 
 
 
-        <!-- Select/Unselect All Rooms -->
+        <!-- Select/Unselect All Rooms --><div>
         <input type="checkbox" id="select-all-rooms">
-        <label for="select-all-rooms">Select All</label><br>
+        <label for="select-all-rooms">Select All</label><br></div>
 
         <!-- Room Selection -->
         <label for="rooms">Select Rooms:</label><br>
@@ -112,14 +121,7 @@
         <input type="text" id="aadhar" name="aadhar"><br>
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email"><br>
-        <label for="start_date">Start Date:</label>
-    <div class="date-input">
-        <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
 
-    </div>
-    <label for="end_date">End Date:</label>
-    <div class="date-input">
-        <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
         <label for="price">Price:</label><br>
         <input type="text" id="price" name="price"><br>
 

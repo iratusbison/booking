@@ -300,11 +300,12 @@ def generate_pdf_bill(booking):
     content = []
 
     # Add title
-    content.append(Paragraph("SV Mahal", title_style))
+    content.append(Paragraph("SV Mahal / AKS Inn", title_style))
 
 # Add details
     content.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
-    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265, 8608381175", detail_style))
+    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265", detail_style))
+    content.append(Paragraph("Email: ksaisandeep53@gmail.com", detail_style))
     content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
 
     # Calculate GST dynamically
@@ -315,8 +316,8 @@ def generate_pdf_bill(booking):
     # Add booking details in a table
     booking_data = [
         ['Booking ID', str(booking.id)],
-        ['Start Date', booking.start_date.strftime('%Y-%m-%d')],
-        ['End Date', booking.end_date.strftime('%Y-%m-%d')],
+        ['checkin', booking.start_date.strftime('%Y-%m-%d')],
+        ['checkout', booking.end_date.strftime('%Y-%m-%d')],
         ['Price', str(booking.price)],
         ['GST (12%)', str(gst)],
         ['Total Price', str(total_price)],
@@ -404,11 +405,12 @@ def generate_pdf_bookings(bookings, start_date, end_date, total_revenue):
     content = []
 
     # Add title
-    content.append(Paragraph("SV Mahal", title_style))
+    content.append(Paragraph("SV Mahal / AKS Inn", title_style))
 
 # Add details
     content.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
-    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265, 8608381175", detail_style))
+    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265", detail_style))
+    content.append(Paragraph("Email: ksaisandeep53@gmail.com", detail_style))
     content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
 
     # Table header for booking details
