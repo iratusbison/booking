@@ -73,7 +73,7 @@
             </thead>
             <tbody>
                 {% for booking in bookings %}
-                    <tr>
+                    <tr onclick="window.location='{% url 'booking_detail' booking_id=booking.booking.id %}';" style="cursor:pointer;">
                         <td>{{ booking.booking.id }}</td>
                         <td>{{ booking.checkin_datetime|date:"Y-m-d H:i" }}</td>
                         <td>{{ booking.checkout_datetime|date:"Y-m-d H:i" }}</td>
