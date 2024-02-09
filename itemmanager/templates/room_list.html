@@ -22,7 +22,7 @@
         <tbody>
             {% for room in rooms %}
             <tr>
-                <td>{{ room.name }}</td>
+                <td>{{ room.room_number }}</td>
 
                 <td>{% if room.is_available %} Available {% else %} Not Available {% endif %}</td>
                 <td>
@@ -30,7 +30,7 @@
                         <div class="booking-info">
                             <div>ID: {{ room.booking.id }}</div>
 
-                            <div>Date: {{ room.booking.end_date }}</div>
+                            <div>Date: {{ room.booking.checkout_datetime}}</div>
                         </div>
                     {% else %}
                         No Booking
@@ -43,8 +43,8 @@
     </table>
 
     <div class="button-container">
-
-        <a class="button" href="{% url 'booking_create' %}">Book</a>
+        <a class="button" href="{% url 'add_room' %}">Add Room</a>
+        <a class="button" href="{% url 'book_room' %}">Book</a>
         <a class="button" href="{% url 'booking_list' %}">Booked List</a>
     </div>
     <style>/* Dark Mode Styles */

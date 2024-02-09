@@ -1,3 +1,4 @@
+
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
@@ -81,17 +82,22 @@
 </head>
 <body>
     <h4>Create Booking</h4>
-    <form method="POST" action="{% url 'booking_create' %}">
+    {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+   {% endif %}
+    <form method="POST" action="{% url 'book_room' %}">
         {% csrf_token %}
        <center> <label for="start_date">Start Date:</label>
         <div class="date-input">
-        <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+        <label for="checkin_datetime">Check-in Date and Time:</label>
+        <input type="datetime-local" id="checkin_datetime" name="checkin_datetime" required><br><br>
 
-        </div>
-        <label for="end_date">End Date:</label>
-        <div class="date-input">
-        <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+        <label for="checkout_datetime">Check-out Date and Time:</label>
+        <input type="datetime-local" id="checkout_datetime" name="checkout_datetime" required><br><br>
         </div></center>
+
 
 
 
@@ -105,13 +111,13 @@
             {% for room in rooms %}
             <div class="checkbox-item floor-{{ room.floor }}">
                 <input type="checkbox" class="room-checkbox" id="room{{ room.id }}" name="rooms" value="{{ room.id }}">
-                <label for="room{{ room.id }}">{{ room.name }}</label><br>
+                <label for="room{{ room.id }}">{{ room.room_number}}</label><br>
             </div>
             {% endfor %}
         </div>
-
+<div>
         <!-- User Information -->
-        <label for="name">Name:</label><br>
+        <label for="name">Name:</label><br></div>
         <input type="text" id="name" name="name"><br>
         <label for="address">Address:</label><br>
         <input type="text" id="address" name="address"><br>
@@ -119,8 +125,7 @@
         <input type="text" id="phone" name="phone"><br>
         <label for="aadhar">Aadhar:</label><br>
         <input type="text" id="aadhar" name="aadhar"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
+
 
         <label for="price">Price:</label><br>
         <input type="text" id="price" name="price"><br>

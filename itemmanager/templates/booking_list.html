@@ -1,3 +1,9 @@
+
+
+
+
+
+
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
@@ -103,19 +109,14 @@
 </script>
 <!-- Filter Form -->
 <form method="get" action="{% url 'booking_list' %}">
-    <label for="start_date">Start Date:</label>
-    <div class="date-input">
-        <input type="date" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+    <label for="checkin_datetime">Check-in Date:</label>
+    <input type="date" id="checkin_datetime" name="checkin_datetime" value="{{ checkin_datetime|date:'Y-m-d' }}" required>
 
-    </div>
-    <label for="end_date">End Date:</label>
-    <div class="date-input">
-        <input type="date" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+    <label for="checkout_datetime">Check-out Date:</label>
+    <input type="date" id="checkout_datetime" name="checkout_datetime" value="{{ checkout_datetime|date:'Y-m-d' }}" required>
 
-    </div>
-    <button type="submit">Apply Filter</button>
-    <a href="{% url 'download_pdf_bookings' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
-</form>
+    <button type="submit">Filter</button>
+</form> <a href="{% url 'download_pdf_bookings' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
 
 <!-- Total Revenue -->
 <p>Total Revenue: ₹{{ total_revenue|default:"0.00" }}</p>
@@ -134,30 +135,35 @@
 </form>
 
 <!-- Booking Table -->
+<!-- Booking Table -->
 <table id="booking_table">
     <thead>
         <tr>
             <th>Booking ID</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th>CheckIn</th>
+            <th>CheckOut</th>
             <th>Price</th>
             <th>GST</th>
             <th>Rooms</th>
         </tr>
     </thead>
     <tbody>
-        {% for booking_detail in bookings %}
+        {% for booking_details in bookings %}
         <tr>
-            <td>{{ booking_detail.booking.id }}</td>
-            <td>{{ booking_detail.start_date }}</td>
-            <td>{{ booking_detail.end_date }}</td>
-            <td>₹{{ booking_detail.price }}</td>
-            <td>{{ booking_detail.gst }}</td>
+            <td>{{ booking_details.booking.id }}</td>
+
+
+            <td>{{ booking_details.checkin_datetime }}</td>
+            <td>{{ booking_details.checkout_datetime }}</td>
+            <td>₹{{ booking_details.price }}</td>
+            <td>{{ booking_details.gst }}</td>
             <td>
-                {% if booking_detail.booking.id %}
-                    <a href="{% url 'booking_detail' booking_detail.booking.id %}?rooms={{ booking_detail.rooms }}">{{ booking_detail.rooms }}</a>
+                <!-- Check if rooms are available -->
+                {% if booking_details.rooms %}
+                    <!-- Display rooms as a comma-separated list -->
+                    {{ booking_details.rooms}}
                 {% else %}
-                    {{ booking_detail.rooms }}
+                    No rooms booked
                 {% endif %}
             </td>
         </tr>

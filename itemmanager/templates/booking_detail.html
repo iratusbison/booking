@@ -1,0 +1,30 @@
+
+  <h4>Booking Details</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Aadhar</th>
+        <th>Price</th>
+        <th>GST</th>
+        <th>Total Price</th>
+        <th>Rooms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ booking.id }}</td>
+        <td>{{ booking.name }}</td>
+        <td>{{ booking.phone }}</td>
+        <td>{{ booking.aadhar }}</td>
+        <td>{{ price }}</td>
+        <td>{{ gst }}</td>
+        <td>{{ total_price }}</td>
+        <td>{{ rooms }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <a href="{% url 'generate_bill' booking.id %}">Generate Bill</a>
+
