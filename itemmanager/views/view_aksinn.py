@@ -20,7 +20,8 @@ from django.utils import timezone
 
 from django.utils.timezone import make_aware
 
-
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='/login')
 def add_room(request):
     if request.method == 'POST':
         room_number = request.POST.get('room_number')
@@ -39,7 +40,7 @@ def add_room(request):
     return render(request, 'room_add.html')
 
 
-
+@login_required(login_url='/login')
 def room_list(request):
     rooms = Room.objects.all()
     now = timezone.now()
@@ -121,7 +122,7 @@ def book_room(request):
         return render(request, 'book_room.html', {'rooms': rooms})
 '''
 from django.db import transaction
-
+@login_required(login_url='/login')
 @transaction.atomic
 def book_room(request):
     rooms = Room.objects.all()
@@ -181,7 +182,7 @@ def book_room(request):
     else:
         return render(request, 'book_room.html', {'rooms': rooms})
 
-
+@login_required(login_url='/login')
 def booking_detail(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     rooms = booking.rooms.all()
@@ -190,7 +191,7 @@ def booking_detail(request, booking_id):
     total_price = price + gst
 
     return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'total_price': total_price})
-
+@login_required(login_url='/login')
 def edit_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
     rooms = booking.rooms.all()
@@ -452,7 +453,7 @@ def generate_bill(request, booking_id):
 
 
 
-
+@login_required(login_url='/login')
 def booking_list(request):
     # Check if a date range is provided in the request
     checkin_datetime = request.GET.get('checkin_datetime', '')
