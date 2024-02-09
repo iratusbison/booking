@@ -15,14 +15,15 @@
                 <th>Room</th>
 
                 <th>Availability</th>
-                <th>Booking</th>
+               >
 
             </tr>
         </thead>
         <tbody>
             {% for room in rooms %}
-            <tr>
-                <td>{{ room.room_number }}</td>
+            <tr onclick="window.location='{% url 'room_check_list' room.id %}';" style="cursor:pointer;">
+
+
 
                 <td>{% if room.is_available %} Available {% else %} Not Available {% endif %}</td>
                 <td>

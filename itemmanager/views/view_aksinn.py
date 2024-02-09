@@ -537,3 +537,45 @@ def booking_list(request):
 
     return render(request, 'booking_list.html', {'bookings': bookings_with_details})
 '''
+@login_required(login_url='/login')
+def room_check_list(request, room_id):
+    # Retrieve the room object based on the room ID
+    room = get_object_or_404(Room, id=room_id)
+
+    # Check if a date range is provided in the request
+    checkin_datetime = request.GET.get('checkin_datetime', '')
+    checkout_datetime = request.GET.get('checkout_datetime', '')
+
+    # Default to the last 30 days if no date range is provided
+    if not checkin_datetime or not checkout_datetime:
+        checkout_datetime = datetime.now()
+        checkin_datetime = checkout_datetime - timedelta(days=30)
+    else:
+        checkin_datetime = make_aware(datetime.strptime(checkin_datetime, '%Y-%m-%d'))
+        checkout_datetime = make_aware(datetime.strptime(checkout_datetime, '%Y-%m-%d'))
+
+    # Retrieve bookings related to the room within the specified date range
+    bookings = Booking.objects.filter(
+        rooms=room,
+        checkin_datetime__range=(checkin_datetime, checkout_datetime)
+    )
+
+    # Prepare a list to hold each booking along with its details
+    bookings_with_details = []
+
+    for booking in bookings:
+        # Construct a dictionary with booking details
+        booking_details = {
+            'booking': booking,
+            'checkin_datetime': booking.checkin_datetime,
+            'checkout_datetime': booking.checkout_datetime,
+        }
+
+        bookings_with_details.append(booking_details)
+
+    return render(request, 'room_check_list.html', {
+        'room': room,
+        'bookings': bookings_with_details,
+        'checkin_datetime': checkin_datetime,
+        'checkout_datetime': checkout_datetime,
+    })
