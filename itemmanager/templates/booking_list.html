@@ -149,7 +149,7 @@
     </thead>
     <tbody>
         {% for booking_details in bookings %}
-        <tr>
+        <tr><a href="{% url 'booking_detail' booking_id=booking_details.booking.id %}">View Details</a>
             <td>{{ booking_details.booking.id }}</td>
 
 
