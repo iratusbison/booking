@@ -149,7 +149,7 @@
     </thead>
     <tbody>
         {% for booking_details in bookings %}
-        <tr><a href="{% url 'booking_detail' booking_id=booking_details.booking.id %}">View Details</a>
+        <tr onclick="window.location='{% url 'booking_detail' booking_id=booking_details.booking.id %}';" style="cursor:pointer;">
             <td>{{ booking_details.booking.id }}</td>
 
 
@@ -166,7 +166,7 @@
                     No rooms booked
                 {% endif %}
             </td>
-        </tr>
+        </tr></tr>
         {% endfor %}
     </tbody>
 </table>

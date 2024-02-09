@@ -282,6 +282,7 @@ def generate_pdf_book(request):
     elements.append(Paragraph("GST: 33ADDFS68571Z8", styles["BodyText"]))
     elements.append(Paragraph("<br/><br/>", normal_style))  # Add space between address and table
 
+
     # Define data for the table
     data = [['ID', 'Name', 'Phone', 'Aadhar', 'Price', 'GST', 'Total Price']]
 
@@ -327,7 +328,11 @@ def generate_pdf_book(request):
     # Apply style to the table
     table.setStyle(style)
     elements.append(table)
+    elements.append(Paragraph(f"Total Revenue: {total_revenue}", styles["Normal"]))
 
+    # Build the PDF
+
+    buffer.seek(0)
     # Build the PDF
     doc.build(elements)
     buffer.seek(0)
