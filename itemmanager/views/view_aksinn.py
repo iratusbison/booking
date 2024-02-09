@@ -232,128 +232,114 @@ from django.utils import timezone
 from django.utils.timezone import make_aware
 
 from decimal import Decimal
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from io import BytesIO
+from django.http import HttpResponse
+from django.utils.timezone import make_aware, timezone
+from datetime import datetime, timedelta
+from decimal import Decimal
 
-from reportlab.lib.styles import ParagraphStyle
+def generate_pdf_book(request):
+    # Check if a date range is provided in the request
+    checkin_datetime = request.GET.get('checkin_datetime', '')
+    checkout_datetime = request.GET.get('checkout_datetime', '')
 
-def generate_pdf_book(bookings, checkin_datetime, checkout_datetime, total_revenue):
+    # Default to the last 30 days if no date range is provided
+    if not checkin_datetime or not checkout_datetime:
+        checkout_datetime = timezone.now()
+        checkin_datetime = checkout_datetime - timedelta(days=30)
+    else:
+        checkin_datetime = make_aware(datetime.strptime(checkin_datetime, '%Y-%m-%d'))
+        checkout_datetime = make_aware(datetime.strptime(checkout_datetime, '%Y-%m-%d'))
+
+    # Filter bookings based on the provided date range
+    bookings = Booking.objects.filter(checkin_datetime__range=(checkin_datetime, checkout_datetime))
+
     buffer = BytesIO()
 
-    # Create a PDF document
+    # Create PDF document
     doc = SimpleDocTemplate(buffer, pagesize=letter)
+    elements = []
 
-    # Define styles
     styles = getSampleStyleSheet()
+    normal_style = styles["Normal"]
 
-    title_style = ParagraphStyle(
-    name='Title',
-    fontName='Helvetica-Bold',
-    fontSize=16,
-    alignment=1,  # Center alignment
-    spaceAfter=20
-      )
+    # Add title to the PDF with decoration
+    title_text = f"Booking List ({checkin_datetime.date()} to {checkout_datetime.date()})"
+    title = Paragraph(title_text, styles["Title"])
+    title.alignment = 1  # Center alignment
+    elements.append(title)
 
-    detail_style = ParagraphStyle(
-        name='Detail',
-        fontName='Helvetica',
-        fontSize=8,
-        alignment=1
-        )
+    # Add SV Mahal / AKS Inn to the top center
+    elements.append(Paragraph("SV Mahal / AKS Inn", styles["Heading2"]))
+    elements.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", styles["BodyText"]))
+    elements.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265", styles["BodyText"]))
+    elements.append(Paragraph("Email: ksaisandeep53@gmail.com", styles["BodyText"]))
+    elements.append(Paragraph("GST: 33ADDFS68571Z8", styles["BodyText"]))
+    elements.append(Paragraph("<br/><br/>", normal_style))  # Add space between address and table
 
-    # Content for the PDF
-    content = []
+    # Define data for the table
+    data = [['ID', 'Name', 'Phone', 'Aadhar', 'Price', 'GST', 'Total Price']]
 
-    # Add title
-    content.append(Paragraph("SV Mahal / AKS Inn", title_style))
+    total_revenue = Decimal('0.00')
 
-# Add details
-    content.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
-    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265", detail_style))
-    content.append(Paragraph("Email: ksaisandeep53@gmail.com", detail_style))
-    content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
-
-    # Table header for booking details
-    header = ['Booking ID', 'Price', 'GST (12%)', 'Total Price', 'Name',
-              'Aadhar', 'Phone']
-
-    # Prepare data for the PDF table
-    booking_data = [header]
     for booking in bookings:
-        # Calculate GST dynamically
-        price = Decimal(booking.price)
+        # Calculate GST and total price
+        price = booking.price
         gst = price * Decimal('0.12')
         total_price = price + gst
 
-        # Add booking details to the table
-        room_names = [room.room_number for room in booking.rooms.all()]
-        room_lines = [", ".join(room_names[i:i + 5]) for i in range(0, len(room_names), 5)]
-        room_text = "\n".join(room_lines)
-
-        row = [
-            str(booking.id),
-
-            str(booking.price),
-            str(gst),
-            str(total_price),
+        # Append booking details to the data list
+        data.append([
+            booking.id,
             booking.name,
-
-            booking.aadhar,
             booking.phone,
+            booking.aadhar,
+            price,
+            gst,
+            total_price,
+        ])
 
+        # Increment total revenue
+        total_revenue += price
 
-        ]
+    if len(data) == 1:
+        data.append(['No bookings found', '', '', '', '', '', ''])  # If no bookings found, add a message row
 
-        booking_data.append(row)
+    # Create the table
+    table = Table(data)
 
-    # Create the PDF table
-    booking_table = Table(booking_data)
-
-    # Apply table styles
-    booking_table.setStyle(TableStyle([
+    # Define style for the table
+    style = TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Vertical alignment middle
-    ]))
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ])
 
-    content.append(booking_table)
+    # Apply style to the table
+    table.setStyle(style)
+    elements.append(table)
 
-    # Display total revenue
-    content.append(Paragraph(f'Total Revenue: {total_revenue}', styles['Normal']))
-
-    # Build the PDF document
-    doc.build(content)
-
-    # File is done, rewind the buffer.
+    # Build the PDF
+    doc.build(elements)
     buffer.seek(0)
-    return buffer
 
-def download_pdf_bookings(request):
-    # Get start and end dates from the request, defaulting to the last 30 days if not provided
-    checkin_datetime_str = request.GET.get('checkin_datetime', '')
-    checkout_datetime_str = request.GET.get('checkout_datetime', '')
-    if not checkin_datetime_str or not checkout_datetime_str:
-        checkout_datetime = datetime.now()
-        checkin_datetime = checkout_datetime - timedelta(days=30)
-    else:
-        checkin_datetime = make_aware(datetime.strptime(checkin_datetime_str, '%Y-%m-%d'))
-        checkout_datetime = make_aware(datetime.strptime(checkout_datetime_str, '%Y-%m-%d'))
-
-    # Fetch bookings based on the date range
-    bookings = Booking.objects.filter(checkin_datetime__range=(checkin_datetime,checkout_datetime))
-
-    # Calculate total revenue for the given date range
-    total_revenue = bookings.aggregate(Sum('price'))['price__sum']
-
-    pdf_buffer = generate_pdf_book(bookings, checkin_datetime, checkout_datetime, total_revenue)
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename=bookings_list_{checkin_datetime_str}_{checkout_datetime_str}.pdf'
-    response.write(pdf_buffer.read())
+    # Create the HTTP response with PDF mime type
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="booking_list.pdf"'
 
     return response
+
+
+
 
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
@@ -462,8 +448,6 @@ def generate_bill(request, booking_id):
 
 
 
-
-
 def booking_list(request):
     # Check if a date range is provided in the request
     checkin_datetime = request.GET.get('checkin_datetime', '')
@@ -513,6 +497,8 @@ def booking_list(request):
         'total_revenue': total_revenue,
 
     })
+
+
 
 '''
 def booking_list(request):

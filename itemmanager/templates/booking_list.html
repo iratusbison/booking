@@ -116,7 +116,7 @@
     <input type="date" id="checkout_datetime" name="checkout_datetime" value="{{ checkout_datetime|date:'Y-m-d' }}" required>
 
     <button type="submit">Filter</button>
-</form> <a href="{% url 'download_pdf_bookings' %}?start_date={{ start_date|date:'Y-m-d' }}&end_date={{ end_date|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
+</form> <a href="{% url 'generate_pdf_book' %}?checkin_datetime={{ checkin_datetime|date:'Y-m-d' }}&checkout_datetime={{ checkout_datetime|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
 
 <!-- Total Revenue -->
 <p>Total Revenue: ₹{{ total_revenue|default:"0.00" }}</p>
