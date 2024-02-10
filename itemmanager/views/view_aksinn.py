@@ -1,9 +1,12 @@
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from itemmanager.models.aks import Room, Booking
+
 from datetime import datetime, timedelta
 
 from django.db.models import Sum
+from django.utils import timezone as djtimezone
+from datetime import datetime, timedelta
 
 
 from decimal import Decimal
@@ -16,7 +19,7 @@ from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 
-from django.utils import timezone
+
 
 from django.utils.timezone import make_aware
 
@@ -43,7 +46,7 @@ def add_room(request):
 @login_required(login_url='/login')
 def room_list(request):
     rooms = Room.objects.all()
-    now = timezone.now()
+    now = djtimezone.now()
     for room in rooms:
         bookings = Booking.objects.filter(rooms=room, checkout_datetime__gte=now)
         if bookings.exists():
@@ -236,8 +239,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
 from io import BytesIO
 from django.http import HttpResponse
-from datetime import datetime, timedelta
-from django.utils import timezone
+
 from django.utils.timezone import make_aware
 
 from decimal import Decimal
@@ -249,7 +251,7 @@ from reportlab.lib.units import inch
 from io import BytesIO
 from django.http import HttpResponse
 from django.utils.timezone import make_aware, timezone
-from datetime import datetime, timedelta
+
 from decimal import Decimal
 
 def generate_pdf_book(request):
