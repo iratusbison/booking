@@ -137,6 +137,8 @@ def book_room(request):
         email = request.POST.get('email')
         aadhar = request.POST.get('aadhar')
         price = request.POST.get('price')
+        persons = request.POST.get('persons')
+        REASON_CHOICES = request.POST.get('REASON_CHOICES')
 
         # Validate if the end date is not earlier than the start date
         if checkout_datetime <= checkin_datetime:
@@ -150,9 +152,12 @@ def book_room(request):
             phone=phone,
             aadhar=aadhar,
             price=price,
+            email=email,
+            persons=persons,
+            #REASON_CHOICES=REASON_CHOICES,
             checkin_datetime=checkin_datetime,
-            checkout_datetime=checkout_datetime
-        )
+            checkout_datetime=checkout_datetime,
+            )
 
         # Iterate through selected rooms and add them to the booking
         for room_id in room_ids:
@@ -190,7 +195,7 @@ def booking_detail(request, booking_id):
     gst = price * Decimal('0.12')
     total_price = price + gst
 
-    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'total_price': total_price})
+    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'total_price': total_price, 'reason':booking.reason})
 @login_required(login_url='/login')
 def edit_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
@@ -365,6 +370,7 @@ def generate_bill(request, booking_id):
     # Create a PDF document
     doc = SimpleDocTemplate(buffer, pagesize=letter)
 
+
     # Define styles
     styles = getSampleStyleSheet()
 
@@ -408,10 +414,10 @@ def generate_bill(request, booking_id):
         ["Total Price", str(booking.price * Decimal('1.12'))],
         ["Check-in Date", str(checkin_datetime_local)],
         ["Check-out Date", str(checkout_datetime_local)],
-        ["Email", booking.email]  # Add email field
+        ["Email", booking.email],  # Add email field
+        ["persons", booking.persons],
+        ["reason", booking.reason]
     ]
-
-
 
     # Separate room numbers into lines with a maximum of 5 numbers per line
     room_numbers = [room.room_number for room in booking.rooms.all()]
@@ -435,7 +441,6 @@ def generate_bill(request, booking_id):
 
     content.append(table)
 
-
     # Build the PDF
     doc.build(content)
 
@@ -447,8 +452,6 @@ def generate_bill(request, booking_id):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="booking_bill_{booking.id}.pdf"'
     return response
-
-
 
 
 

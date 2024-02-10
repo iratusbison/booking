@@ -100,6 +100,10 @@
 
         <p>Check-in Date and Time: {{ booking.checkin_datetime }}</p>
         <p>Check-out Date and Time: {{ booking.checkout_datetime }}</p>
+        <p>Reason for Booking: {{ reason }}</p>
+        <p>Persons: {{ booking.persons }}</p>
+        <p>Email: {{ booking.email }}</p>
+
 
         <a href="{% url 'edit_booking' booking.id %}" class="action-btn"><i class="icon edit-icon fas fa-edit"></i>Edit</a>
         <a href="{% url 'delete_booking' booking.id %}" class="action-btn"><i class="icon delete-icon fas fa-trash"></i>Delete</a>

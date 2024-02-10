@@ -53,12 +53,12 @@
     <h4>Room {{ room.room_number }} Bookings</h4>
 
     <!-- Date range filter form -->
-    <form method="get">
+    <form method="get" id="filterForm">
         <label for="checkin_datetime">Check-in Date:</label>
         <input type="date" id="checkin_datetime" name="checkin_datetime" value="{{ checkin_datetime|date:'Y-m-d' }}">
         <label for="checkout_datetime">Check-out Date:</label>
         <input type="date" id="checkout_datetime" name="checkout_datetime" value="{{ checkout_datetime|date:'Y-m-d' }}">
-        <button class="button" type="submit">Filter</button>
+        <!-- Removed the Filter button -->
     </form>
 
     <!-- Display bookings -->
@@ -84,5 +84,16 @@
     {% else %}
         <p class="no-bookings">No bookings found.</p>
     {% endif %}
+
+    <script>
+        // Detect changes in date fields and submit form
+        document.getElementById('checkin_datetime').addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+
+        document.getElementById('checkout_datetime').addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+    </script>
 </body>
 {% endblock %}
