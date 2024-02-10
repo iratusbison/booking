@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+
+{% extends "core/dashboard.html" %}
+
+{% block dashboard_content %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -100,7 +102,9 @@
 
         <p>Check-in Date and Time: {{ booking.checkin_datetime }}</p>
         <p>Check-out Date and Time: {{ booking.checkout_datetime }}</p>
-        <p>Reason for Booking: {{ reason }}</p>
+
+         <p>Reason: {{ booking.reason }}</p>
+
         <p>Persons: {{ booking.persons }}</p>
         <p>Email: {{ booking.email }}</p>
 
@@ -112,4 +116,4 @@
         <a href="{% url 'booking_list' %}">Back to Booking List</a>
     </div>
 </body>
-</html>
+{% endblock %}

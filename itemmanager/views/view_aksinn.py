@@ -138,7 +138,8 @@ def book_room(request):
         aadhar = request.POST.get('aadhar')
         price = request.POST.get('price')
         persons = request.POST.get('persons')
-        REASON_CHOICES = request.POST.get('REASON_CHOICES')
+        reason = request.POST.get('reason')
+
 
         # Validate if the end date is not earlier than the start date
         if checkout_datetime <= checkin_datetime:
@@ -154,7 +155,7 @@ def book_room(request):
             price=price,
             email=email,
             persons=persons,
-            #REASON_CHOICES=REASON_CHOICES,
+            reason=reason,
             checkin_datetime=checkin_datetime,
             checkout_datetime=checkout_datetime,
             )
@@ -195,7 +196,7 @@ def booking_detail(request, booking_id):
     gst = price * Decimal('0.12')
     total_price = price + gst
 
-    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'total_price': total_price, 'reason':booking.reason})
+    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'total_price': total_price,'reason': booking.reason,})
 @login_required(login_url='/login')
 def edit_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
@@ -282,9 +283,9 @@ def generate_pdf_book(request):
 
     # Add SV Mahal / AKS Inn to the top center
     elements.append(Paragraph("SV Mahal / AKS Inn", styles["Heading2"]))
-    elements.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", styles["BodyText"]))
-    elements.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265", styles["BodyText"]))
-    elements.append(Paragraph("Email: ksaisandeep53@gmail.com", styles["BodyText"]))
+    elements.append(Paragraph("No.192/1A 1B, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", styles["BodyText"]))
+    elements.append(Paragraph("Phone: 9842254415, 9443733265, 9994195966", styles["BodyText"]))
+    elements.append(Paragraph("Email: svmahalaksinn@gmail.com", styles["BodyText"]))
     elements.append(Paragraph("GST: 33ADDFS68571Z8", styles["BodyText"]))
     elements.append(Paragraph("<br/><br/>", normal_style))  # Add space between address and table
 
@@ -396,9 +397,9 @@ def generate_bill(request, booking_id):
     content.append(Paragraph("SV Mahal / AKS Inn", title_style))
 
     # Add details
-    content.append(Paragraph("No.192/1A, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
-    content.append(Paragraph("Phone: 9842254415, 9994195966, 9443733265", detail_style))
-    content.append(Paragraph("Email: ksaisandeep53@gmail.com", detail_style))
+    content.append(Paragraph("No.192/1A 1B, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
+    content.append(Paragraph("Phone: 9842254415, 9443733265, 9994195966 ", detail_style))
+    content.append(Paragraph("Email: svmahalaksinn@gmail.com", detail_style))
     content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
 
     # Create data for the table
@@ -416,7 +417,7 @@ def generate_bill(request, booking_id):
         ["Check-out Date", str(checkout_datetime_local)],
         ["Email", booking.email],  # Add email field
         ["persons", booking.persons],
-        ["reason", booking.reason]
+        ['reason', booking.reason]
     ]
 
     # Separate room numbers into lines with a maximum of 5 numbers per line
