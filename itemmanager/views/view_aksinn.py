@@ -193,10 +193,12 @@ def booking_detail(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     rooms = booking.rooms.all()
     price = booking.price
+    gst_amount = price - (price / (1 + Decimal('0.12')))
+    net_price = price - gst_amount
     gst = price * Decimal('0.12')
     total_price = price + gst
 
-    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'total_price': total_price,'reason': booking.reason,})
+    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'gst_amount':gst_amount, 'net_price':net_price,'total_price': total_price,'reason': booking.reason,})
 @login_required(login_url='/login')
 def edit_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
@@ -353,94 +355,81 @@ def generate_pdf_book(request):
 
 
 
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from io import BytesIO
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from django.http import HttpResponse
+from django.utils.timezone import localtime
 from decimal import Decimal
-from django.utils import timezone
+from reportlab.lib.units import inch
 
 def generate_bill(request, booking_id):
     buffer = BytesIO()
 
-    # Retrieve the booking object
+    # Retrieve booking details
     booking = Booking.objects.get(id=booking_id)
-    checkin_datetime_local = timezone.localtime(booking.checkin_datetime)
-    checkout_datetime_local = timezone.localtime(booking.checkout_datetime)
-    # Create a PDF document
-    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    checkin_datetime_local = localtime(booking.checkin_datetime)
+    checkout_datetime_local = localtime(booking.checkout_datetime)
 
+    # Create a PDF document
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
 
     # Define styles
     styles = getSampleStyleSheet()
-
-    title_style = ParagraphStyle(
-        name='Title',
-        fontName='Helvetica-Bold',
-        fontSize=16,
-        alignment=1,  # Center alignment
-        spaceAfter=20
-    )
-
-    detail_style = ParagraphStyle(
-        name='Detail',
-        fontName='Helvetica',
-        fontSize=8,
-        alignment=1
-    )
+    title_style = styles["Title"]
+    title_style.alignment = 1  # Center alignment
+    detail_style = styles["Normal"]
 
     # Content for the PDF
     content = []
 
-    # Add title
-    content.append(Paragraph("SV Mahal / AKS Inn", title_style))
-
-    # Add details
+    # Add SV Mahal/Aksinn Topic and Address, Email, Phone
+    content.append(Paragraph("SV Mahal/Aksinn", title_style))
     content.append(Paragraph("No.192/1A 1B, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
     content.append(Paragraph("Phone: 9842254415, 9443733265, 9994195966 ", detail_style))
     content.append(Paragraph("Email: svmahalaksinn@gmail.com", detail_style))
     content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
 
-    # Create data for the table
-    data = [
-        ["Booking ID", str(booking.id)],
-        ['Rooms', ', '.join([room.room_number for room in booking.rooms.all()])],
-        ["Name", booking.name],
-        ['Address', "\n".join(booking.address.split(','))],  # Separate address by line breaks
-        ["Phone", booking.phone],
-        ["Aadhar", booking.aadhar],
-        ["Price", str(booking.price)],
-        ["GST", str(booking.price * Decimal('0.12'))],
-        ["Total Price", str(booking.price * Decimal('1.12'))],
-        ["Check-in Date", str(checkin_datetime_local)],
-        ["Check-out Date", str(checkout_datetime_local)],
-        ["Email", booking.email],  # Add email field
-        ["persons", booking.persons],
-        ['reason', booking.reason]
+
+    # Add title
+    content.append(Paragraph("Booking Bill", title_style))
+
+    # Add booking details
+    booking_details = [
+        ["Booking ID:", str(booking.id)],
+        ["Check-in Date:", str(checkin_datetime_local)],
+        ["Check-out Date:", str(checkout_datetime_local)],
+        ["Name:", booking.name],
+        ['Address', "\n".join(booking.address.split(','))],
+        ["Phone:", booking.phone],
+        ["Aadhar:", booking.aadhar],
+        ["Price:", str(booking.price)],
+        ["Email:", booking.email],
+        ["Persons:", str(booking.persons)],
+        ["Reason:", booking.reason],
     ]
 
-    # Separate room numbers into lines with a maximum of 5 numbers per line
-    room_numbers = [room.room_number for room in booking.rooms.all()]
-    room_lines = [", ".join(room_numbers[i:i+5]) for i in range(0, len(room_numbers), 5)]
-    room_numbers_text = "\n".join(room_lines)
+    # Add booking details to table
+    booking_table = Table(booking_details, colWidths=[2*inch, 4*inch])
+    booking_table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.lightblue),
+                                       ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                                       ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                       ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                       ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                                       ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                                       ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
 
-    data[1][1] = room_numbers_text
+    content.append(booking_table)
 
-    table = Table(data)
+    # Calculate GST and net price
+    gst_amount = booking.price * Decimal('0.12')
+    net_price = booking.price - gst_amount
 
-    # Create the table
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Vertical alignment middle
-        ]))
-
-    content.append(table)
+    # Add GST and net price to content
+    content.append(Paragraph(f"GST (12%): {gst_amount}", detail_style))
+    content.append(Paragraph(f"Net Price: {net_price}", detail_style))
 
     # Build the PDF
     doc.build(content)
@@ -453,6 +442,7 @@ def generate_bill(request, booking_id):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="booking_bill_{booking.id}.pdf"'
     return response
+
 
 
 

@@ -95,10 +95,11 @@
         <p>Price: {{ booking.price }}</p>
 
         <!-- Display GST and Total Price -->
-        {% if price and gst and total_price %}
-            <p>GST (12%): {{ gst }}</p>
-            <p>Total Price (including GST): {{ total_price }}</p>
-        {% endif %}
+       {% if price and gst and total_price %}
+         <p>GST (12%): {{ gst_amount|floatformat:"2" }}</p>
+         <p>Principal amount (without GST): {{ net_price|floatformat:"2" }}</p>
+      {% endif %}
+
 
         <p>Check-in Date and Time: {{ booking.checkin_datetime }}</p>
         <p>Check-out Date and Time: {{ booking.checkout_datetime }}</p>
