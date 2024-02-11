@@ -1,9 +1,3 @@
-
-
-
-
-
-
 {% extends "core/dashboard.html" %}
 
 {% block dashboard_content %}
@@ -99,15 +93,35 @@
         }
     </style>
 
+
 </head>
 <body>
 <script>
-    // Add this JavaScript function to toggle the calendar
     function toggleCalendar(inputId) {
         document.getElementById(inputId).click();
     }
+
+    function searchFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("booking_table");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0]; // Change index to the column you want to search (0 for Booking ID)
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
 </script>
-<!-- Filter Form -->
+
 <form method="get" action="{% url 'booking_list' %}">
     <label for="checkin_datetime">Check-in Date:</label>
     <input type="date" id="checkin_datetime" name="checkin_datetime" value="{{ checkin_datetime|date:'Y-m-d' }}" required>
@@ -118,24 +132,15 @@
     <button type="submit">Filter</button>
 </form> <a href="{% url 'generate_pdf_book' %}?checkin_datetime={{ checkin_datetime|date:'Y-m-d' }}&checkout_datetime={{ checkout_datetime|date:'Y-m-d' }}" class="btn btn-primary">Download PDF</a>
 
-<!-- Total Revenue -->
 <p>Total Revenue: ₹{{ total_revenue|default:"0.00" }}</p>
 
-<!-- Booking List -->
 <h4 style="color: #ffffff; font-size: 24px; background-color: #007bff; padding: 10px; border-radius: 5px;">
-        <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">money_off</i>
-        Booking List
-    </h4>
+    <i class="material-icons" style="font-size: 24px; vertical-align: middle; margin-right: 10px; color: #ffffff;">money_off</i>
+    Booking List
+</h4>
 
-<!-- Search Form -->
-<form id="search_form">
-    <label for="search_booking_id">Search Booking ID:</label>
-    <input type="text" id="search_booking_id" name="search_booking_id">
-    <button type="button" id="search_button">Search</button>
-</form>
+<input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Search for Booking ID...">
 
-<!-- Booking Table -->
-<!-- Booking Table -->
 <table id="booking_table">
     <thead>
         <tr>
@@ -151,22 +156,18 @@
         {% for booking_details in bookings %}
         <tr onclick="window.location='{% url 'booking_detail' booking_id=booking_details.booking.id %}';" style="cursor:pointer;">
             <td>{{ booking_details.booking.id }}</td>
-
-
             <td>{{ booking_details.checkin_datetime }}</td>
             <td>{{ booking_details.checkout_datetime }}</td>
             <td>₹{{ booking_details.price }}</td>
             <td>{{ booking_details.gst }}</td>
             <td>
-                <!-- Check if rooms are available -->
                 {% if booking_details.rooms %}
-                    <!-- Display rooms as a comma-separated list -->
                     {{ booking_details.rooms}}
                 {% else %}
                     No rooms booked
                 {% endif %}
             </td>
-        </tr></tr>
+        </tr>
         {% endfor %}
     </tbody>
 </table>
