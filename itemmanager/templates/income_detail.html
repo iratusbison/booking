@@ -1,0 +1,57 @@
+
+{% extends "core/dashboard.html" %}
+{% load static %}
+{% block dashboard_content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Detail</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h4 {
+            color: #ffcc00;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        li strong {
+            color: #ffcc00;
+        }
+        /* Button Styles */
+        button {
+            background-color: #ffcc00; /* Set button background color */
+            color: #1a1a1a; /* Set button text color */
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ffdd33; /* Change button background color on hover */
+        }
+    </style>
+</head>
+<body>
+    <h4>Income Detail</h4>
+    <ul>
+        {% for key, value in income_details.items %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+    
+    <form action="{% url 'generate_bill_view' income_id=income_id %}" method="get">
+        <button type="submit">Download Bill</button>
+    </form>
+</body>
+
+{% endblock %}

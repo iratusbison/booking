@@ -12,9 +12,11 @@ from itemmanager.models.todolist import Task
 class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
-        fields = ['description', 'amount','status', 'date']
+        fields = '__all__'
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
+            'checkin_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'checkout_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'})
         }
 
 class IncSectionForm(forms.ModelForm):

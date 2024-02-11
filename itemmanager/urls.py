@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from itemmanager.views.view_aksinn import room_check_list, add_room, room_list, book_room, edit_booking, delete_booking, generate_pdf_book, booking_detail, booking_list, generate_bill
 from itemmanager.views.view_expense import expense_list, add_expense, delete_expense, esection_list, add_esection, generate_pdf
 from itemmanager.views.view_invest import  invest_list, investment_detail, add_investment,  isection_list, iadd_section, rdsection_list, rd_list, rd_detail, Radd_section, add_rd
-from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection, edit_income, monthly_income_list, add_monthly_income, edit_monthly_income, delete_monthly_income,generate_pdf_income
+from itemmanager.views.view_income import income_list, add_income, delete_income, incsection_list, add_incsection, edit_income, monthly_income_list, add_monthly_income, edit_monthly_income, delete_monthly_income,generate_pdf_income, income_detail, generate_bill_view
 from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
 from itemmanager.views.view_total import total_view
 from itemmanager.views.view_tax import calculate_tax
@@ -28,6 +28,7 @@ urlpatterns = [
     path('incsection/income/<int:income_id>/delete/', delete_income, name='delete_income'),
     path('incsection/edit_income/<int:income_id>/', edit_income, name='edit_income'),
     path('generate-pdf-income/<int:incsection_id>/', generate_pdf_income, name='generate_pdf_income'),
+    path('generate-bill/<int:income_id>/', generate_bill_view, name='generate_bill_view'),
 
 
     path('task_list', task_list, name='task_list'),
@@ -47,6 +48,7 @@ urlpatterns = [
     path('isection/<int:isection_id>/invest/add/', add_investment, name='add_investment'),
     path('isection/list/', isection_list, name='isection_list'),
     path('isection/add/', iadd_section, name='iadd_section'),
+    path('income_detail/<int:income_id>/', income_detail, name='income_detail'),
 
     path('rdsection_list/', rdsection_list, name='rdsection_list'),
     path('rd_list/<int:rdsection_id>/', rd_list, name='rd_list'),

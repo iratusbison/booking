@@ -24,14 +24,15 @@
                 <a href="{% url 'income_list' incsection.id %}" style="color: #ffffff; text-decoration: none;">{{ incsection.name }}</a>
             </div>
             <div class="section-actions">
-                <form method="post" style="display: inline;">
+                <form method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this section?');">
                     {% csrf_token %}
                     <input type="hidden" name="delete_incsection" value="{{ incsection.id }}">
-                    <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ff0000;"> <!-- Delete button with a different color -->
-                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px; color: #ff0000;">delete</i> <!-- Delete icon for the button -->
+                    <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #ff0000;">
+                        <i class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 5px; color: #ff0000;">delete</i>
                         Remove
                     </button>
                 </form>
+                
             </div>
         </div>
         {% endfor %}

@@ -394,7 +394,6 @@ def generate_bill(request, booking_id):
     content.append(Paragraph("Email: svmahalaksinn@gmail.com", detail_style))
     content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
 
-
     # Add title
     content.append(Paragraph("Booking Bill", title_style))
 
@@ -411,17 +410,29 @@ def generate_bill(request, booking_id):
         ["Email:", booking.email],
         ["Persons:", str(booking.persons)],
         ["Reason:", booking.reason],
+        #['Rooms', ', '.join([room.room_number for room in booking.rooms.all()])],
     ]
+
+    room_numbers = [room.room_number for room in booking.rooms.all()]
+    room_lines = [", ".join(room_numbers[i:i+5]) for i in range(0, len(room_numbers), 5)]
+    room_numbers_text = "\n".join(room_lines)
+
+    booking_details.append(["Room Numbers:", room_numbers_text])
 
     # Add booking details to table
     booking_table = Table(booking_details, colWidths=[2*inch, 4*inch])
-    booking_table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.lightblue),
-                                       ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                                       ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                                       ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                                       ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                                       ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                                       ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+    booking_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.lightgrey),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('FONTSIZE', (0, 0), (-1, -1), 12),  # Increase font size
+        ('TOPPADDING', (0, 0), (-1, -1), 8),  # Add padding to the cells
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+    ]))
 
     content.append(booking_table)
 
@@ -444,9 +455,6 @@ def generate_bill(request, booking_id):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="booking_bill_{booking.id}.pdf"'
     return response
-
-
-
 
 
 @login_required(login_url='/login')
