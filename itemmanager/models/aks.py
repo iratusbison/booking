@@ -17,6 +17,7 @@ class Booking(models.Model):
     aadhar = models.BigIntegerField(null=True)
     email = models.EmailField(null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    other_charges = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     checkin_datetime = models.DateTimeField(null=True)
     checkout_datetime = models.DateTimeField(null=True)
     persons = models.CharField(max_length=50, null=True)

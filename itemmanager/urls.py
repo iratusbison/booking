@@ -7,7 +7,7 @@ from itemmanager.views.view_income import income_list, add_income, delete_income
 from itemmanager.views.view_todo import task_list, create_task, edit_task, delete_task
 from itemmanager.views.view_total import total_view
 from itemmanager.views.view_tax import calculate_tax
-from itemmanager.views.view_chatgpt import query
+
 
 urlpatterns = [
     #path('expense', expense_list, name='expense_list'),
@@ -57,7 +57,7 @@ urlpatterns = [
     path('add_rd/<int:rdsection_id>/', add_rd, name='add_rd'),
 
     path('calculate_tax/', calculate_tax, name='calculate_tax'),
-    path('query/', query, name='query'),
+
 
     path('add/', add_room, name='add_room'),
     path('room_list', room_list, name='room_list'),

@@ -105,7 +105,7 @@
           <li>
             <h1 class="logo-wrapper">
               <a href="{% url 'dashboard' %}" class="brand-logo darken-1">
-                <span class="logo-text hide-on-med-and-down heading">SV Mahal / AKS Inn</span>
+                <span class="logo-text hide-on-med-and-down heading"></span>
               </a>
             </h1>
           </li>
@@ -153,15 +153,7 @@
     </li>
   </ul>
 </li>
-<li class="no-padding">
-          <ul class="" data-collapsible="accordion">
-            <li class="bold">
-              <a href="{% url 'incsection_list' %}" class="">
-                <span class="nav-text"><i class="fas fa-hotel"></i>  SV Mahal </span> <!-- Updated with brush icon -->
-              </a>
-            </li>
-          </ul>
-        </li>
+
 <li class="no-padding">
     <ul class="" data-collapsible="accordion">
         <li class="bold">
@@ -268,17 +260,16 @@
             <div class="card blue darken-2">
               <div class="card-content white-text">
                 <span class="card-title">
-                  <a href="{% url 'incsection_list' %}" style="color: #ffffff;">
-                     SV Mahal
+                  <a href="{% url 'booking_list' %}" style="color: #ffffff;">
+                     Booking_List
                   </a>
                 </span>
-                <p style="color: #ffffff;">  ₹ {{ total_income}}</p>
+
               </div>
             </div>
           </div>
         </div>
       </div>
-<div><center><a href="https://www.tamildailycalendar.com/tamil_daily_calendar.php" target="_blank" class="btn btn-primary">Tamil Calendar Website</a></center></div>
 
     </section>
     {% endblock dashboard_content %}

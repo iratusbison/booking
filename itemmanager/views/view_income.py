@@ -13,7 +13,7 @@ def apply_gst(income_amount):
     gst_rate = Decimal('0.18')
     gst_amount = income_amount * gst_rate
     total_amount = income_amount + gst_amount
-    
+
     return total_amount
     '''
   # Calculate the GST amount
@@ -21,7 +21,7 @@ def apply_gst(income_amount):
     # Calculate the net amount (amount without GST)
   net_amount = income_amount - gst_amount
   return net_amount, gst_amount
-    
+
 
 
 from django.contrib.auth.decorators import login_required
@@ -285,7 +285,7 @@ def income_detail(request, income_id):
         'Income Section': income.incsection.name if income.incsection else None
     }
     return render(request, 'income_detail.html', {'income_details': income_details, 'income_id': income_id})
-    
+
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
@@ -311,16 +311,16 @@ def generate_bill(data):
 
     # Create a list to hold the PDF elements
     elements = []
-
+    '''
     # Add a title
     elements.append(Paragraph("SV Mahal / AKS Inn", styles["Title"]))
-    
+
     elements.append(Paragraph("No.192/1A 1B, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", styles["BodyText"]))
     elements.append(Paragraph("Phone: 9842254415, 9443733265, 9994195966", styles["BodyText"]))
     elements.append(Paragraph("Email: svmahalaksinn@gmail.com", styles["BodyText"]))
     elements.append(Paragraph("GST: 33ADDFS68571Z8", styles["BodyText"]))
     elements.append(Paragraph("Bill Statement", styles['Title']))
-    
+    '''
     # Increase font size for table
     table_style = TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
@@ -334,7 +334,7 @@ def generate_bill(data):
         ('TOPPADDING', (0, 0), (-1, -1), 8),  # Add padding to the cells
         ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
     ])
-    
+
     # Add data to the bill table
     bill_data = [
         ["Total Amount", f"Rs {data['Total Amount']}"],
@@ -347,7 +347,7 @@ def generate_bill(data):
         ["Bride", data['Bride']],
         ["Groom", data['Groom']],
         ["Address", data['Reserver Address']],  # Handle newline characters here
-        
+
         ["Phone", data['Reserver Phone']],
         ["Aadhar", data['Reserver Aadhar']],
         ["Checkin Datetime", data['Checkin Datetime']],
@@ -393,7 +393,7 @@ def generate_bill_view(request, income_id):
         'Bride': income.bride,
         'Groom': income.groom,
         'Reserver Address': address_with_line_breaks, # Pass the address as is
-        
+
         'Reserver Phone': income.reserver_phone,
         'Reserver Aadhar': income.reserver_aadhar,
         'Checkin Datetime': income.checkin_datetime,

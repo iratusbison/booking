@@ -140,6 +140,7 @@ def book_room(request):
         email = request.POST.get('email')
         aadhar = request.POST.get('aadhar')
         price = request.POST.get('price')
+        other_charges = request.POST.get('other_charges')
         persons = request.POST.get('persons')
         reason = request.POST.get('reason')
         payment = request.POST.get('payment')
@@ -157,6 +158,7 @@ def book_room(request):
             phone=phone,
             aadhar=aadhar,
             price=price,
+            other_charges=other_charges,
             email=email,
             persons=persons,
             reason=reason,
@@ -198,12 +200,15 @@ def booking_detail(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     rooms = booking.rooms.all()
     price = booking.price
+    other_charges = booking.other_charges
+    total_charges = Decimal(other_charges or 0) + price
+
     gst_amount = price - (price / (1 + Decimal('0.12')))
     net_price = price - gst_amount
     gst = price * Decimal('0.12')
     total_price = price + gst
 
-    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'gst_amount':gst_amount, 'net_price':net_price,'total_price': total_price,'reason': booking.reason,})
+    return render(request, 'booking_detail.html', {'booking': booking, 'rooms': rooms, 'price': price, 'gst': gst, 'gst_amount':gst_amount,'total_charges':total_charges, 'net_price':net_price,'total_price': total_price,'reason': booking.reason,})
 @login_required(login_url='/login')
 def edit_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
@@ -218,6 +223,7 @@ def edit_booking(request, booking_id):
         booking.aadhar = request.POST.get('aadhar')
         booking.email = request.POST.get('email')
         booking.price = request.POST.get('price')
+        booking.other_charges =request.POST.get('other_charges')
 
         booking.save()
         return redirect('booking_detail', booking_id=booking_id)
@@ -286,7 +292,7 @@ def generate_pdf_book(request):
     title = Paragraph(title_text, styles["Title"])
     title.alignment = 1  # Center alignment
     elements.append(title)
-
+    '''
     # Add SV Mahal / AKS Inn to the top center
     elements.append(Paragraph("SV Mahal / AKS Inn", styles["Heading2"]))
     elements.append(Paragraph("No.192/1A 1B, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", styles["BodyText"]))
@@ -294,10 +300,10 @@ def generate_pdf_book(request):
     elements.append(Paragraph("Email: svmahalaksinn@gmail.com", styles["BodyText"]))
     elements.append(Paragraph("GST: 33ADDFS68571Z8", styles["BodyText"]))
     elements.append(Paragraph("<br/><br/>", normal_style))  # Add space between address and table
-
+    '''
 
     # Define data for the table
-    data = [['ID', 'Name', 'Phone', 'Aadhar', 'Price', 'GST', 'Total Price']]
+    data = [['ID', 'Name', 'Phone', 'Aadhar', 'Price', 'GST', 'Net Price']]
 
     total_revenue = Decimal('0.00')
 
@@ -307,6 +313,9 @@ def generate_pdf_book(request):
         gst = price * Decimal('0.12')
         total_price = price + gst
 
+        gst_amount = booking.price * Decimal('0.12')
+        net_price = booking.price - gst_amount
+
         # Append booking details to the data list
         data.append([
             booking.id,
@@ -315,7 +324,7 @@ def generate_pdf_book(request):
             booking.aadhar,
             price,
             gst,
-            total_price,
+            net_price,
         ])
 
         # Increment total revenue
@@ -388,17 +397,17 @@ def generate_bill(request, booking_id):
 
     # Content for the PDF
     content = []
-
+    '''
     # Add SV Mahal/Aksinn Topic and Address, Email, Phone
     content.append(Paragraph("SV Mahal/Aksinn", title_style))
     content.append(Paragraph("No.192/1A 1B, Vandavasi Road, Sevilimedu, Kanchipuram - 631502", detail_style))
     content.append(Paragraph("Phone: 9842254415, 9443733265, 9994195966 ", detail_style))
     content.append(Paragraph("Email: svmahalaksinn@gmail.com", detail_style))
     content.append(Paragraph("GST: 33ADDFS68571Z8", detail_style))
-
+    '''
     # Add title
     content.append(Paragraph("Booking Bill", title_style))
-
+    total_charges = Decimal(booking.price or 0) + Decimal(booking.other_charges or 0)
     # Add booking details
     booking_details = [
         ["Booking ID:", str(booking.id)],
@@ -409,10 +418,13 @@ def generate_bill(request, booking_id):
         ["Phone:", booking.phone],
         ["Aadhar:", booking.aadhar],
         ["Price:", str(booking.price)],
+        ["other_charges:", str(booking.other_charges)],
+        ["total_price:", total_charges],
         ["Email:", booking.email],
         ["Persons:", str(booking.persons)],
         ["Reason:", booking.reason],
         #['Rooms', ', '.join([room.room_number for room in booking.rooms.all()])],
+
     ]
 
     room_numbers = [room.room_number for room in booking.rooms.all()]
