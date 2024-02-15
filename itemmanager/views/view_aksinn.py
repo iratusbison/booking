@@ -142,6 +142,7 @@ def book_room(request):
         price = request.POST.get('price')
         persons = request.POST.get('persons')
         reason = request.POST.get('reason')
+        payment = request.POST.get('payment')
 
 
         # Validate if the end date is not earlier than the start date
@@ -159,6 +160,7 @@ def book_room(request):
             email=email,
             persons=persons,
             reason=reason,
+            payment=payment,
             checkin_datetime=checkin_datetime,
             checkout_datetime=checkout_datetime,
             )

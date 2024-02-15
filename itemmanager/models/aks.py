@@ -20,6 +20,14 @@ class Booking(models.Model):
     checkin_datetime = models.DateTimeField(null=True)
     checkout_datetime = models.DateTimeField(null=True)
     persons = models.CharField(max_length=50, null=True)
+    payment = {
+        ('upi','UPI'),
+        ('cash', 'Cash'),
+        ('debit/credit_card','Debit/Credit_Card'),
+        ('netbanking','NetBanking'),
+    }
+    payment = models.CharField(max_length=20, choices=payment , null=True)
+
     REASON_CHOICES = [
         ('marriage', 'Marriage'),
         ('tour', 'Tour'),
