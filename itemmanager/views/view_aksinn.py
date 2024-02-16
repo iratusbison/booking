@@ -125,6 +125,7 @@ def book_room(request):
         return render(request, 'book_room.html', {'rooms': rooms})
 '''
 from django.db import transaction
+'''
 @login_required(login_url='/login')
 @transaction.atomic
 def book_room(request):
@@ -191,6 +192,94 @@ def book_room(request):
 
         # Redirect to booking_detail with the obtained booking_id
         return redirect('booking_detail', booking_id=booking.id)
+
+    else:
+        return render(request, 'book_room.html', {'rooms': rooms})
+'''
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from itemmanager.models.aks import Room, Booking
+from django.db import transaction
+
+@login_required(login_url='/login')
+#@transaction.atomic
+def book_room(request):
+    rooms = Room.objects.all()
+
+    if request.method == 'POST':
+        with transaction.atomic():
+        # Process form submission
+          room_ids = request.POST.getlist('rooms')  # Get selected room IDs from the form
+          checkin_datetime = request.POST.get('checkin_datetime')
+          checkout_datetime = request.POST.get('checkout_datetime')
+          name = request.POST.get('name')
+          address = request.POST.get('address')
+          phone = request.POST.get('phone')
+          email = request.POST.get('email')
+          aadhar = request.POST.get('aadhar')
+          price = request.POST.get('price')
+          other_charges = request.POST.get('other_charges')
+          persons = request.POST.get('persons')
+          reason = request.POST.get('reason')
+          payment = request.POST.get('payment')
+
+        # Validate if the end date is not earlier than the start date
+          if checkout_datetime <= checkin_datetime:
+            error_message = 'Invalid date range'
+            return render(request, 'book_room.html', {'rooms': rooms, 'error': error_message})
+
+        # Perform additional validation if needed
+
+        try:
+            # Create the Booking object
+            booking = Booking.objects.create(
+                name=name,
+                address=address,
+                phone=phone,
+                aadhar=aadhar,
+                price=price,
+                other_charges=other_charges,
+                email=email,
+                persons=persons,
+                reason=reason,
+                payment=payment,
+                checkin_datetime=checkin_datetime,
+                checkout_datetime=checkout_datetime,
+            )
+
+            # Iterate through selected rooms and add them to the booking
+            for room_id in room_ids:
+                room = Room.objects.get(id=room_id)
+
+                # Check if the room is already booked for the given date range
+                existing_bookings = Booking.objects.filter(
+                    rooms=room,
+                    checkout_datetime__gte=checkin_datetime,
+                    checkin_datetime__lte=checkout_datetime
+                )
+                if existing_bookings.exists():
+                    error_message = f'Room {room.room_number} is already booked for the selected date range'
+                    booking.delete()  # Rollback the booking creation
+                    return render(request, 'book_room.html', {'rooms': rooms, 'error': error_message})
+
+                # Add the room to the booking
+                booking.rooms.add(room)
+
+                # Set the room's availability to False
+                room.is_available = False
+                room.save()
+
+            # Redirect to booking_detail with the obtained booking_id
+            return redirect('booking_detail', booking_id=booking.id)
+
+        except ValueError:
+            error_message = 'Invalid value for number. Please enter a valid number.'
+            return render(request, 'book_room.html', {'rooms': rooms, 'error': error_message})
+
+        except ValidationError as e:
+            # Handle validation errors
+            error_message = 'Validation error occurred. Please check your input.'
+            return render(request, 'book_room.html', {'rooms': rooms, 'error': error_message})
 
     else:
         return render(request, 'book_room.html', {'rooms': rooms})
