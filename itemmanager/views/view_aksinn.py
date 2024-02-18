@@ -319,7 +319,7 @@ def edit_booking(request, booking_id):
     else:
         return render(request, 'edit_booking.html', {'booking': booking,'rooms':rooms})
 
-
+@login_required(login_url='/login')
 def delete_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
     rooms = booking.rooms.all()  # Get all rooms associated with the booking
@@ -350,7 +350,7 @@ from django.http import HttpResponse
 from django.utils.timezone import make_aware, timezone
 
 from decimal import Decimal
-
+@login_required(login_url='/login')
 def generate_pdf_book(request):
     # Check if a date range is provided in the request
     checkin_datetime = request.GET.get('checkin_datetime', '')
@@ -466,7 +466,7 @@ from django.http import HttpResponse
 from django.utils.timezone import localtime
 from decimal import Decimal
 from reportlab.lib.units import inch
-
+@login_required(login_url='/login')
 def generate_bill(request, booking_id):
     buffer = BytesIO()
 
